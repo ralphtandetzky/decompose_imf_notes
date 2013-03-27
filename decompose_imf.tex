@@ -1,0 +1,50 @@
+\documentclass{scrartcl}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{ngerman}
+\usepackage{enumerate}
+
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\de}{{\mathrm{d}}}
+
+\begin{document}
+
+\tableofcontents
+
+\section{Aufgabenstellung}
+
+Sei $f:[a,b]\to\R$ eine hinreichend glatte reellwertige Funktion auf einem Intervall $[a,b]$. Gesucht ist eine Zerlegung
+$$ f(t) = \sum_{i=1}^N a_i(t)\cos\varphi_i(t) + r(t)\,, $$
+wobei $a_i,\varphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. F"ur die Funktionen $a_i$ und $\varphi_i$ f"ur $i=1,\dotsc,N$ sollen dabei mindestens folgende Bedingungen f"ur alle $t$ gelten:
+\begin{align*}
+  a_i(t) &> 0 \\
+  \dot{\varphi_i}(t) &> 0
+\end{align*}
+Au"serdem sollten die Summanden $a_i(t)\cos\varphi_i(t)$ zwischen je zwei benachbarten Nullstellen h"ochstens ein Extremum besitzen. 
+
+Die Aufgabe ist es, neben den obigen Forderungen an die Funktionen $a_i$ und $\varphi_i$, weitere praktikable Bedingungen festzulegen, damit eine plausible L"osung des Problems gefunden wird. 
+
+
+\section{Analyse}
+
+Die Bedingung an die $a_i(t)$ ist sehr schwach. Prinzipiell k"onnte man $\varphi_1(t):=0$ und $\varphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
+
+Wir untersuchen zun"achst die Nullstellen der Ableitung eines Summanden $a_i(t)\cos\varphi_i(t)$. Die Ableitung ist
+$$ \dot a_i(t)\cos\varphi_i(t)-a_i(t)\dot\varphi_i(t)\sin\varphi_i(t)\,. $$
+Diesen zwischen zwei Nullstellen k"onnen wir diesen problemlos durch $a_i(t)\cos\varphi_i(t)$ teilen und erhalten so
+$$ \frac{\dot a_i(t)}{a_i(t)}
+-\dot\varphi_i(t)\tan\varphi_i(t)\,. $$
+Dieser Ausdruck l"auft gegen $+\infty$, wenn man sich einer Nullstelle von $a_i(t)\cos\varphi_i(t)$ von rechts n"ahert und gegen $-\infty$, wenn man sich von links einer Nullstelle n"ahert. Aus dem Zwischenwertsatz folgt also, dass dieser Ausdruck mindestens eine Nullstelle zwischen zwei benachbarten Nullstellen von $a_i(t)\cos\varphi_i(t)$ besitzt. Wir wollen nun Voraussetzungen herleiten, unter denen dieser Ausdruck zwischen den Nullstellen monoton f"allt. Aus der Monotonie folgt dann die Eindeutigkeit der Nullstelle und somit dass es nur eine Extremstelle von $a_i(t)\cos\varphi_i(t)$ zwischen benachbarten Nullstellen gibt. Um Voraussetzungen f"ur die Monotonie zu erlangen, leiten wir den Ausdruck zun"achst ab und bekommen
+$$ \frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)}
+-\ddot\varphi_i(t)\tan\varphi_i(t)
+-\frac{\dot\varphi_i(t)^2}{\cos^2\varphi_i(t)}\,. $$
+Multipliziert mit $\cos^2\varphi_i(t)$ ergibt das
+$$ \cos^2\varphi_i(t)\frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)}
+-\frac12\ddot\varphi_i(t)\sin 2\varphi_i(t)
+-\dot\varphi_i(t)^2\,. $$
+Wenn die ersten beiden Summanden kleiner als $\frac12\dot\varphi_i(t)^2$ sind, dann ist der gesamte Ausdruck negativ. Insbesondere ist das der Fall, wenn 
+$$ \frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)} < \frac12\dot\varphi_i(t)^2
+\qquad \text{und} \qquad
+\lvert\ddot\varphi_i(t)\rvert < \dot\varphi_i(t)^2 $$
+ist. Damit ist also eine Bedingung hergeleitet, unter der der Summand $a_i(t)\cos\varphi_i(t)$ garantiert h"ochstens eine Extremstelle zwischen zwei benachbarten Nullstellen besitzt. 
+
+\end{document}
