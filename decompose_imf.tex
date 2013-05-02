@@ -1,10 +1,13 @@
-\documentclass{scrartcl}
+\documentclass[a4paper]{scrartcl}
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{ngerman}
 \usepackage{enumerate}
 
 \newcommand{\R}{{\mathbb{R}}}
 \newcommand{\de}{{\mathrm{d}}}
+\newcommand{\ii}{{\mathrm{i}}}
+\newcommand{\pphi}{{\varphi}}
+\newcommand{\defeq}{\overset{!}{=}}
 
 \begin{document}
 
@@ -13,38 +16,207 @@
 \section{Aufgabenstellung}
 
 Sei $f:[a,b]\to\R$ eine hinreichend glatte reellwertige Funktion auf einem Intervall $[a,b]$. Gesucht ist eine Zerlegung
-$$ f(t) = \sum_{i=1}^N a_i(t)\cos\varphi_i(t) + r(t)\,, $$
-wobei $a_i,\varphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. F"ur die Funktionen $a_i$ und $\varphi_i$ f"ur $i=1,\dotsc,N$ sollen dabei mindestens folgende Bedingungen f"ur alle $t$ gelten:
+$$ f(t) = \sum_{i=1}^N a_i(t)\cos\pphi_i(t) + r(t)\,, $$
+wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. F"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ sollen dabei mindestens folgende Bedingungen f"ur alle $t$ gelten:
 \begin{align*}
   a_i(t) &> 0 \\
-  \dot{\varphi_i}(t) &> 0
+  \dot{\pphi_i}(t) &\ge 0
 \end{align*}
-Au"serdem sollten die Summanden $a_i(t)\cos\varphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (Intrinsic Mode Function) erf"ullt ist.
+Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (Intrinsic Mode Function) erf"ullt ist. Die Aufgabe ist es, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. Dazu ist Folgendes notwendig:
+\begin{enumerate}
+  \item Neben den obigen Forderungen an die Funktionen $a_i$ und $\pphi_i$, sollten weitere praktikable Bedingungen festgelegt werden, damit eine plausible L"osung des Problems gefunden wird. Dies wird im Abschnitt~\ref{sec:moreconds} behandelt. 
+  \item Die Funktionen $a_i$ und $\pphi_i$ m"ussen geeignet diskretisiert werden, etwa indem man sie in Linearkombinationen einfacher Funktionen zerlegt. Darauf wird in Abschnitt~\ref{sec:discretize} eingegangen.
+  \item Man braucht ein geeignetes Optimierungsverfahren, um die L"osungen schrittweise zu verbessern. Denkbar sind etwa Gradientenverfahren. Dabei ist zu beachten, dass die Nebenbedingungen stets eingehalten werden m"ussen. Dies ist sicherlich erst dann sinnvoll, wenn man sich sehr nah an einem guten lokalen Optimum befindet. Verschiedene Ans"atze werden in Abschnitt~\ref{sec:gradients} besprochen.
+  \item Bei dem Optimierungsproblem wird es im Allgemeinen sehr viele lokale Extremstellen geben. Es sollte also eine gute erste N"aherung f"ur die $a_i$ und $\pphi_i$ gefunden werden. Dies wird in Abschnitt~\ref{sec:initialval} beschrieben. 
+  \item Au"serdem sollte im Algorithmus vermieden werden, dass man sich in einem schlechten lokalen Extrempunkt verf"angt und nicht mehr davon wegkommt. Abschnitt~\ref{sec:jumps} geht darauf ein, wie das gelingt.
+\end{enumerate}
 
-Die Aufgabe ist es, neben den obigen Forderungen an die Funktionen $a_i$ und $\varphi_i$, weitere praktikable Bedingungen festzulegen, damit eine plausible L"osung des Problems gefunden wird. 
+
+\section{Weitere Nebenbedingungen} \label{sec:moreconds}
+
+Die Bedingung an die $a_i(t)$ ist sehr schwach. Prinzipiell k"onnte man $\pphi_1(t):=0$ und $\pphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
+
+Wir untersuchen zun"achst die Nullstellen der Ableitung eines Summanden $a_i(t)\cos\pphi_i(t)$. Um uns etwas Schreibarbeit zu sparen, verzichten wir darauf, den Index $i$ jedesmal zu schreiben, solange er keine Rolle spielt. Die Ableitung von $a(t)\cos\pphi(t)$ ist
+$$ \dot a(t)\cos\pphi(t)-a(t)\dot\pphi(t)\sin\pphi(t)\,. $$
+Zwischen zwei Nullstellen k"onnen wir diesen Ausdruck problemlos durch $a(t)\cos\pphi(t)$ teilen und erhalten so
+$$ \frac{\dot a(t)}{a(t)}
+-\dot\pphi(t)\tan\pphi(t)\,. $$
+Dieser Ausdruck l"auft gegen $+\infty$, wenn man sich einer Nullstelle von $a(t)\cos\pphi(t)$ von rechts n"ahert und gegen $-\infty$, wenn man sich von links einer Nullstelle n"ahert. Aus dem Zwischenwertsatz folgt also, dass dieser Ausdruck mindestens eine Nullstelle zwischen zwei benachbarten Nullstellen von $a(t)\cos\pphi(t)$ besitzt. Wir wollen nun Voraussetzungen herleiten, unter denen dieser Ausdruck zwischen den Nullstellen streng monoton f"allt. Aus der Monotonie folgt dann die Eindeutigkeit der Nullstelle und somit dass es nur eine Extremstelle von $a(t)\cos\pphi(t)$ zwischen benachbarten Nullstellen gibt. Um Voraussetzungen f"ur die Monotonie zu erlangen, leiten wir den Ausdruck zun"achst ab und bekommen
+$$ \frac{\de}{\de t}\frac{\dot a(t)}{a(t)}
+-\ddot\pphi(t)\tan\pphi(t)
+-\frac{\dot\pphi(t)^2}{\cos^2\pphi(t)}\,. $$
+Multipliziert mit $\cos^2\pphi(t)$ ergibt das
+$$ \cos^2\pphi(t)\frac{\de}{\de t}\frac{\dot a(t)}{a(t)}
+-\frac12\ddot\pphi(t)\sin 2\pphi(t)
+-\dot\pphi(t)^2\,. $$
+Wir bleibt also eine Bedingung herzuleiten, unter der dieser Ausdruck nicht positiv werden kann. Dies ist "aquivalent zu
+\begin{align} \label{eq:AxByC}
+  Ax + By \le C\,,
+\end{align}
+wobei wir 
+$$ 
+A:=\frac{d^2}{dt^2}\ln a(t)\,, \quad
+B:=\ddot\pphi(t)\,, \quad
+C:=\dot\pphi(t)^2\,, \quad
+x:=\cos^2\pphi(t)\,, \quad
+y:=-\frac12\sin\pphi(t) $$
+setzen. Die Gr"o"sen $x$ und $y$ gehorchen der Nebenbedingung
+$$ \left(x-\frac12\right)^2 + y^2 = \frac14\,. $$
+Wir nehmen jetzt $A$ und $B$ als feste Gr"o"sen an, und wollen das Maximum des Ausdrucks $Ax+By$ unter dieser Nebenbedingung berechnen. Als Lagrange-Funktion f"ur dieses Problem haben wir
+$$ \Lambda(x,y,\lambda) 
+:= Ax + By + \left( \left(x-\frac12\right)^2 + y^2 - \frac12 \right) \lambda \,. $$
+Leiten wir die Langrange-Funktion nach $x$ und $y$ ab, so erhalten wir
+\begin{alignat*}{4}
+  \frac{\partial\Lambda}{\partial x}(x,y,\lambda) &= A + (2x-1)\lambda &&\defeq 0 
+  &\qquad&\Longrightarrow &\qquad& \lambda = -\frac{A}{2x-1}\,, \\
+  \frac{\partial\Lambda}{\partial y}(x,y,\lambda) &= B +  2y   \lambda &&\defeq 0 
+  && \Longrightarrow && \lambda = -\frac{B}{2y}\,.
+\end{alignat*}
+Setzen wir die erhaltenen Gleichungen f"ur $\lambda$ gleich, so bekommen wir 
+$$ (2x-1)B = 2yA \qquad \Longrightarrow \qquad
+x-\frac12 = \frac AB y\,. $$
+Setzen wir dies in die Nebenbedingung ein, so entsteht
+$$ \frac{A^2}{B^2}y^2 + y^2 = \frac{A^2+B^2}{B^2}y^2 
+= \frac14 \qquad \Longrightarrow \qquad
+y=\pm\frac B2\sqrt{\frac{1}{A^2+B^2}}\,. $$
+Damit k"onnen wir auch $x$ ermitteln:
+$$ x = \pm\frac A2\sqrt{\frac{1}{A^2+B^2}} + \frac12 $$
+Unter der obigen Nebenbedingung nimmt $Ax+By$ somit das Maximum
+$$ \frac12 \sqrt{A^2+B^2}+\frac A2 $$
+an. Also ist die Ungleichung~\eqref{eq:AxByC} erf"ullt, wenn 
+\begin{align} \label{eq:intermediateABC}
+  \frac12\sqrt{A^2+B^2}+\frac A2 \le C 
+\end{align}
+gilt. Wir bringen $A/2$ auf die andere Seite, quadrieren und ziehen dann $A^2/4$ auf beiden Seite ab. Es entsteht die "aquivalente Ungleichung
+$$ \frac14 B^2 \le C^2 - AC. $$
+Wir bringen den Ausdruck $AC$ auf die andere Seite und erhalten nach Einsetzen von $A$, $B$ und $C$ die Ungleichgung
+\begin{align} \label{eq:condpphiiai}
+  \frac14\ddot\pphi(t)^2 + \dot\pphi(t)^2\frac{d^2}{dt^2}\ln a(t) 
+  \le \dot\pphi(t)^4\,.
+\end{align}
+Wenn also diese Ungleichung gilt, dann ist sichergestellt, dass zwischen zwei Nullstellen von $a(t)\cos\pphi(t)$ nicht mehr als eine lokale Extremstelle existiert. Es ist bemerkenswert, dass diese Ungleichung nicht von der momentanen Phase $\pphi(t)$ abh"angt, sondern nur von der Winkelgeschwindigkeit, der Winkelbeschleunigung und der zweiten logarithmischen Ableitung von $a(t)$. Es folgt also, dass $a(t)\cos\pphi(t)$ auch dann noch eine IMF ist, wenn man zur Phase eine konstante Funktion hinzuaddiert. Dasselbe Argument gilt f"ur $a(t)$: Gilt die obige Bedingung, dann bleibt $a(t)\cos\pphi(t)$ auch dann noch eine IMF, wenn man  $a(t)$ mit einer beliebigen Funktion der Form $e^{ct+d}$ multipliziert, denn die zweite logarithmische Ableitung von $a(t)$ bleibt unver"andert. 
+
+Die Bedingung~\eqref{eq:condpphiiai} sieht sehr kompliziert aus. "Au"serlich erscheint sie etwas einfacher, wenn man
+$$ \alpha(t):=\ln a(t) $$
+einf"uhrt. Dann kann man die zweite logarithmische Ableitung von $a(t)$ schreiben als $\frac{d^2}{dt^2}\ln a(t) = \ddot\alpha(t)$. F"uhrt man dann noch die komplexwertige Funktion
+$$ \sigma(t) := \alpha(t) + \ii\pphi(t) $$
+ein, so haben wir die kompaktere Darstellung
+$$ a(t)\cos\pphi(t) = \Re e^{\sigma(t)}\,. $$
+Die Ungleichung~\eqref{eq:intermediateABC} ist erf"ullt, wenn 
+$$ \sqrt{A^2 + B^2} \le C $$
+gilt. Dies ist "aquivalent zu der Formulierung
+\begin{align} \label{eq:imSigma}
+  \lvert\ddot\sigma(t)\rvert \le \left(\Im\dot\sigma(t)\right)^2\,.
+\end{align}
+Man kann alle Aussagen unserer Problemstellung statt mit $a(t)$ und $\pphi(t)$ ausgehend von $\sigma(t)$ beschreiben. Der Vorteil dieser Sichtweise ist, dass die Nebenbedingungen $a(t)>0$ wegen $a(t)=|e^{\sigma(t)}|$ automatisch erf"ullt ist. Es bleibt nur noch 
+$$ \Im\dot\sigma(t)\ge0 $$ 
+zu beachten und wir haben damit eine kleine Menge von sehr einfachen Nebenbedingungen. Eine noch st"arkere, aber auch handhabbarere Bedingung ist 
+\begin{align} \label{eq:absSigma}
+  \lvert\ddot\sigma(t)\rvert \le\lvert\dot\sigma(t)\rvert^2\,.
+\end{align}
+Zusammenfassend haben wir also die Implikationskette 
+$$ \text{\eqref{eq:absSigma}} \quad \Longrightarrow \quad
+  \text{\eqref{eq:imSigma}} \quad \Longrightarrow \quad
+  \text{\eqref{eq:condpphiiai}} \quad \Longrightarrow \quad
+  \text{$a(t)\cos\pphi(t)$ ist eine IMF,} $$
+wobei die Umkehrungen jeweils nicht allgemeing"ultig zutreffen. 
 
 
-\section{Analyse}
+\section{Diskretisierung der Amplituden- und Phasenfunktionen} \label{sec:discretize}
 
-Die Bedingung an die $a_i(t)$ ist sehr schwach. Prinzipiell k"onnte man $\varphi_1(t):=0$ und $\varphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
+\subsection{Na"iver Ansatz}
 
-Wir untersuchen zun"achst die Nullstellen der Ableitung eines Summanden $a_i(t)\cos\varphi_i(t)$. Die Ableitung ist
-$$ \dot a_i(t)\cos\varphi_i(t)-a_i(t)\dot\varphi_i(t)\sin\varphi_i(t)\,. $$
-Diesen zwischen zwei Nullstellen k"onnen wir diesen problemlos durch $a_i(t)\cos\varphi_i(t)$ teilen und erhalten so
-$$ \frac{\dot a_i(t)}{a_i(t)}
--\dot\varphi_i(t)\tan\varphi_i(t)\,. $$
-Dieser Ausdruck l"auft gegen $+\infty$, wenn man sich einer Nullstelle von $a_i(t)\cos\varphi_i(t)$ von rechts n"ahert und gegen $-\infty$, wenn man sich von links einer Nullstelle n"ahert. Aus dem Zwischenwertsatz folgt also, dass dieser Ausdruck mindestens eine Nullstelle zwischen zwei benachbarten Nullstellen von $a_i(t)\cos\varphi_i(t)$ besitzt. Wir wollen nun Voraussetzungen herleiten, unter denen dieser Ausdruck zwischen den Nullstellen monoton f"allt. Aus der Monotonie folgt dann die Eindeutigkeit der Nullstelle und somit dass es nur eine Extremstelle von $a_i(t)\cos\varphi_i(t)$ zwischen benachbarten Nullstellen gibt. Um Voraussetzungen f"ur die Monotonie zu erlangen, leiten wir den Ausdruck zun"achst ab und bekommen
-$$ \frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)}
--\ddot\varphi_i(t)\tan\varphi_i(t)
--\frac{\dot\varphi_i(t)^2}{\cos^2\varphi_i(t)}\,. $$
-Multipliziert mit $\cos^2\varphi_i(t)$ ergibt das
-$$ \cos^2\varphi_i(t)\frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)}
--\frac12\ddot\varphi_i(t)\sin 2\varphi_i(t)
--\dot\varphi_i(t)^2\,. $$
-Wenn die ersten beiden Summanden kleiner als $\frac12\dot\varphi_i(t)^2$ sind, dann ist der gesamte Ausdruck negativ. Insbesondere ist das der Fall, wenn 
-$$ \frac{\de}{\de t}\frac{\dot a_i(t)}{a_i(t)} < \frac12\dot\varphi_i(t)^2
-\qquad \text{und} \qquad
-\lvert\ddot\varphi_i(t)\rvert < \dot\varphi_i(t)^2 $$
-ist. Damit ist also eine Bedingung hergeleitet, unter der der Summand $a_i(t)\cos\varphi_i(t)$ garantiert h"ochstens eine Extremstelle zwischen zwei benachbarten Nullstellen besitzt. 
+Um die Funktionen $a_i$ und $\pphi_i$ numerisch ann"ahern zu k"onnen, muss zun"achst eine Diskretiesierung vorgenommen werden. Daf"ur bietet es sich an, die Funktionen als Linearkombinationen darzustellen:
+\begin{align*}
+      a_i(t) &= \sum_{m=0}^{M_a    }     a_{im}    b_m(t)\,, \\ 
+  \pphi_i(t) &= \sum_{m=0}^{M_\pphi} \pphi_{im} \psi_m(t)\,.
+\end{align*}
+Geht man von der alternativen Formulierung mit $\sigma_i(t)$ statt $a_i(t)$ und $\pphi_i(t)$ aus, so k"onnte man auch den Ansatz
+\begin{align*}
+  \sigma_i(t) &= \sum_{m=0}^M \sigma_{im}g_m(t)
+\end{align*}
+mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein, das ist jedoch nicht notwendig und vielleicht auch gar nicht erw"unscht. 
+
+Als Basisfunktionen w"aren beispielsweise Polynome oder trigonometrische Polynome denkbar. Eine konstante Funktion und ein Polynom erster Ordnung erscheinen sehr sinnvoll. Als weitere Basisfunktionen k"onnten auch solche dienen, deren zweite Ableitung Wavelets mit bestimmten Eigenschaften sind. Wavelets haben den Vorteil, dass sie gut lokalisiert sind. Wenn bei den Wavelets au"serdem die nullten und ersten Momente verschwinden, dann ist auch die entsprechende Basisfunktion lokalisiert. Bei der numerischen Optimierung k"onnte auch die Orthogonalit"at von Wavelets eine entscheidende Rolle spielen. 
+
+
+\subsection{Angepasster Ansatz}
+
+Wir definieren
+\begin{align} \label{eq:def_theta} 
+\theta(t) := \frac{\ddot\sigma(t)}{\dot\sigma(t)^2}. 
+\end{align}
+Die Gleichung~\eqref{eq:absSigma} ist also genau dann erf"ullt, wenn 
+$$ |\theta(t)| \le 1. $$
+Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\sigma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. Es gilt dann n"amlich 
+$$ -\frac{1}{\dot\sigma(t)} = \int\theta(t)\,\de t 
+\qquad \Longrightarrow \qquad 
+\sigma(t) = -\int \frac{1}{\int\theta(t)\,\de t}\,\de t $$
+Nun ist die Idee, dass man $\theta(t)$ und die Integrationskonstanten optimiert. Der Vorteil ist, dass die Nebenbedingung sehr einfach zu verifizieren ist. Als Ansatz nehmen wir an, dass $\theta(t)$ st"uckweise konstant ist. Auf einem Intervall, wo $\theta(t)=c_0$ konstant ist, gilt dann 
+$$ \sigma(t) = -\int \frac{\de t}{c_0t + c_1}
+=-\frac{1}{c_0}\ln(c_0t+c_1) + c_2 $$
+f"ur geeignete Werte von $c_0$, $c_1$ und $c_2$. Mit 
+$$ A := -\frac{1}{c_0}\,, \quad
+B:= -\frac{c_1}{c_0}\,, \quad
+C:= c_2 + A\ln c_0 $$
+gilt 
+$$ \sigma(t) = A\ln(t-B) + C\,. $$
+Die Nebenbedingungen 
+$$ |\theta(t)| \le 1 \qquad \text{und} \qquad
+\Im\dot\sigma(t)\ge 0 $$
+k"onnen umformuliert werden zu
+$$ |A|\ge 1 \qquad \text{und}\qquad
+\Im\left[A(t-B)^*\right]\ge 0\,, $$
+wobei $(t-B)^*$ der konjugiert komplexe Wert von $t-B$ sein soll. Die Bedingung links kann trivial "uberpr"uft werden, die Bedingung rechts braucht lediglich an den Endpunkten der Intervalle "uberpr"uft zu werden, auf denen $\theta(t)$ konstant ist. Wenn die Bedingung dort zutrifft, dann auch im Inneren des Intervalls. 
+
+
+\subsection{Lokale Ver"anderungen}
+
+Der Ansatz aus dem vorangegangenen Unterabschnitt erleichtert die "Uberpr"ufung der Nebenbedingungen. Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\sigma(t)$ nach sich ziehen. Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\sigma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
+
+Man kann dies etwa damit vergleichen, dass man eine st"uckweise konstante Funktion kennt und wissen m"ochte, wie man sie ver"andern kann, so dass nach zweifachem Integrieren eine Funktion herauskommt, die nur lokale "Anderungen aufweist. Bei "aquidistanten Intervallen braucht man in diesem Fall drei benachbarte Intervalle mit den Wichtungen $1$, $-2$ und $1$ in dieser Reihenfolge, damit sich die zweimal integrierte Funktion nur dort und nirgends sonst "andert. 
+
+In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t_1,t_2]$ und $[t_2,t_3]$. Da $\sigma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. Da sich $\sigma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\sigma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. Die Parameter $A$, $B$ und $C$ aus dem vorangegangen Abschnitt unterscheiden sich auf den drei Intervallen. Wir bezeichnen diese Parameter auf $[t_{i-1},t_i]$ mit $A_i$, $B_i$ und $C_i$ f"ur $i=1,\dotsc,3$. Au"serdem schreiben wir der K"urze halber $\sigma_i:=\sigma(t_i)$ und $\dot\sigma_i:=\dot\sigma(t_i)$ f"ur $i=0,\dotsc,3$. Mit diesen Bezeichnungen bekommen wir folgendes Gleichungssystem:
+\begin{align}
+  \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \\
+  \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \\
+  \sigma_1       &= A_1\ln(t_1-B_1)+C_1 \\
+  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \\
+  \sigma_1       &= A_2\ln(t_1-B_2)+C_2 \\
+  \dot\sigma_1 &= \frac{A_2}{t_1-B_2} \\
+  \sigma_2       &= A_2\ln(t_2-B_2)+C_2 \\
+  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \\
+  \sigma_2       &= A_3\ln(t_2-B_3)+C_3 \\
+  \dot\sigma_2 &= \frac{A_3}{t_2-B_3} \\
+  \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \\
+  \dot\sigma_3 &= \frac{A_3}{t_3-B_3}
+\end{align}
+Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. Alle anderen Gr"o"sen setzen wir als bekannt voraus. Somit bleibt also ein Freiheitsgrad. Man kann sich also zum Beispiel den Wert $A_1$ vorgeben und dann alle restlichen Parameter daraus berechnen. 
+
+
+\section{Lokale Optimumsuche} \label{sec:gradients}
+
+F"ur die lokale Suche eines Optimums k"onnen verschiedenste Algorithmen verwendet werden, die Ungleichungen als Nebenbedingungen zulassen. Man kann zum Beispiel ein einfaches Gradientenverfahren ansetzen. 
+
+Damit n"ahert man sich sehr schnell einem lokalen Optimum. Es ist absehbar, dass bei unserem Problem sehr viele lokale Optima existieren. Die eigentliche Schwierigkeit besteht darin, ein m"oglichst gutes lokales Optimum zu finden. Daf"ur braucht man einen m"oglichst guten Startpunkt f"ur die Optimierung oder eine M"oglichkeit, einem lokalen Maximum wieder zu entkommen, oder beides. Beide Ans"atze werden in den Abschnitten \ref{sec:initialval} und~\ref{sec:jumps} er"ortert. 
+
+
+\section{Suche nach einer guten Anfangsn"aherung} \label{sec:initialval}
+
+Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu zerlegen. Dazu geh"ort die Hilbert-Huang-Transformation. Eine andere M"oglichkeit ist die Benutzung des Spektrograms der Short-Time-Fourier-Transformation oder das Wavelet-Energie-Spektrum bez"uglich des komplexwertigen Morlet-Wavelets. Aus diesen Diagrammen kann man recht gut die haupts"achlich vorkommenden Frequenzen zu verschiedenen Zeitpunkten ablesen. Dies k"onnte man als Grundlage f"ur eine Anfangsn"aherung nehmen. Eine Schwierigkeit, die dabei wahrscheinlich auftreten wird, ist die Verifizierung der Nebenbedingungen. Was tut man mit einer Anfangsn"aherung, die die Nebenbedingungen nicht erf"ullt?
+
+
+\section{Phasenboost und genetische Algorithmen} \label{sec:jumps}
+
+Viele lokale Maxima werden vermutlich durch lokale "Anderungen der Funktionen $a_i(t)$ und $\pphi_i(t)$ voneinander getrennt. Addiert man zu einer Phasenfunktion $\pphi_i(t)$ eine Funktion, die f"ur gen"ugend kleines $t$ konstant $0$ ist und ab einem gewissen $t$ konstant $2\pi$ ist und zwischen diesen konstanten Teilen verbunden wird, dann findet man bei $a_i(t)\cos\pphi_i(t)$ nur eine lokale "Anderung vor, n"amlich zwischen den beiden konstanten Abschnitten der addierten Funktion. Solch eine Addition bezeichnen wir als Phasenboost. Es ist vorstellbar, dass durch Phasenboosts viele Gr"aben zwischen lokalen Maxima "uberwunden werden k"onnen. 
+
+Weiterhin ist es vermutlich sinnvoll, nicht nur lokal zu suchen, sondern mehrere lokale Optima gleichzeitig zu suchen. Gute L"osungen k"onnten dann wiederum kombiniert werden, um noch bessere L"osungen zu erhalten. Solche Algorithmen werden auch als genetische Algorithmen bezeichnet. Genetische Algorithmen umfassen folgende Elemente
+\begin{itemize}
+  \item {\em Selektion} zweier Individuen gem"a"s der Fitness in der Population. Als Fitness kann beispielsweise die Norm der Fehlerfunktion $r(t)$ angenommen werden.  
+  \item {\em Kombination} (Kreuzung) der beiden selektierten Individuen zu einem neuen Individuum. Die Funktionen k"onnen etwa zerst"uckelt aneinander gesetzt werden.
+  \item {\em Mutation} des Individuums. Dies kann zum einen bedeuten, dass die Funktion so mit einem Gradientenverfahren optimiert wird, dass man sich nahe einem lokalen Optimum befindet. Andererseits k"onnten auch Phasenboosts mit einflie"sen. 
+\end{itemize}
+Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Methoden mit sich, die verwendet werden k"onnten. 
+
 
 \end{document}
