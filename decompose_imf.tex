@@ -6,6 +6,7 @@
 \newcommand{\R}{{\mathbb{R}}}
 \newcommand{\de}{{\mathrm{d}}}
 \newcommand{\ii}{{\mathrm{i}}}
+\newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
 \newcommand{\pphi}{{\varphi}}
 \newcommand{\defeq}{\overset{!}{=}}
 
@@ -26,6 +27,7 @@ Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachba
 \begin{enumerate}
   \item Neben den obigen Forderungen an die Funktionen $a_i$ und $\pphi_i$, sollten weitere praktikable Bedingungen festgelegt werden, damit eine plausible L"osung des Problems gefunden wird. Dies wird im Abschnitt~\ref{sec:moreconds} behandelt. 
   \item Die Funktionen $a_i$ und $\pphi_i$ m"ussen geeignet diskretisiert werden, etwa indem man sie in Linearkombinationen einfacher Funktionen zerlegt. Darauf wird in Abschnitt~\ref{sec:discretize} eingegangen.
+  \item F"ur die Restfunktion muss eine geeignete Norm festgelegt werden, damit "uberhaupt klar ist, was es hei"st, den Fehler zu minimieren. Hierauf wird in Abschnitt~\ref{sec:norms4r} eingegangen.
   \item Man braucht ein geeignetes Optimierungsverfahren, um die L"osungen schrittweise zu verbessern. Denkbar sind etwa Gradientenverfahren. Dabei ist zu beachten, dass die Nebenbedingungen stets eingehalten werden m"ussen. Dies ist sicherlich erst dann sinnvoll, wenn man sich sehr nah an einem guten lokalen Optimum befindet. Verschiedene Ans"atze werden in Abschnitt~\ref{sec:gradients} besprochen.
   \item Bei dem Optimierungsproblem wird es im Allgemeinen sehr viele lokale Extremstellen geben. Es sollte also eine gute erste N"aherung f"ur die $a_i$ und $\pphi_i$ gefunden werden. Dies wird in Abschnitt~\ref{sec:initialval} beschrieben. 
   \item Au"serdem sollte im Algorithmus vermieden werden, dass man sich in einem schlechten lokalen Extrempunkt verf"angt und nicht mehr davon wegkommt. Abschnitt~\ref{sec:jumps} geht darauf ein, wie das gelingt.
@@ -181,11 +183,11 @@ In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t
   \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \label{eq:local1} \\
   \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \label{eq:local2} \\
   \sigma_1       &= A_1\ln(t_1-B_1)+C_1 \label{eq:local3} \\
-  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \label{eq:local4} \\
+  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \label{eq:local4} \displaybreak[0] \\
   \sigma_1       &= A_2\ln(t_1-B_2)+C_2 \label{eq:local5} \\
   \dot\sigma_1 &= \frac{A_2}{t_1-B_2} \label{eq:local6} \\
   \sigma_2       &= A_2\ln(t_2-B_2)+C_2 \label{eq:local7} \\
-  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \label{eq:local8} \\
+  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \label{eq:local8} \displaybreak[0] \\
   \sigma_2       &= A_3\ln(t_2-B_3)+C_3 \label{eq:local9} \\
   \dot\sigma_2 &= \frac{A_3}{t_2-B_3} \label{eq:local10} \\
   \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \label{eq:local11} \\
@@ -298,16 +300,37 @@ Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen
 $$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
 \qquad \text{und} \qquad
 \Im\dot\sigma(t)\ge0 $$
-sind "uberall erf"ullt, falls sie an den ganzzahligen stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. In der Sprache der Koeffizienten $\sigma_k$ sind die Nebenbedingungen also "aquivalent zu 
+sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. In der Sprache der Koeffizienten $\sigma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
 \begin{gather*}
 \lvert\sigma_j-2\sigma_{j+1}+\sigma_{j+2}\rvert 
-\le \max\{(\Im\sigma_j-\Im\sigma_{j+1})^2, (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\} \\
+\le \max\{(\Im\sigma_j-\Im\sigma_{j+1})^2, 
+    (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\} \\
 \text{und} \qquad
 \Im\sigma_j-\Im\sigma_{j+1}
 \ge 0
 \end{gather*}
-f"ur alle ganzzahligen $j$. 
+f"ur alle ganzzahligen $j$. Mit 
+$$ \tau_j := \sigma_j-\sigma_{j+1} $$
+l"asst sich das noch k"urzer schreiben als
+$$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
+\qquad \text{und} \qquad
+\Im\tau_j \ge 0\,. $$
+Die Nebenbedingunen lassen sich also auch mit diesem zweiten Ansatz leicht "uberpr"ufen. Im n"achsten Abschnitt soll die eigentliche Zielfunktion, also eine Norm der Restfunktion, genauer beschrieben werden.
 
+
+\section{Norm f"ur die Restfunktion} \label{sec:norms4r}
+
+Die Aufgabenstellung ist es, zu einer gegebenen hinreichend glatten Funktion $f:[a,b]\to\R$, Funktionen $a_i(t)$ und $\pphi_i(t)$, $i=1,\dotsc,N$ zu finden, so dass 
+$$ r(t) := f(t)-\sum_{i=1}^N a_i(t)\cos\pphi_i(t) $$
+m"oglichst klein wird. Bis jetzt haben wir noch nicht genau festgelegt, was wir unter \glqq{}klein\grqq{} verstehen. Das wollen wir nun nachholen, indem wir geeignete Normen f"ur die Restfunktion $r:[a,b]\to\R$ definieren. Folgende Ans"atze liegen nahe:
+\begin{itemize}
+\item $L_p$-Normen mit $1\le p\le\infty$, insbesondere sind die F"alle $p=1,2,\infty$ naheliegend. 
+\item Sobolev-Normen, also Normen der Form
+$$ \norm{r}_{W^{k,p}} := \left(\,\sum_{d=0}^k\int_a^b \lvert r^{(d)}(t)\rvert^p\,\de t\right)^{1/p}. $$
+\end{itemize}
+In der Praxis liegt $f$ oft nicht als Funktion vor, sondern als eine Folge von Messwerten. Um dann mit den $L_p$- oder Sobolev-Normen immernoch arbeiten zu k"onnen, wird $f$ dann typischerweise interpoliert. Die Berechnung der Integrale ist dann wahrscheinlich nicht mehr analytisch m"oglich, sondern nur noch numerisch, was die Berechnung der Norm sehr aufwendig machen kann. Dies umgeht man, indem man f"ur dir Norm nur die gemessenen Funktionswerte benutzt, also etwa
+$$ \norm{r}_{\ell_p} := \left(\,\sum_{j=1}^{N}\lvert r(j)\rvert^p\right)^{1/p}, $$
+f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. 
 
 
 \section{Lokale Optimumsuche} \label{sec:gradients}
