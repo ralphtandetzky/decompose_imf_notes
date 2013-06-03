@@ -36,7 +36,7 @@ Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachba
 
 Die Bedingung an die $a_i(t)$ ist sehr schwach. Prinzipiell k"onnte man $\pphi_1(t):=0$ und $\pphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
 
-Wir untersuchen zun"achst die Nullstellen der Ableitung eines Summanden $a_i(t)\cos\pphi_i(t)$. Um uns etwas Schreibarbeit zu sparen, verzichten wir darauf, den Index $i$ jedesmal zu schreiben, solange er keine Rolle spielt. Die Ableitung von $a(t)\cos\pphi(t)$ ist
+Wir untersuchen zun"achst die Nullstellen der ersten Ableitung eines Summanden $a_i(t)\cos\pphi_i(t)$. Um uns etwas Schreibarbeit zu sparen, verzichten wir darauf, den Index $i$ jedesmal zu schreiben, solange er keine Rolle spielt. Die Ableitung von $a(t)\cos\pphi(t)$ ist
 $$ \dot a(t)\cos\pphi(t)-a(t)\dot\pphi(t)\sin\pphi(t)\,. $$
 Zwischen zwei Nullstellen k"onnen wir diesen Ausdruck problemlos durch $a(t)\cos\pphi(t)$ teilen und erhalten so
 $$ \frac{\dot a(t)}{a(t)}
@@ -135,7 +135,7 @@ Geht man von der alternativen Formulierung mit $\sigma_i(t)$ statt $a_i(t)$ und 
 \begin{align*}
   \sigma_i(t) &= \sum_{m=0}^M \sigma_{im}g_m(t)
 \end{align*}
-mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein, das ist jedoch nicht notwendig und vielleicht auch gar nicht erw"unscht. 
+mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein. Jedoch ist das nicht notwendig und unter Umst"anden auch gar nicht erw"unscht. 
 
 Als Basisfunktionen w"aren beispielsweise Polynome oder trigonometrische Polynome denkbar. Eine konstante Funktion und ein Polynom erster Ordnung erscheinen sehr sinnvoll. Als weitere Basisfunktionen k"onnten auch solche dienen, deren zweite Ableitung Wavelets mit bestimmten Eigenschaften sind. Wavelets haben den Vorteil, dass sie gut lokalisiert sind. Wenn bei den Wavelets au"serdem die nullten und ersten Momente verschwinden, dann ist auch die entsprechende Basisfunktion lokalisiert. Bei der numerischen Optimierung k"onnte auch die Orthogonalit"at von Wavelets eine entscheidende Rolle spielen. 
 
@@ -243,7 +243,7 @@ Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "ub
 Im n"achsten Abschnitt versuchen wir einen weiteren Ansatz zu erarbeiten, der wahrscheinlich beide Probleme l"ost.
 
 
-\subsection{Zweiter angepasster Ansatz}
+\subsection{Zweiter angepasster Ansatz} \label{sec:2ndansatz}
 
 Wir wollen zeigen, dass die Nebenbedingungen 
 $$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
@@ -254,16 +254,59 @@ f"ur st"uckweise quadratische, stetig differenzierbare Funktionen besonders leic
 Ganz konkret sei $[t_0,t_1]$ ein Intervall, auf dem $\sigma(t)$ quadratisch ist, und zwar
 $$ \sigma(t) = at^2 + bt + c $$
 Dann erf"ullt $\sigma(t)$ die beiden Nebenbedingungen auf dem Intervall genau dann, wenn 
-$$ 2\,\lvert a\rvert \le (2\,\Im a\,t_i + \Im b)^2
+$$ 2\,\lvert a\rvert \le (2\,\Im a\,t_j + \Im b)^2
 \qquad \text{und} \qquad
-2\,\Im a\,t_i + \Im b\ge 0 $$
-f"ur $i=0,1$. 
+2\,\Im a\,t_j + \Im b\ge 0 $$
+f"ur $j=0,1$. 
 
 
 \subsection{Lokale Ver"anderungen beim zweiten Ansatz}
 
 Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. B-Splines l"osen genau dieses Problem. Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. Sie quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
 
+F"ur "aquidistante St"utzstellen lassen sich die quadratischen B-Splines besonders einfach aufschreiben. F"ur die St"utzstellenmenge $\{0,1,2,3\}$ hat der quadratische B-Spline die Form
+$$ b(t)=\begin{cases}
+\frac12t^2 & \text{f"ur $t\in[0,1)$} \\
+\frac12t^2-\frac32(t-1)^2 & \text{f"ur $t\in[1,2)$} \\
+\frac12t^2-\frac32(t-1)^2+\frac32(t-2)^2 & \text{f"ur $t\in[2,3)$} \\
+0 & \text{sonst.}
+\end{cases} $$
+Es gilt $b(1)=b(2)=\frac12$. An allen anderen ganzzahligen Stellen verschwindet  die Funktion $b$. Die erste und zweite Ableitung von $b$ sind
+$$ \dot b(t)=\begin{cases}
+t & \text{f"ur $t\in[0,1)$} \\
+-2(t-\frac32) & \text{f"ur $t\in[1,2)$} \\
+t-3 & \text{f"ur $t\in[2,3)$} \\
+0 & \text{sonst}
+\end{cases} 
+\qquad \text{und} \qquad
+\ddot b(t)=\begin{cases}
+1 & \text{f"ur $t\in(0,1)$} \\
+-2 & \text{f"ur $t\in(1,2)$} \\
+1 & \text{f"ur $t\in(2,3)$} \\
+0 & \text{f"ur $t\in\R\setminus[0,3]$\,.}
+\end{cases} $$
+Alle anderen quadratischen B-Splines mit aufeinanderfolgenden ganzzahligen St"utzstellen ergeben sich durch Translation des gegebenen B-Splines. Alle stetig differenzierbaren Funktionen, die auf den Intervallen $(k,k+1)$ f"ur alle ganzzahligen $k$ quadratische Funktionen sind, lassen sich durch Linearkombinationen dieser beschriebenen B-Splines darstellen. Also kann man die Funktion $\sigma(t)$ schreiben als
+$$ \sigma(t) = \sum_{k=-\infty}^{\infty}\sigma_kb(t-k) $$
+wenn die Koeffizienten $\sigma_k$ geeignet gew"ahlt werden. An ganzzahligen Stellen $j$ gilt somit
+\begin{align*}
+\sigma(j) &= \frac{\sigma_{j+1}+\sigma_{j+2}}{2} \\
+\dot\sigma(j) &= \sigma_{j+1}-\sigma_{j+2} \\
+\lim_{t\nearrow j}\ddot\sigma(t) &= \sigma_{j+1}-2\sigma_{j+2}+\sigma_{j+3} \\
+\lim_{t\searrow\,j}\ddot\sigma(t) &= \sigma_{j}-2\sigma_{j+1}+\sigma_{j+2}\,.
+\end{align*}
+Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen rechtsseitigen Limes. Die Nebenbedingungen 
+$$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
+\qquad \text{und} \qquad
+\Im\dot\sigma(t)\ge0 $$
+sind "uberall erf"ullt, falls sie an den ganzzahligen stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. In der Sprache der Koeffizienten $\sigma_k$ sind die Nebenbedingungen also "aquivalent zu 
+\begin{gather*}
+\lvert\sigma_j-2\sigma_{j+1}+\sigma_{j+2}\rvert 
+\le \max\{(\Im\sigma_j-\Im\sigma_{j+1})^2, (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\} \\
+\text{und} \qquad
+\Im\sigma_j-\Im\sigma_{j+1}
+\ge 0
+\end{gather*}
+f"ur alle ganzzahligen $j$. 
 
 
 
