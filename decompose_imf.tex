@@ -22,7 +22,7 @@ wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem 
   a_i(t) &> 0 \\
   \dot{\pphi_i}(t) &\ge 0
 \end{align*}
-Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (Intrinsic Mode Function) erf"ullt ist. Die Aufgabe ist es, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. Dazu ist Folgendes notwendig:
+Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (intrinsic mode function) erf"ullt ist. Die Aufgabe ist es, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. Dazu ist Folgendes notwendig:
 \begin{enumerate}
   \item Neben den obigen Forderungen an die Funktionen $a_i$ und $\pphi_i$, sollten weitere praktikable Bedingungen festgelegt werden, damit eine plausible L"osung des Problems gefunden wird. Dies wird im Abschnitt~\ref{sec:moreconds} behandelt. 
   \item Die Funktionen $a_i$ und $\pphi_i$ m"ussen geeignet diskretisiert werden, etwa indem man sie in Linearkombinationen einfacher Funktionen zerlegt. Darauf wird in Abschnitt~\ref{sec:discretize} eingegangen.
@@ -59,12 +59,12 @@ A:=\frac{d^2}{dt^2}\ln a(t)\,, \quad
 B:=\ddot\pphi(t)\,, \quad
 C:=\dot\pphi(t)^2\,, \quad
 x:=\cos^2\pphi(t)\,, \quad
-y:=-\frac12\sin\pphi(t) $$
+y:=-\frac12\sin2\pphi(t) $$
 setzen. Die Gr"o"sen $x$ und $y$ gehorchen der Nebenbedingung
 $$ \left(x-\frac12\right)^2 + y^2 = \frac14\,. $$
 Wir nehmen jetzt $A$ und $B$ als feste Gr"o"sen an, und wollen das Maximum des Ausdrucks $Ax+By$ unter dieser Nebenbedingung berechnen. Als Lagrange-Funktion f"ur dieses Problem haben wir
 $$ \Lambda(x,y,\lambda) 
-:= Ax + By + \left( \left(x-\frac12\right)^2 + y^2 - \frac12 \right) \lambda \,. $$
+:= Ax + By + \left( \left(x-\frac12\right)^2 + y^2 - \frac14 \right) \lambda \,. $$
 Leiten wir die Langrange-Funktion nach $x$ und $y$ ab, so erhalten wir
 \begin{alignat*}{4}
   \frac{\partial\Lambda}{\partial x}(x,y,\lambda) &= A + (2x-1)\lambda &&\defeq 0 
@@ -140,13 +140,13 @@ mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. Die Basisfunktionen $g_
 Als Basisfunktionen w"aren beispielsweise Polynome oder trigonometrische Polynome denkbar. Eine konstante Funktion und ein Polynom erster Ordnung erscheinen sehr sinnvoll. Als weitere Basisfunktionen k"onnten auch solche dienen, deren zweite Ableitung Wavelets mit bestimmten Eigenschaften sind. Wavelets haben den Vorteil, dass sie gut lokalisiert sind. Wenn bei den Wavelets au"serdem die nullten und ersten Momente verschwinden, dann ist auch die entsprechende Basisfunktion lokalisiert. Bei der numerischen Optimierung k"onnte auch die Orthogonalit"at von Wavelets eine entscheidende Rolle spielen. 
 
 
-\subsection{Angepasster Ansatz}
+\subsection{Erster angepasster Ansatz}
 
-Wir definieren
+Wir wollen nun einen Ansatz behandeln, der speziell auf unser Problem zugeschnitten ist. Der Ansatz im vorigen Abschnitt hat den Nachteil, dass es aufwendig sein kann, die Nebenbedingungen w"ahrend des Optimierens zu "uberpr"ufen. In diesem Abschnitt werden wir einen Ansatz besprechen, bei dem die Nebenbedingungen trivial "uberpr"ufbar sind. Dazu definieren wir
 \begin{align} \label{eq:def_theta} 
 \theta(t) := \frac{\ddot\sigma(t)}{\dot\sigma(t)^2}. 
 \end{align}
-Die Gleichung~\eqref{eq:absSigma} ist also genau dann erf"ullt, wenn 
+Die Nebenbedingung~\eqref{eq:absSigma} ist also genau dann erf"ullt, wenn 
 $$ |\theta(t)| \le 1. $$
 Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\sigma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. Es gilt dann n"amlich 
 $$ -\frac{1}{\dot\sigma(t)} = \int\theta(t)\,\de t 
@@ -170,7 +170,7 @@ $$ |A|\ge 1 \qquad \text{und}\qquad
 wobei $(t-B)^*$ der konjugiert komplexe Wert von $t-B$ sein soll. Die Bedingung links kann trivial "uberpr"uft werden, die Bedingung rechts braucht lediglich an den Endpunkten der Intervalle "uberpr"uft zu werden, auf denen $\theta(t)$ konstant ist. Wenn die Bedingung dort zutrifft, dann auch im Inneren des Intervalls. 
 
 
-\subsection{Lokale Ver"anderungen}
+\subsection{Lokale Ver"anderungen beim ersten Ansatz}
 
 Der Ansatz aus dem vorangegangenen Unterabschnitt erleichtert die "Uberpr"ufung der Nebenbedingungen. Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\sigma(t)$ nach sich ziehen. Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\sigma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
 
@@ -178,20 +178,93 @@ Man kann dies etwa damit vergleichen, dass man eine st"uckweise konstante Funkti
 
 In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t_1,t_2]$ und $[t_2,t_3]$. Da $\sigma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. Da sich $\sigma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\sigma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. Die Parameter $A$, $B$ und $C$ aus dem vorangegangen Abschnitt unterscheiden sich auf den drei Intervallen. Wir bezeichnen diese Parameter auf $[t_{i-1},t_i]$ mit $A_i$, $B_i$ und $C_i$ f"ur $i=1,\dotsc,3$. Au"serdem schreiben wir der K"urze halber $\sigma_i:=\sigma(t_i)$ und $\dot\sigma_i:=\dot\sigma(t_i)$ f"ur $i=0,\dotsc,3$. Mit diesen Bezeichnungen bekommen wir folgendes Gleichungssystem:
 \begin{align}
-  \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \\
-  \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \\
-  \sigma_1       &= A_1\ln(t_1-B_1)+C_1 \\
-  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \\
-  \sigma_1       &= A_2\ln(t_1-B_2)+C_2 \\
-  \dot\sigma_1 &= \frac{A_2}{t_1-B_2} \\
-  \sigma_2       &= A_2\ln(t_2-B_2)+C_2 \\
-  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \\
-  \sigma_2       &= A_3\ln(t_2-B_3)+C_3 \\
-  \dot\sigma_2 &= \frac{A_3}{t_2-B_3} \\
-  \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \\
-  \dot\sigma_3 &= \frac{A_3}{t_3-B_3}
+  \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \label{eq:local1} \\
+  \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \label{eq:local2} \\
+  \sigma_1       &= A_1\ln(t_1-B_1)+C_1 \label{eq:local3} \\
+  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \label{eq:local4} \\
+  \sigma_1       &= A_2\ln(t_1-B_2)+C_2 \label{eq:local5} \\
+  \dot\sigma_1 &= \frac{A_2}{t_1-B_2} \label{eq:local6} \\
+  \sigma_2       &= A_2\ln(t_2-B_2)+C_2 \label{eq:local7} \\
+  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \label{eq:local8} \\
+  \sigma_2       &= A_3\ln(t_2-B_3)+C_3 \label{eq:local9} \\
+  \dot\sigma_2 &= \frac{A_3}{t_2-B_3} \label{eq:local10} \\
+  \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \label{eq:local11} \\
+  \dot\sigma_3 &= \frac{A_3}{t_3-B_3} \label{eq:local12}
 \end{align}
-Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. Alle anderen Gr"o"sen setzen wir als bekannt voraus. Somit bleibt also ein Freiheitsgrad. Man kann sich also zum Beispiel den Wert $A_1$ vorgeben und dann alle restlichen Parameter daraus berechnen. 
+Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. Alle anderen Gr"o"sen $\sigma_0$, $\dot\sigma_0$, $\sigma_3$, $\dot\sigma_3$, $t_0$, $t_1$, $t_2$ und $t_3$ setzen wir als bekannt voraus. Somit verbleibt also ein Freiheitsgrad. Man kann sich also zum Beispiel den Wert $A_2$ vorgeben und dann alle restlichen Parameter daraus berechnen. Wir wollen diese Rechnung so weit wie m"oglich analytisch durchf"uhren. Zun"achst stellen wir~\eqref{eq:local2} nach $B_1$ um und erhalten so 
+\begin{align} \label{eq:B1}
+  B_1=t_0-\frac{A_1}{\dot\sigma_0}\,.
+\end{align}
+Setzen wir dies in~\eqref{eq:local1} ein und stellen nach $C_1$ um, so erhalten wir
+\begin{align} \label{eq:C1}
+  C_1=\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}\,.
+\end{align}
+Setzen wir den Ausdruck f"ur $B_1$ in~\eqref{eq:local4} ein, so erhalten wir 
+$$ \dot\sigma_1 = \frac{A_1}{t_1-t_0+\frac{A_1}{\dot\sigma_0}}\,. $$
+Setzen wir die Ausdr"ucke f"ur $B_1$ und $C_1$ in~\eqref{eq:local3} ein, so entsteht
+$$ \sigma_1 = A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}\,. $$
+Wir setzen die erhaltenen Ausdr"ucke in~\eqref{eq:local6} ein, und bekommen
+\begin{align} \label{eq:B2}
+  B_2 = t_1-\frac{A_2}{A_1}(t_1-t_0)-\frac{A_2}{\dot\sigma_0}\,.
+\end{align}
+Ebenso verfahren wir mit Gleichung~\eqref{eq:local5}. Es entsteht
+\begin{equation} \label{eq:C2}
+\begin{split}
+  C_2 
+  &= A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}-A_2\ln\left(\frac{A_2}{A_1}(t_1-t_0)+\frac{A_2}{\dot\sigma_0}\right) \\
+  &= (A_1-A_2)\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}-A_2\ln\frac{A_2}{A_1}\,.
+\end{split}
+\end{equation}
+Das Gleichungssystem bestehend aus den Gleichungen \eqref{eq:local1} bis~\eqref{eq:local12} ist symmetrisch. Vertauscht man die folgenden Gr"o"sen, so erh"alt man dasselbe Gleichungssystem, allerdings in einer anderen Reihenfolge der Gleichungen: $A_1\leftrightarrow A_3$, $B_1\leftrightarrow B_3$, $C_1\leftrightarrow C_3$, $\sigma_0\leftrightarrow \sigma_3$, $\sigma_1\leftrightarrow \sigma_2$, $\dot\sigma_0\leftrightarrow \dot\sigma_3$, $\dot\sigma_1\leftrightarrow \dot\sigma_2$, $t_0\leftrightarrow t_3$ und $t_1\leftrightarrow t_2$. Also gelten die Gleichungen \eqref{eq:B2} und~\eqref{eq:C2} auch noch nach dieser Vertauschung der Gr"o"sen. Sie lauten dann 
+\begin{gather}
+  \label{eq:B2symm}
+  B_2 = t_2-\frac{A_2}{A_3}(t_2-t_3)-\frac{A_2}{\dot\sigma_3}\,, \\
+  \label{eq:C2symm}
+  C_2 = (A_3-A_2)\ln\left(t_2-t_3+\frac{A_3}{\dot\sigma_3}\right)+\sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}-A_2\ln\frac{A_2}{A_3}\,.
+\end{gather}
+Wir teilen nun die Gleichungen \eqref{eq:B2} und~\eqref{eq:B2symm} durch~$A_2$ und setzen dann beide Seiten gleich. Es entsteht dadurch
+$$ \frac{t_0-t_1}{A_1}+\frac{t_1-t_2}{A_2}+\frac{t_2-t_3}{A_3} 
+  = \frac{1}{\dot\sigma_0}-\frac{1}{\dot\sigma_3}\,. $$
+Setzt man die Gleichungen \eqref{eq:C2} und~\eqref{eq:C2symm} gleich und formt geschickt um, so erh"alt man
+$$ (A_1-A_2)\ln\left(\frac{\dot\sigma_0}{A_1}(t_1-t_0)+1\right)+\sigma_0
+  = (A_3-A_2)\ln\left(\frac{\dot\sigma_3}{A_3}(t_2-t_3)+1\right)+\sigma_3\,. $$
+Durch diese beiden Gleichungen sind direkte Beziehungen zwischen den Unbekannten $A_1$ und~$A_3$ hergestellt. Alle anderen Gr"o"sen in den beiden Gleichungen sind bekannt. Diese Gleichungen kann man numerisch nach $A_1$ und~$A_3$ aufl"osen. Sind $A_1$ und~$A_3$ bekannt, so kann man damit die Gr"o"sen $B_1$, $C_1$, $B_2$, $C_2$, $B_3$ und $C_3$ durch die Beziehungen \eqref{eq:B1}, \eqref{eq:C1}, \eqref{eq:B2}, \eqref{eq:C2} und 
+\begin{align*}
+  B_3 &= t_3-\frac{A_3}{\dot\sigma_3}\,, \\
+  C_3 &= \sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}
+\end{align*}
+berechnen. Die beiden letzten Gleichungen entstehen durch Austauschen der Variablen bei den Gleichungen \eqref{eq:B1} und~\eqref{eq:C1}. Alternativ erh"alt man diese Gleichungen auch, indem man zun"achst Gleichung~\eqref{eq:local12} nach~$B_3$ umstellt und dann in~\eqref{eq:local11} einsetzt diese Gleichung und nach~$C_3$ umstellt. 
+
+
+\subsection{Bewertung des ersten Ansatzes}
+
+Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass der Vorteil, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen sich aufhebt. 
+
+Im n"achsten Abschnitt versuchen wir einen weiteren Ansatz zu erarbeiten, der wahrscheinlich beide Probleme l"ost.
+
+
+\subsection{Zweiter angepasster Ansatz}
+
+Wir wollen zeigen, dass die Nebenbedingungen 
+$$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
+\qquad \text{und} \qquad
+\Im\dot\sigma(t)\ge0 $$
+f"ur st"uckweise quadratische, stetig differenzierbare Funktionen besonders leicht "uberpr"uft werden k"onnen. Auf einem Intervall~$I$, auf dem $\sigma(t)$ quadratisch ist, ist $\Im\dot\sigma(t)$ monoton. Also gilt die zweite Nebenbedigung $\Im\dot\sigma(t)\ge0$ genau dann, wenn sie an beiden Endpunkten dieses Intervalls erf"ullt ist. Wenn $\Im\dot\sigma(t)$ monoton und nicht-negativ ist, dann gilt dasselbe f"ur das Quadrat davon, welches auf der rechten Seite der ersten Nebenbedingung steht. Auf der linken Seite dieser Ungleichgung steht eine Konstante. Daher ist auch die erste Nebenbedingung automatisch erf"ullt, wenn sie an den Endpunkten gilt und die zweite Nebenbedingung zutrifft. Kurz zusammengefasst sind die beiden Nebenbedingungen genau dann erf"ullt, wenn sie an den Endpunkten der Intervalle erf"ullt ist, auf denen $\sigma(t)$ quadratisch ist.
+
+Ganz konkret sei $[t_0,t_1]$ ein Intervall, auf dem $\sigma(t)$ quadratisch ist, und zwar
+$$ \sigma(t) = at^2 + bt + c $$
+Dann erf"ullt $\sigma(t)$ die beiden Nebenbedingungen auf dem Intervall genau dann, wenn 
+$$ 2\,\lvert a\rvert \le (2\,\Im a\,t_i + \Im b)^2
+\qquad \text{und} \qquad
+2\,\Im a\,t_i + \Im b\ge 0 $$
+f"ur $i=0,1$. 
+
+
+\subsection{Lokale Ver"anderungen beim zweiten Ansatz}
+
+Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. B-Splines l"osen genau dieses Problem. Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. Sie quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
+
+
 
 
 \section{Lokale Optimumsuche} \label{sec:gradients}
