@@ -1,4 +1,5 @@
 \documentclass[a4paper]{scrartcl}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{ngerman}
 \usepackage{enumerate}
@@ -9,6 +10,9 @@
 \newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
 \newcommand{\pphi}{{\varphi}}
 \newcommand{\defeq}{\overset{!}{=}}
+
+
+%\hyphenation{An-fangs-n"a-he-rung}
 
 \begin{document}
 
@@ -240,9 +244,9 @@ berechnen. Die beiden letzten Gleichungen entstehen durch Austauschen der Variab
 
 \subsection{Bewertung des ersten Ansatzes}
 
-Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass der Vorteil, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen sich aufhebt. 
+Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass sich der Vorteil aufhebt, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen. 
 
-Im n"achsten Abschnitt versuchen wir einen weiteren Ansatz zu erarbeiten, der wahrscheinlich beide Probleme l"ost.
+Im n"achsten Abschnitt werden wir einen weiteren Ansatz zu erarbeiten, bei dem die Nebenbedingungen trivial "uberpr"uft werden k"onnen und lokale "Anderungen mit geringem Rechenaufwand realisiert werden k"onnen.
 
 
 \subsection{Zweiter angepasster Ansatz} \label{sec:2ndansatz}
@@ -262,7 +266,7 @@ $$ 2\,\lvert a\rvert \le (2\,\Im a\,t_j + \Im b)^2
 f"ur $j=0,1$. 
 
 
-\subsection{Lokale Ver"anderungen beim zweiten Ansatz}
+\subsection{Lokale Ver"anderungen beim zweiten Ansatz} \label{sec:2ndansatzLocalChanges}
 
 Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. B-Splines l"osen genau dieses Problem. Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. Sie quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
 
@@ -301,20 +305,21 @@ $$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2
 \qquad \text{und} \qquad
 \Im\dot\sigma(t)\ge0 $$
 sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. In der Sprache der Koeffizienten $\sigma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
-\begin{gather*}
+\begin{align*}
 \lvert\sigma_j-2\sigma_{j+1}+\sigma_{j+2}\rvert 
-\le \max\{(\Im\sigma_j-\Im\sigma_{j+1})^2, 
-    (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\} \\
-\text{und} \qquad
-\Im\sigma_j-\Im\sigma_{j+1}
-\ge 0
-\end{gather*}
+&\le (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\,, \\
+\lvert\sigma_{j+1}-2\sigma_{j+2}+\sigma_{j+3}\rvert 
+&\le (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\,, \\
+0&\le \Im\sigma_j-\Im\sigma_{j+1}
+\end{align*}
 f"ur alle ganzzahligen $j$. Mit 
-$$ \tau_j := \sigma_j-\sigma_{j+1} $$
+$ \tau_j := \sigma_j-\sigma_{j+1} $
 l"asst sich das noch k"urzer schreiben als
-$$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
+\begin{equation} \label{eq:condTau}
+\lvert\tau_j-\tau_{j+1}\rvert \le \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
 \qquad \text{und} \qquad
-\Im\tau_j \ge 0\,. $$
+0\le\Im\tau_j\,.
+\end{equation}
 Die Nebenbedingunen lassen sich also auch mit diesem zweiten Ansatz leicht "uberpr"ufen. Im n"achsten Abschnitt soll die eigentliche Zielfunktion, also eine Norm der Restfunktion, genauer beschrieben werden.
 
 
@@ -330,7 +335,20 @@ $$ \norm{r}_{W^{k,p}} := \left(\,\sum_{d=0}^k\int_a^b \lvert r^{(d)}(t)\rvert^p\
 \end{itemize}
 In der Praxis liegt $f$ oft nicht als Funktion vor, sondern als eine Folge von Messwerten. Um dann mit den $L_p$- oder Sobolev-Normen immernoch arbeiten zu k"onnen, wird $f$ dann typischerweise interpoliert. Die Berechnung der Integrale ist dann wahrscheinlich nicht mehr analytisch m"oglich, sondern nur noch numerisch, was die Berechnung der Norm sehr aufwendig machen kann. Dies umgeht man, indem man f"ur dir Norm nur die gemessenen Funktionswerte benutzt, also etwa
 $$ \norm{r}_{\ell_p} := \left(\,\sum_{j=1}^{N}\lvert r(j)\rvert^p\right)^{1/p}, $$
-f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. 
+f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. Wenn man nur diese diskreten Funktionswerte benutzt, dann muss man allerdings sicherstellen, dass keiner der Summanden $a_i(t)\cos\pphi_i(t)$ zu schnell zwischen den Stellen hin und her schwingt. Es muss allenfalls vermieden werden, dass ein Summand mehrere Nullstellen zwischen zwei benachbarten ganzen Zahlen hat. Dies erreicht man, indem man 
+\begin{equation} \label{eq:dotPhiLePi}
+\dot\pphi_i(t)\le\pi
+\end{equation}
+fordert. In Form der Werte $\tau_j$ ausgedr"uckt, ist das "aquivalent zu $\Im\tau_j\le\pi$. Es gibt noch einen weiteren zwingenden Grund f"ur diese Forderung: Man k"onnte $\norm{r}_{\ell_p}=0$ f"ur beliebigen Funktionen $f$ mit einem einzigen Summanden $a(t)\cos\pphi(t)$ erreichen, indem man $a(t)$ gen"ugend gro"s und konstant w"ahlt und man $\pphi(t)$ so einrichtet, dass $\cos\pphi(j)$ f"ur ganzzahligen $j$ um null schwankt und $\dot\pphi(t)\approx\pi$ ist und $\ddot\pphi(t)$ betraglich klein bleibt. Dann w"are die Bedingung~\eqref{eq:absSigma}, also $\lvert\ddot\sigma(t)\rvert\le\lvert\dot\sigma(t)\rvert^2$,  erf"ullt, denn es w"are $ \lvert\dot\sigma(t)\rvert = \lvert\dot\pphi(t)\rvert \approx \pi $ und $\lvert\ddot\sigma(t)\rvert=\lvert\ddot\pphi(t)\rvert \ll 1$. 
+
+Der zweite angepasste Ansatz (siehe Abschnitte \ref{sec:2ndansatz} und~\ref{sec:2ndansatzLocalChanges}) und die Norm $\norm{r}_{\ell_2}$ haben zusammen folgende Eigenschaften:
+
+\begin{itemize}
+\item Die Norm~$\norm{r}_{\ell_2}$ h"angt beliebig oft (reell) differenzierbar von den Gr"o"sen~$\sigma_j$ ab und ist mit sehr geringem Aufwand berechenbar. Die Ableitungen lassen sich als analytische Ausdr"ucke schreiben.
+\item Die Nebenbedingungen \eqref{eq:condTau} und~\eqref{eq:dotPhiLePi} sind anhand der Gr"o"sen $\sigma_j$ mit geringem Rechenaufwand "uberpr"ufbar. 
+\item Wird nur ein einziges~$\sigma_j$ ver"andert, so lassen sich die Nebenbedigungen, wenn sie vorher galten, leicht durch eine lokale Betrachtung "uberpr"ufen. Ebenso l"asst sich die Kostenfunktion~$\norm{r}_{\ell_2}$ durch lokale Berechnungen aus dem vorherigen Wert berechnen. 
+\end{itemize}
+Damit haben wir also beste Voraussetzungen f"ur eine lokale Optimumsuche. Dieser Schritt wird im folgenden Abschnitt besprochen. 
 
 
 \section{Lokale Optimumsuche} \label{sec:gradients}
@@ -342,7 +360,34 @@ Damit n"ahert man sich sehr schnell einem lokalen Optimum. Es ist absehbar, dass
 
 \section{Suche nach einer guten Anfangsn"aherung} \label{sec:initialval}
 
-Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu zerlegen. Dazu geh"ort die Hilbert-Huang-Transformation. Eine andere M"oglichkeit ist die Benutzung des Spektrograms der Short-Time-Fourier-Transformation oder das Wavelet-Energie-Spektrum bez"uglich des komplexwertigen Morlet-Wavelets. Aus diesen Diagrammen kann man recht gut die haupts"achlich vorkommenden Frequenzen zu verschiedenen Zeitpunkten ablesen. Dies k"onnte man als Grundlage f"ur eine Anfangsn"aherung nehmen. Eine Schwierigkeit, die dabei wahrscheinlich auftreten wird, ist die Verifizierung der Nebenbedingungen. Was tut man mit einer Anfangsn"aherung, die die Nebenbedingungen nicht erf"ullt?
+\subsection{Erste Ans"atze}
+
+Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu zerlegen. Dazu geh"ort die Hilbert-Huang-Transformation. Eine andere M"oglichkeit ist die Benutzung des Spektrograms der Short-Time-Fourier-Transformation oder das Wavelet-Energie-Spektrum bez"uglich des komplexwertigen Morlet-Wavelets. Aus diesen Diagrammen kann man recht gut die haupts"achlich vorkommenden Frequenzen zu verschiedenen Zeitpunkten ablesen. Dies k"onnte man als Grundlage f"ur eine Anfangsn"aherung nehmen. Eine Schwierigkeit dabei ist, dass die Nebenbedingungen verifiziert werden m"ussen und im Allgemeinen nicht von selbst eintreten. Dieses Problem kann man auf zweierlei Weisen angehen:
+\begin{itemize}
+\item Man "andert die Anfangsn"aherungen iterativ so ab, dass sie Nebenbedingungen erf"ullen. Wir k"onnen davon sprechen, dass die Nebenbedingungen repariert werden. 
+\item Man konstruiert Anfangsn"aherungen, welche die Nebenbedingungen automatisch erf"ullen. 
+\end{itemize}
+
+
+\subsection{Reparieren der Nebenbedingungen}
+
+Alle bisher angedeuteten Ans"atze aus dem vorigen Unterabschnitt f"uhren zu Anfangsn"aherungen, welche die Nebenbedingungen nicht notwendigerweise erf"ullen. Diese An\-fangs\-n"a\-he\-rungen m"ussen daher repariert werden. Da die Nebenbedingungen alle in Form von Ungleichungen vorliegen, kann man leicht eine Kostenfunktion angeben, die aussagt, wie weit man davon entfernt ist, die Nebenbedingungen zu erf"ullen. In Form der Werte von $\tau_j$ kann man also Kostenfunktion folgendes ansetzen:
+$$ L_j = \left(\lvert\tau_j-\tau_{j+1}\rvert - \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}\right)_+ + (-\Im\tau_j)_+ + (\Im\tau_j-\pi)_+\,, $$
+wobei wir $(x)_+$ definieren durch
+$$ (x)_+ := \begin{cases} x & \text{f"ur $x\ge0$} \\ 0 & \text{sonst.}\end{cases} $$
+Die Gesamtkostenfunktion ergibt sich dann als Summe der einzelnen Kostenfunktionen "uber alle relevanten Werte von $j$ summiert:
+$$ L := \sum_j L_j $$
+Nun kann man diese Funktion anhand eines lokalen Optimierungsverfahrens minimieren und auf diese Weise eine reparierte Anfangsn"aherung erhalten, die nicht allzuweit von der unreparierten entfernt ist. 
+
+
+\subsection{Anfangsn"aherungen bei denen die Nebenbedingungen automatisch erf"ullt werden}
+
+Es gibt gewisse M"oglichkeiten, die Anfangsn"aherungen so zu bestimmen, dass sie automatisch die Nebenbedingungen erf"ullen und in einem gewissen Ma"se optimal sind. Eine solche M"oglichkeit ist, dass man $f$ durch eine diskrete Fourier-Transformation (DFT) in Komponenten zerlegt. Die Komponenten mit den betraglich gr"o"sten Koeffizienten bilden die beste $\ell_2$-Approximation von $f$. Obwohl es die beste Approximation in diesem Sinne ist, ist die Approximation vermutlich nicht sonderlich gut, da sich die Winkelfrequenz nicht "andert und keine lokale Anpassung erfolgt. 
+
+Eine andere M"oglichkeit ist, $\pphi_1$ so einzurichten, dass die Nullstellen (oder Vorzeichenwechsel bez"uglich der ganzzahligen Stellen) mit denen von $f$ "ubereinstimmen. Von Nullstellen zu Nullstelle muss die Phase um $\pi$ vergr"o"sert werden, was man durch eine geeignete Spline-Interpolation erreichen kann. Die Nebenbedingungen k"onnen dabei nat"urlich leicht verletzt werden, wenn sich die Frequenz zu schnell "andert. Das passiert vor allem in Regionen, wo die Nullstellen zu dicht liegen, etwa weil die Funktion um eine Nullstelle herum verrauscht ist und dadurch neue Nullstellen entstehen. Dies kann man vermeiden, indem man Paare von zu dicht liegenden Nullstellen verwirft und bei der Interpolation ignoriert. 
+
+Bei all dem kann die Amplitude zun"achst konstant gelassen werden, da diese ohnehin sp"ater durch Optimierung angepasst wird. Lediglich das Vorzeichen sollte f"ur die meisten Samples "ubereinstimmen. 
+
 
 
 \section{Phasenboost und genetische Algorithmen} \label{sec:jumps}
