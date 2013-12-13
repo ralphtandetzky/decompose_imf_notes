@@ -12,8 +12,6 @@
 \newcommand{\defeq}{\overset{!}{=}}
 
 
-%\hyphenation{An-fangs-n"a-he-rung}
-
 \begin{document}
 
 \tableofcontents
@@ -316,7 +314,7 @@ f"ur alle ganzzahligen $j$. Mit
 $ \tau_j := \sigma_j-\sigma_{j+1} $
 l"asst sich das noch k"urzer schreiben als
 \begin{equation} \label{eq:condTau}
-\lvert\tau_j-\tau_{j+1}\rvert \le \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
+\lvert\tau_j-\tau_{j+1}\rvert \le \min\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
 \qquad \text{und} \qquad
 0\le\Im\tau_j\,.
 \end{equation}
@@ -384,10 +382,11 @@ Nun kann man diese Funktion anhand eines lokalen Optimierungsverfahrens minimier
 
 Es gibt gewisse M"oglichkeiten, die Anfangsn"aherungen so zu bestimmen, dass sie automatisch die Nebenbedingungen erf"ullen und in einem gewissen Ma"se optimal sind. Eine solche M"oglichkeit ist, dass man $f$ durch eine diskrete Fourier-Transformation (DFT) in Komponenten zerlegt. Die Komponenten mit den betraglich gr"o"sten Koeffizienten bilden die beste $\ell_2$-Approximation von $f$. Obwohl es die beste Approximation in diesem Sinne ist, ist die Approximation vermutlich nicht sonderlich gut, da sich die Winkelfrequenz nicht "andert und keine lokale Anpassung erfolgt. 
 
-Eine andere M"oglichkeit ist, $\pphi_1$ so einzurichten, dass die Nullstellen (oder Vorzeichenwechsel bez"uglich der ganzzahligen Stellen) mit denen von $f$ "ubereinstimmen. Von Nullstellen zu Nullstelle muss die Phase um $\pi$ vergr"o"sert werden, was man durch eine geeignete Spline-Interpolation erreichen kann. Die Nebenbedingungen k"onnen dabei nat"urlich leicht verletzt werden, wenn sich die Frequenz zu schnell "andert. Das passiert vor allem in Regionen, wo die Nullstellen zu dicht liegen, etwa weil die Funktion um eine Nullstelle herum verrauscht ist und dadurch neue Nullstellen entstehen. Dies kann man vermeiden, indem man Paare von zu dicht liegenden Nullstellen verwirft und bei der Interpolation ignoriert. 
+Eine andere M"oglichkeit ist, $\pphi_1$ so einzurichten, dass die Nullstellen (oder Vorzeichenwechsel bez"uglich der ganzzahligen Stellen) mit denen von $f$ "ubereinstimmen. Von Nullstelle zu Nullstelle muss die Phase um $\pi$ vergr"o"sert werden, was man durch eine geeignete Spline-Interpolation erreichen kann. Die Nebenbedingungen k"onnen dabei nat"urlich leicht verletzt werden, wenn sich die Frequenz zu schnell "andert. Das passiert vor allem in Regionen, wo die Nullstellen zu dicht liegen, etwa weil die Funktion um eine Nullstelle herum verrauscht ist und dadurch neue Nullstellen entstehen. Dies kann man vermeiden, indem man Paare von zu dicht liegenden Nullstellen verwirft und bei der Interpolation ignoriert. 
+
+Nun braucht man also ein Kriterium mit dem man entscheidet, welche Nullstellen weggelassen werden sollen. 
 
 Bei all dem kann die Amplitude zun"achst konstant gelassen werden, da diese ohnehin sp"ater durch Optimierung angepasst wird. Lediglich das Vorzeichen sollte f"ur die meisten Samples "ubereinstimmen. 
-
 
 
 \section{Phasenboost und genetische Algorithmen} \label{sec:jumps}
