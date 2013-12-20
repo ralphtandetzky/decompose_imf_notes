@@ -402,17 +402,78 @@ Weiterhin ist es vermutlich sinnvoll, nicht nur lokal zu suchen, sondern mehrere
 Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Methoden mit sich, die verwendet werden k"onnten. 
 
 
-\section{Das Korrespondenzproblem}
+\section{Die derzeitige Implementierung des Algorithmus}
+
+Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. 
+
+%- totalCost( func[], params[] )
+%	- getSamplesFromParams( params[] ) -> pairsOfReals[]
+%		- split params[] -> sigma, tau, real[], imag[]
+%		- getSamplesFromRadialBase( real[], sigma ) -> realPart[]
+%			- ...
+%		- getSamplesFromLogisticFunctionBase( imag[], tau ) -> imagPart[]
+%			- ...
+%		- zip realPart[], imagPart[] -> pairsOfReals[]
+%	- costFunction( func[], pairsOfReals[] )
+%		- groupPairsToComplex( pairsOfReals[] ) -> sigma_seq[]
+%		- calculateSigmaFunctionFromSigmaSequence( sigma_seq[] ) -> sigma_func[]
+%			- roughly sigma_func[] = ( sigma_seq[0:$-1] + sigma_seq[1:$] ) / 2 but properly for modulo 2*pi
+%		- calculateImfFromSigmaFunction( sigma_func[] ) -> imf[]
+%			- imf[] = imaginary part of e^sigma_func[]
+%		- sumOfSquaresOfDifference( func[], imf[] ) -> val
+%		- boundaryCondition( sigma_seq[] ) -> penalty
+%			- ...
+%		- val + penalty =: result
 
 
+
+\section{Das Korrespondenzproblem und Mode-Mixing}
+
+\subsection{Nachtr"agliches Sortieren der IMFs}
+
+Da f"ur die Optimierung der Differential Evolution Algorithmus benutzt wird, h"angt das Ergebnis vom Zufall ab. Wenn die erste IMF gefunden wird, so handelt es sich (zumindest ann"ahernd) um ein lokales Minimum der Kostenfunktion. Es k"onnen manchmal verschiedene lokale Minima gefunden werden, je nachdem wie der Zufall entscheidet. Somit kann es passieren, dass die gefundene IMF der Restfunktion sogar bessere Werte der Kostenfunktion (bez"uglich der urspr"unglichen Zielfunktion) liefert, als die erste gefundene IMF. Ein typisches Beispiel, wo soetwas auftreten kann, ist die Funktion
+$$ f(t) := \sin 30t + (1+\varepsilon)\cos t\,. $$
+Sowohl $\sin 30t$ als auch $(1+\varepsilon)\cos t$ sind IMFs, die als ann"ahernde lokale Minima der Kostenfunktion gefunden werden k"onnen. Als zweite IMF wird dann der jeweils andere Summand gefunden. 
+
+Dieses Korrespondenzproblem kann leicht gel"ost werden, indem man als erste IMF diejenige w"ahlt, welche die Kostenfunktion bez"uglich der urspr"unglichen Funktion minimiert. Falls die erste gefundene IMF nicht mit dieser "ubereinstimmt, dann kann auch noch einmal komplett von vorn optimiert werden, indem man die neue erste IMF als Anfangsapproximation vorgibt. Die erste IMF wird durch dieses Vorgehen auf jeden Fall verbessert. Es kann jedoch passieren, dass weitere IMFs im Gesamtergebnis schlechtere Ergebnisse liefern, weil die Norm der Restfunktion gr"o"ser wird.
+
+
+\subsection{Mehrere Suchl"aufe, Anpassungen der globalen Optimumsuche} \label{sec:aormchsogz}
+
+Ein weiterer Ansatz, um das Korrespondenzproblem in den Griff zu bekommen, ist, dass man mehrere Suchl"aufe mit verschiedenen Anfangswerten mit dem Differential Evolution Algorithmus durchf"uhrt und das beste gefundene Optimum heraussucht. Je mehr Suchl"aufe man startet, um so gr"o"ser wird die Wahrscheinlichkeit, dass man das beste lokale Optimum findet. 
+
+Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differential Evolution Algorithmus. Es gibt sicherlich noch viele weitere allgemeine Ans"atze, um Differential Evolution zu verbessern. Oder man k"onnte gar einen v"ollig anderen Algorithmus zur globalen Optimumsuche verwenden. 
+
+
+\section{Benchmarks mit den Funktionen von Rudin}
+
+\subsection{Die Funktionen und die Probleme}
+
+Die Funktionen, die Rudin in seiner Diplomarbeit untersucht sind die folgenden.
+\begin{align*}
+f_1(t) &= \sin 2\pi t + \sin 80\pi t \\
+f_2(t) &= \sin\big(16\pi(t+\sin 2\pi t)\big) \\
+f_3(t) &= \sin(2\pi te^{2t}) + e^{-(4t-2)^2}\sin 30\pi t
+\end{align*}
+Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und scheidet die Phasengeschwindigkeit des zweiten Summanden. 
+
+
+\subsection{Ergebnisse}
+
+Die Funktion $f_1(t)$ stellt f"ur unseren Algorithmus kein Problem dar. Die IMFs werden immer richtig gefunden. Allerdings wird manchmal der eine, manchmal der andere Summand zuerst gefunden. Die exakte Gleichheit der Kostenfunktionen von IMFs sollte allerdings bei realen Daten kaum auftreten. 
+
+Die Funktion $f_2(t)$ ist f"ur unsere Suche allerdings in der Tat ein Problem. Die Phasengeschwindigkeit wechselt das Vorzeichen, was f"ur unsere L"osungen nicht zugelassen ist. Die erste gefundene IMF liefert kaum zufriedenstellende Ergebnisse. 
+
+Bei $f_3(t)$ werden die IMFs oft mit hervorragender "Ubereinstimmung gefunden. Manchmal werden aber auch abh"angig vom Zufall andere L"osungen gefunden. Mode Mixing war hier jedenfalls kein schwerwiegendes Problem. Bei der Funktion $f_3(t)$ w"urde der Ansatz aus Abschnitt~\ref{sec:aormchsogz} wahrscheinlich sehr viel helfen, da hierdurch die L"osungssuche robuster wird. 
 
 
 \section{Ideen f"ur zuk"unftige Forschung und Entwicklung}
 
+Drei Dinge sollten im Jahr 2014 passieren:
 \begin{enumerate}
-\item {\em Nullstellen in den Griff bekommen.} 
-\item Korrespondenzproblem und Mode-Mixing untersuchen
-\item Benchmark mit Funktionen von Rudin
+\item Der Algorithmus und die Mathematik sollten in einem Artikel zur Ver"offentlichung eingereicht werden. 
+\item Weitere Benchmarks mit k"unstlichen und realen Daten sollten durchgef"uhrt werden. Dazu geh"oren Vergleiche mit den derzeit besten Methoden f"ur die Zerlegung in IMFs. 
+\item Ideen f"ur einen Folgeantrag sollten gesammelt werden. 
 \end{enumerate}
 
 
