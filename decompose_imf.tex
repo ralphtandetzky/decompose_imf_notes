@@ -402,6 +402,31 @@ Weiterhin ist es vermutlich sinnvoll, nicht nur lokal zu suchen, sondern mehrere
 Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Methoden mit sich, die verwendet werden k"onnten. 
 
 
+\section{Die derzeitige Implementierung des Algorithmus}
+
+Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. 
+
+%- totalCost( func[], params[] )
+%	- getSamplesFromParams( params[] ) -> pairsOfReals[]
+%		- split params[] -> sigma, tau, real[], imag[]
+%		- getSamplesFromRadialBase( real[], sigma ) -> realPart[]
+%			- ...
+%		- getSamplesFromLogisticFunctionBase( imag[], tau ) -> imagPart[]
+%			- ...
+%		- zip realPart[], imagPart[] -> pairsOfReals[]
+%	- costFunction( func[], pairsOfReals[] )
+%		- groupPairsToComplex( pairsOfReals[] ) -> sigma_seq[]
+%		- calculateSigmaFunctionFromSigmaSequence( sigma_seq[] ) -> sigma_func[]
+%			- roughly sigma_func[] = ( sigma_seq[0:$-1] + sigma_seq[1:$] ) / 2 but properly for modulo 2*pi
+%		- calculateImfFromSigmaFunction( sigma_func[] ) -> imf[]
+%			- imf[] = imaginary part of e^sigma_func[]
+%		- sumOfSquaresOfDifference( func[], imf[] ) -> val
+%		- boundaryCondition( sigma_seq[] ) -> penalty
+%			- ...
+%		- val + penalty =: result
+
+
+
 \section{Das Korrespondenzproblem und Mode-Mixing}
 
 \subsection{Nachtr"agliches Sortieren der IMFs}
