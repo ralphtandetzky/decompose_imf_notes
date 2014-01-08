@@ -445,15 +445,15 @@ Ein weiterer Ansatz, um das Korrespondenzproblem in den Griff zu bekommen, ist, 
 Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differential Evolution Algorithmus. Es gibt sicherlich noch viele weitere allgemeine Ans"atze, um Differential Evolution zu verbessern. Oder man k"onnte gar einen v"ollig anderen Algorithmus zur globalen Optimumsuche verwenden. 
 
 
-\section{Benchmarks mit den Funktionen von Rudin}
+\section{Benchmarks mit den Funktionen von Rudi}
 
 \subsection{Die Funktionen und die Probleme}
 
-Die Funktionen, die Rudin in seiner Diplomarbeit untersucht sind die folgenden.
+Die Funktionen, die Rudi in seiner Diplomarbeit \cite[S.~28--32]{bib:rudi2010} untersucht sind die folgenden.
 \begin{align*}
-f_1(t) &= \sin 2\pi t + \sin 80\pi t \\
-f_2(t) &= \sin\big(16\pi(t+\sin 2\pi t)\big) \\
-f_3(t) &= \sin(2\pi te^{2t}) + e^{-(4t-2)^2}\sin 30\pi t
+f_1(t) &= \sin 10\pi t + \sin 80\pi t \\
+f_2(t) &= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
+f_3(t) &= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
 \end{align*}
 Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und scheidet die Phasengeschwindigkeit des zweiten Summanden. 
 
@@ -475,6 +475,18 @@ Drei Dinge sollten im Jahr 2014 passieren:
 \item Weitere Benchmarks mit k"unstlichen und realen Daten sollten durchgef"uhrt werden. Dazu geh"oren Vergleiche mit den derzeit besten Methoden f"ur die Zerlegung in IMFs. 
 \item Ideen f"ur einen Folgeantrag sollten gesammelt werden. 
 \end{enumerate}
+
+
+\begin{thebibliography}{MM}
+
+\bibitem{bib:rudi2010}
+  Rudin, J.:
+  \emph{Empirical Mode Decomposition via adaptiver Wavelet-Approximation.} (Diplomarbeit)
+  Paderborn, 
+  2010
+  
+\end{thebibliography}
+
 
 
 \end{document}
