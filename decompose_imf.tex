@@ -450,14 +450,16 @@ Ein weiterer Ansatz, um das Korrespondenzproblem in den Griff zu bekommen, ist, 
 Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differential Evolution Algorithmus. Es gibt sicherlich noch viele weitere allgemeine Ans"atze, um Differential Evolution zu verbessern. Oder man k"onnte gar einen v"ollig anderen Algorithmus zur globalen Optimumsuche verwenden. 
 
 
-\section{Benchmarks mit den Funktionen von Rudi}
+\section{Benchmarks mit verschiedenen Funktionen}
 
 \subsection{Die Funktionen und die Probleme}
 
 Die Funktionen, die~\citeauthor{rudi2010} in seiner Diplomarbeit \citep[S.~28--32]{rudi2010} untersucht, sind die folgenden.
 \begin{align*}
 f_1(t) &:= \sin 10\pi t + \sin 80\pi t \\
+%sin(10*pi*x)+sin(80*pi*x)
 f_2(t) &:= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
+%sin(16*pi*(sin(2*pi*x)+x))
 f_3(t) &:= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
 %exp(-30*(x-0.5)^2)*sin(160*pi*x)+sin(3*pi*x*exp(3*x))
 \end{align*}
@@ -468,7 +470,7 @@ Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der 
 
 Die Funktion $f_1(t)$ stellt f"ur unseren Algorithmus kein Problem dar. Die IMFs werden immer richtig gefunden. Allerdings wird manchmal der eine, manchmal der andere Summand zuerst gefunden. Die exakte Gleichheit der Kostenfunktionen von IMFs sollte allerdings bei realen Daten kaum auftreten. 
 
-Die Funktion $f_2(t)$ ist f"ur unsere Suche allerdings in der Tat ein Problem. Die Phasengeschwindigkeit wechselt das Vorzeichen, was f"ur unsere L"osungen nicht zugelassen ist. Die erste gefundene IMF liefert kaum zufriedenstellende Ergebnisse. 
+Die Funktion $f_2(t)$ ist f"ur unsere Suche allerdings in der Tat ein Problem. Die Phasengeschwindigkeit wechselt das Vorzeichen, was f"ur unsere L"osungen nicht zugelassen ist. Die erste gefundene IMF liefert oft wenig zufriedenstellende Ergebnisse. Die Stellen, wo die Phasengeschwindigkeit das Vorzeichen wechselt werden meist schlecht erfasst. Die restlichen Schwingungen werden allerdings gut approximiert. 
 
 Bei $f_3(t)$ werden die IMFs oft mit hervorragender "Ubereinstimmung gefunden. Manchmal werden aber auch abh"angig vom Zufall andere L"osungen gefunden. Mode Mixing war hier jedenfalls kein schwerwiegendes Problem. Bei der Funktion $f_3(t)$ w"urde der Ansatz aus Abschnitt~\ref{sec:aormchsogz} wahrscheinlich sehr viel helfen, da hierdurch die L"osungssuche robuster wird. 
 
