@@ -1,8 +1,13 @@
 \documentclass[a4paper]{scrartcl}
+\usepackage[utf8]{inputenc} % necessary for the BiBTeX file to work with umlauts
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage[ngerman]{babel}
 \usepackage{enumerate}
+\usepackage{natbib} % provides a few nice styles for the bibliography
+\usepackage[nottoc]{tocbibind} % makes sure the bibliography is added to the table of contents
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{german} % selects german as language for the bibliography
 
 \newcommand{\R}{{\mathbb{R}}}
 \newcommand{\de}{{\mathrm{d}}}
@@ -449,11 +454,12 @@ Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differ
 
 \subsection{Die Funktionen und die Probleme}
 
-Die Funktionen, die Rudi in seiner Diplomarbeit \cite[S.~28--32]{bib:rudi2010} untersucht sind die folgenden.
+Die Funktionen, die~\citeauthor{rudi2010} in seiner Diplomarbeit \citep[S.~28--32]{rudi2010} untersucht, sind die folgenden.
 \begin{align*}
-f_1(t) &= \sin 10\pi t + \sin 80\pi t \\
-f_2(t) &= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
-f_3(t) &= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
+f_1(t) &:= \sin 10\pi t + \sin 80\pi t \\
+f_2(t) &:= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
+f_3(t) &:= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
+%exp(-30*(x-0.5)^2)*sin(160*pi*x)+sin(3*pi*x*exp(3*x))
 \end{align*}
 Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und scheidet die Phasengeschwindigkeit des zweiten Summanden. 
 
@@ -477,16 +483,8 @@ Drei Dinge sollten im Jahr 2014 passieren:
 \end{enumerate}
 
 
-\begin{thebibliography}{MM}
-
-\bibitem{bib:rudi2010}
-  Rudin, J.:
-  \emph{Empirical Mode Decomposition via adaptiver Wavelet-Approximation.} (Diplomarbeit)
-  Paderborn, 
-  2010
-  
-\end{thebibliography}
-
+\bibliographystyle{plainnat}
+\bibliography{decompose_imf}
 
 
 \end{document}
