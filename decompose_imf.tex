@@ -339,7 +339,9 @@ m"oglichst klein wird. Bis jetzt haben wir noch nicht genau festgelegt, was wir 
 $$ \norm{r}_{W^{k,p}} := \left(\,\sum_{d=0}^k\int_a^b \lvert r^{(d)}(t)\rvert^p\,\de t\right)^{1/p}. $$
 \end{itemize}
 In der Praxis liegt $f$ oft nicht als Funktion vor, sondern als eine Folge von Messwerten. Um dann mit den $L_p$- oder Sobolev-Normen immernoch arbeiten zu k"onnen, wird $f$ dann typischerweise interpoliert. Die Berechnung der Integrale ist dann wahrscheinlich nicht mehr analytisch m"oglich, sondern nur noch numerisch, was die Berechnung der Norm sehr aufwendig machen kann. Dies umgeht man, indem man f"ur dir Norm nur die gemessenen Funktionswerte benutzt, also etwa
-$$ \norm{r}_{\ell_p} := \left(\,\sum_{j=1}^{N}\lvert r(j)\rvert^p\right)^{1/p}, $$
+\begin{align} \label{eq:lpnormr}
+\norm{r}_{\ell_p} := \left(\,\sum_{j=1}^{N}\lvert r(j)\rvert^p\right)^{1/p},
+\end{align}
 f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. Wenn man nur diese diskreten Funktionswerte benutzt, dann muss man allerdings sicherstellen, dass keiner der Summanden $a_i(t)\cos\pphi_i(t)$ zu schnell zwischen den Stellen hin und her schwingt. Es muss allenfalls vermieden werden, dass ein Summand mehrere Nullstellen zwischen zwei benachbarten ganzen Zahlen hat. Dies erreicht man, indem man 
 \begin{equation} \label{eq:dotPhiLePi}
 \dot\pphi_i(t)\le\pi
@@ -411,15 +413,21 @@ Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Met
 
 \section{Die derzeitige Implementierung des Algorithmus}
 
-Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. Wir werden nun rückwärts beschreiben, wie diese IMF aus anfänglichen Parametern berechnet wird. Danach werden wir zeigen, wie man daraus die Kostenfunktion ableitet. 
+Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. Wir beschreiben die folgenden Bestandteile des Algorithmus in dieser Reihenfolge:
+\begin{enumerate}[1.]
+\item Die IMF wird aus anfänglichen Parametern berechnet. 
+\item Die Kostenfunktion inklusive der Strafterme bei Verletzung der Nebenbedigung wird berechnet. 
+\item Ein globaler Optimierungsalgorithmus wird verwendet, um anf"angliche Parameter zu finden, die die Kostenfunktion minimieren. 
+\end{enumerate}
 
+Wir beschreiben hier, wie man die Berechnung der IMF schrittweise auf die anf"anglichen Parameter zur"uckf"uhrt. 
 Die IMF ist der Realteil der Funktion $e^{\sigma(t)}$. Die IMF braucht nur sampleweise berechnet zu werden. Daher wird dies nur an Stellen $t_1,\ldots,t_n$ ausgef"uhrt. Die Funktion $\sigma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\sigma_0,\ldots,\sigma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\sigma(t_i)=\dfrac{\sigma_{i-1}+\sigma_{i}}{2}$ f"ur $i=1,\ldots,n$. Da die Division durch $2$ in $\C/2\pi\ii\Z$ nicht eindeutig ist, sondern $2x=y$ bei gegebenem $y\in\C/2\pi\ii\Z$ genau zwei L"osungen $x\in\C/2\pi\ii\Z$ besitzt, m"ussen wir genauer festlegen, welche L"osung wir meinen. Wir w"ahlen aus den Restklassen solche Repr"asentanten aus, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist, und dividieren deren Summe durch $2$. Auf diese Weise ist die Restklasse, in der $\sigma(t_i)$ liegt, eindeutig festgelegt. 
 
 Der Realteil der Folge $\sigma_0,\ldots,\sigma_n$ wird durch eine Summe von Radialbasisfunktionen und der Imagin"arteil als Summe von logistischen Funktionen beschrieben, d.\,h. 
-$$ \sigma_i = \sum_{k=1}^{d_1}b_ke^{-\frac{(i-\mu_k)}{2\sigma^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+e^{\nu_l-i}} $$
-bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$. Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
+$$ \sigma_i = \sum_{k=1}^{d_1}b_ke^{-\frac{(i-\mu_k)}{2\alpha^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+e^\frac{\nu_l-i}{\beta}} $$
+bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$ und $\alpha$ und~$\beta$. Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
 
-Die Kostenfunktion setzt sich nun aus der quadratischen Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. Mit der Definition
+Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. Mit der Definition
 $ \tau_j := \sigma_j-\sigma_{j+1} $ 
 k"onnen diese Nebenbedingungen auch in der Form 
 $$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2
@@ -429,7 +437,7 @@ geschrieben werden. Wieder m"ussen wir sagen, welche Repr"asentanten von $\sigma
 $$ 1 + \lvert\tau_j-\tau_{j+1}\rvert - \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2 $$
 addiert. Wird die rechte Nebenbedingung verletzt, so wird zus"atzlich 
 $ 1 - \Im\tau_j $
-auf die Kostenfunktion aufaddiert. Dies wird f"ur alle $j$ durchgef"uhrt, f"ur die dies sinnvoll m"oglich ist. 
+auf die Kostenfunktion aufaddiert. Dies wird f"ur alle m"oglichen Werte von $j$ durchgef"uhrt. 
 
 %- totalCost( func[], params[] )
 %	- getSamplesFromParams( params[] ) -> pairsOfReals[]
