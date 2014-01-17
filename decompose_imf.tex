@@ -9,7 +9,9 @@
 \usepackage[fixlanguage]{babelbib}
 \selectbiblanguage{german} % selects german as language for the bibliography
 
+\newcommand{\C}{{\mathbb{C}}}
 \newcommand{\R}{{\mathbb{R}}}
+\newcommand{\Z}{{\mathbb{Z}}}
 \newcommand{\de}{{\mathrm{d}}}
 \newcommand{\ii}{{\mathrm{i}}}
 \newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
@@ -409,7 +411,25 @@ Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Met
 
 \section{Die derzeitige Implementierung des Algorithmus}
 
-Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. 
+Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. Wir werden nun rückwärts beschreiben, wie diese IMF aus anfänglichen Parametern berechnet wird. Danach werden wir zeigen, wie man daraus die Kostenfunktion ableitet. 
+
+Die IMF ist der Realteil der Funktion $e^{\sigma(t)}$. Die IMF braucht nur sampleweise berechnet zu werden. Daher wird dies nur an Stellen $t_1,\ldots,t_n$ ausgef"uhrt. Die Funktion $\sigma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\sigma_0,\ldots,\sigma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\sigma(t_i)=\dfrac{\sigma_{i-1}+\sigma_{i}}{2}$ f"ur $i=1,\ldots,n$. Da die Division durch $2$ in $\C/2\pi\ii\Z$ nicht eindeutig ist, sondern $2x=y$ bei gegebenem $y\in\C/2\pi\ii\Z$ genau zwei L"osungen $x\in\C/2\pi\ii\Z$ besitzt, m"ussen wir genauer festlegen, welche L"osung wir meinen. Wir w"ahlen aus den Restklassen solche Repr"asentanten aus, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist, und dividieren deren Summe durch $2$. Auf diese Weise ist die Restklasse, in der $\sigma(t_i)$ liegt, eindeutig festgelegt. 
+
+Der Realteil der Folge $\sigma_0,\ldots,\sigma_n$ wird durch eine Summe von Radialbasisfunktionen und der Imagin"arteil als Summe von logistischen Funktionen beschrieben, d.\,h. 
+$$ \sigma_i = \sum_{k=1}^{d_1}b_ke^{-\frac{(i-\mu_k)}{2\sigma^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+e^{\nu_l-i}} $$
+bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$. Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
+
+Die Kostenfunktion setzt sich nun aus der quadratischen Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. Mit der Definition
+$ \tau_j := \sigma_j-\sigma_{j+1} $ 
+k"onnen diese Nebenbedingungen auch in der Form 
+$$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2
+\qquad \text{und} \qquad
+0\le\Im\tau_j $$
+geschrieben werden. Wieder m"ussen wir sagen, welche Repr"asentanten von $\sigma_j$ und $\sigma_{j+1}$ wir verwenden, da es sich streng genommen um Restklassen modulo $2\pi\ii$ handelt und beispielsweise der Ausdruck $\lvert\tau_j-\tau_{j+1}\rvert$ davon abh"angt. Wir w"ahlen zwei solche Repr"asentanten von $\sigma_j$ und~$\sigma_{j+1}$, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist. F"ur jede solche Auswahl ist die angegebene Bedingung "aquivalent. Wird die linke Nebenbedingung f"ur ein $j$ verletzt, so wird der Strafterm
+$$ 1 + \lvert\tau_j-\tau_{j+1}\rvert - \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2 $$
+addiert. Wird die rechte Nebenbedingung verletzt, so wird zus"atzlich 
+$ 1 - \Im\tau_j $
+auf die Kostenfunktion aufaddiert. Dies wird f"ur alle $j$ durchgef"uhrt, f"ur die dies sinnvoll m"oglich ist. 
 
 %- totalCost( func[], params[] )
 %	- getSamplesFromParams( params[] ) -> pairsOfReals[]
