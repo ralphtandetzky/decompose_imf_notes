@@ -374,7 +374,7 @@ Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu
 
 \subsection{Reparieren der Nebenbedingungen}
 
-Alle bisher angedeuteten Ans"atze aus dem vorigen Unterabschnitt f"uhren zu Anfangsn"aherungen, welche die Nebenbedingungen nicht notwendigerweise erf"ullen. Diese An\-fangs\-n"a\-he\-rungen m"ussen daher repariert werden. Da die Nebenbedingungen alle in Form von Ungleichungen vorliegen, kann man leicht eine Kostenfunktion angeben, die aussagt, wie weit man davon entfernt ist, die Nebenbedingungen zu erf"ullen. In Form der Werte von $\tau_j$ kann man also Kostenfunktion folgendes ansetzen:
+Alle bisher angedeuteten Ans"atze aus dem vorigen Unterabschnitt f"uhren zu Anfangsn"aherungen, welche die Nebenbedingungen nicht notwendigerweise erf"ullen. Diese An\-fangs\-n"a\-he\-rungen m"ussen daher repariert werden. Da die Nebenbedingungen alle in Form von Ungleichungen vorliegen, kann man leicht eine Kostenfunktion angeben, die aussagt, wie weit man davon entfernt ist, die Nebenbedingungen zu erf"ullen. In Form der Werte von $\tau_j$ kann man als Kostenfunktion folgendes ansetzen:
 $$ L_j = \left(\lvert\tau_j-\tau_{j+1}\rvert - \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}\right)_+ + (-\Im\tau_j)_+ + (\Im\tau_j-\pi)_+\,, $$
 wobei wir $(x)_+$ definieren durch
 $$ (x)_+ := \begin{cases} x & \text{f"ur $x\ge0$} \\ 0 & \text{sonst.}\end{cases} $$
@@ -463,7 +463,7 @@ f_2(t) &:= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
 f_3(t) &:= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
 %exp(-30*(x-0.5)^2)*sin(160*pi*x)+sin(3*pi*x*exp(3*x))
 \end{align*}
-Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und scheidet die Phasengeschwindigkeit des zweiten Summanden. 
+Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und schneidet die Phasengeschwindigkeit des zweiten Summanden. 
 
 
 \subsection{Ergebnisse}
