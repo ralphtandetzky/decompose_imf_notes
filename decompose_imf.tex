@@ -25,34 +25,56 @@
 
 \section{Aufgabenstellung}
 
-Sei $f:[a,b]\to\R$ eine hinreichend glatte reellwertige Funktion auf einem Intervall $[a,b]$. Gesucht ist eine Zerlegung
+Sei $f:[a,b]\to\R$ eine hinreichend glatte reellwertige Funktion auf einem Intervall $[a,b]$. 
+Gesucht ist eine Zerlegung
 $$ f(t) = \sum_{i=1}^N a_i(t)\cos\pphi_i(t) + r(t)\,, $$
-wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. F"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ sollen dabei mindestens folgende Bedingungen f"ur alle $t$ gelten:
+wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. 
+F"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ sollen dabei mindestens folgende Bedingungen f"ur alle $t$ gelten:
 \begin{align*}
   a_i(t) &> 0 \\
   \dot{\pphi_i}(t) &\ge 0
 \end{align*}
-Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (intrinsic mode function) erf"ullt ist. Die Aufgabe ist es, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. Dazu ist Folgendes notwendig:
+Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (intrinsic mode function) erf"ullt ist. 
+Die Aufgabe ist es, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. 
+Dazu ist Folgendes notwendig:
 \begin{enumerate}
-  \item Neben den obigen Forderungen an die Funktionen $a_i$ und $\pphi_i$, sollten weitere praktikable Bedingungen festgelegt werden, damit eine plausible L"osung des Problems gefunden wird. Dies wird im Abschnitt~\ref{sec:moreconds} behandelt. 
-  \item Die Funktionen $a_i$ und $\pphi_i$ m"ussen geeignet diskretisiert werden, etwa indem man sie in Linearkombinationen einfacher Funktionen zerlegt. Darauf wird in Abschnitt~\ref{sec:discretize} eingegangen.
-  \item F"ur die Restfunktion muss eine geeignete Norm festgelegt werden, damit "uberhaupt klar ist, was es hei"st, den Fehler zu minimieren. Hierauf wird in Abschnitt~\ref{sec:norms4r} eingegangen.
-  \item Man braucht ein geeignetes Optimierungsverfahren, um die L"osungen schrittweise zu verbessern. Denkbar sind etwa Gradientenverfahren. Dabei ist zu beachten, dass die Nebenbedingungen stets eingehalten werden m"ussen. Dies ist sicherlich erst dann sinnvoll, wenn man sich sehr nah an einem guten lokalen Optimum befindet. Verschiedene Ans"atze werden in Abschnitt~\ref{sec:gradients} besprochen.
-  \item Bei dem Optimierungsproblem wird es im Allgemeinen sehr viele lokale Extremstellen geben. Es sollte also eine gute erste N"aherung f"ur die $a_i$ und $\pphi_i$ gefunden werden. Dies wird in Abschnitt~\ref{sec:initialval} beschrieben. 
-  \item Au"serdem sollte im Algorithmus vermieden werden, dass man sich in einem schlechten lokalen Extrempunkt verf"angt und nicht mehr davon wegkommt. Abschnitt~\ref{sec:jumps} geht darauf ein, wie das gelingt.
+  \item Neben den obigen Forderungen an die Funktionen $a_i$ und $\pphi_i$, sollten weitere praktikable Bedingungen festgelegt werden, damit eine plausible L"osung des Problems gefunden wird. 
+  Dies wird im Abschnitt~\ref{sec:moreconds} behandelt. 
+  \item Die Funktionen $a_i$ und $\pphi_i$ m"ussen geeignet diskretisiert werden, etwa indem man sie in Linearkombinationen einfacher Funktionen zerlegt. 
+  Darauf wird in Abschnitt~\ref{sec:discretize} eingegangen.
+  \item F"ur die Restfunktion muss eine geeignete Norm festgelegt werden, damit "uberhaupt klar ist, was es hei"st, den Fehler zu minimieren. 
+  Hierauf wird in Abschnitt~\ref{sec:norms4r} eingegangen.
+  \item Man braucht ein geeignetes Optimierungsverfahren, um die L"osungen schrittweise zu verbessern. 
+  Denkbar sind etwa Gradientenverfahren. Dabei ist zu beachten, dass die Nebenbedingungen stets eingehalten werden m"ussen. 
+  Dies ist sicherlich erst dann sinnvoll, wenn man sich sehr nah an einem guten lokalen Optimum befindet. 
+  Verschiedene Ans"atze werden in Abschnitt~\ref{sec:gradients} besprochen.
+  \item Bei dem Optimierungsproblem wird es im Allgemeinen sehr viele lokale Extremstellen geben. 
+  Es sollte also eine gute erste N"aherung f"ur die $a_i$ und $\pphi_i$ gefunden werden. 
+  Dies wird in Abschnitt~\ref{sec:initialval} beschrieben. 
+  \item Au"serdem sollte im Algorithmus vermieden werden, dass man sich in einem schlechten lokalen Extrempunkt verf"angt und nicht mehr davon wegkommt. 
+  Abschnitt~\ref{sec:jumps} geht darauf ein, wie das gelingt.
 \end{enumerate}
 
 
 \section{Weitere Nebenbedingungen} \label{sec:moreconds}
 
-Die Bedingung an die $a_i(t)$ ist sehr schwach. Prinzipiell k"onnte man $\pphi_1(t):=0$ und $\pphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
+Die Bedingung an die $a_i(t)$ ist sehr schwach. 
+Prinzipiell k"onnte man $\pphi_1(t):=0$ und $\pphi_2(t):=\pi$ setzen und dann die gesamte Approximation mit geeigneten $a_1$ und $a_2$ ausf"uhren. 
+Dadurch wird allerdings im Allgemeinen die Bedingung verletzt, dass zwischen zwei benachbarten Nullstellen nur ein Extrempunkt liegen darf verletzt. 
+Wir brauchen also eine geeignete Bedingung, die sich leicht in eine analytische Form bringen l"asst, so dass die Extrempunkteigenschaft sichergestellt ist. 
 
-Wir untersuchen zun"achst die Nullstellen der ersten Ableitung eines Summanden $a_i(t)\cos\pphi_i(t)$. Um uns etwas Schreibarbeit zu sparen, verzichten wir darauf, den Index $i$ jedesmal zu schreiben, solange er keine Rolle spielt. Die Ableitung von $a(t)\cos\pphi(t)$ ist
+Wir untersuchen zun"achst die Nullstellen der ersten Ableitung eines Summanden $a_i(t)\cos\pphi_i(t)$. 
+Um uns etwas Schreibarbeit zu sparen, verzichten wir darauf, den Index $i$ jedesmal zu schreiben, solange er keine Rolle spielt. 
+Die Ableitung von $a(t)\cos\pphi(t)$ ist
 $$ \dot a(t)\cos\pphi(t)-a(t)\dot\pphi(t)\sin\pphi(t)\,. $$
 Zwischen zwei Nullstellen k"onnen wir diesen Ausdruck problemlos durch $a(t)\cos\pphi(t)$ teilen und erhalten so
 $$ \frac{\dot a(t)}{a(t)}
 -\dot\pphi(t)\tan\pphi(t)\,. $$
-Dieser Ausdruck l"auft gegen $+\infty$, wenn man sich einer Nullstelle von $a(t)\cos\pphi(t)$ von rechts n"ahert und gegen $-\infty$, wenn man sich von links einer Nullstelle n"ahert. Aus dem Zwischenwertsatz folgt also, dass dieser Ausdruck mindestens eine Nullstelle zwischen zwei benachbarten Nullstellen von $a(t)\cos\pphi(t)$ besitzt. Wir wollen nun Voraussetzungen herleiten, unter denen dieser Ausdruck zwischen den Nullstellen streng monoton f"allt. Aus der Monotonie folgt dann die Eindeutigkeit der Nullstelle und somit dass es nur eine Extremstelle von $a(t)\cos\pphi(t)$ zwischen benachbarten Nullstellen gibt. Um Voraussetzungen f"ur die Monotonie zu erlangen, leiten wir den Ausdruck zun"achst ab und bekommen
+Dieser Ausdruck l"auft gegen $+\infty$, wenn man sich einer Nullstelle von $a(t)\cos\pphi(t)$ von rechts n"ahert und gegen $-\infty$, wenn man sich von links einer Nullstelle n"ahert. 
+Aus dem Zwischenwertsatz folgt also, dass dieser Ausdruck mindestens eine Nullstelle zwischen zwei benachbarten Nullstellen von $a(t)\cos\pphi(t)$ besitzt. 
+Wir wollen nun Voraussetzungen herleiten, unter denen dieser Ausdruck zwischen den Nullstellen streng monoton f"allt. 
+Aus der Monotonie folgt dann die Eindeutigkeit der Nullstelle und somit dass es nur eine Extremstelle von $a(t)\cos\pphi(t)$ zwischen benachbarten Nullstellen gibt. 
+Um Voraussetzungen f"ur die Monotonie zu erlangen, leiten wir den Ausdruck zun"achst ab und bekommen
 $$ \frac{\de}{\de t}\frac{\dot a(t)}{a(t)}
 -\ddot\pphi(t)\tan\pphi(t)
 -\frac{\dot\pphi(t)^2}{\cos^2\pphi(t)}\,. $$
@@ -60,7 +82,8 @@ Multipliziert mit $\cos^2\pphi(t)$ ergibt das
 $$ \cos^2\pphi(t)\frac{\de}{\de t}\frac{\dot a(t)}{a(t)}
 -\frac12\ddot\pphi(t)\sin 2\pphi(t)
 -\dot\pphi(t)^2\,. $$
-Wir bleibt also eine Bedingung herzuleiten, unter der dieser Ausdruck nicht positiv werden kann. Dies ist "aquivalent zu
+Uns bleibt also eine Bedingung herzuleiten, unter der dieser Ausdruck nicht positiv werden kann. 
+Dies ist "aquivalent zu
 \begin{align} \label{eq:AxByC}
   Ax + By \le C\,,
 \end{align}
@@ -73,7 +96,8 @@ x:=\cos^2\pphi(t)\,, \quad
 y:=-\frac12\sin2\pphi(t) $$
 setzen. Die Gr"o"sen $x$ und $y$ gehorchen der Nebenbedingung
 $$ \left(x-\frac12\right)^2 + y^2 = \frac14\,. $$
-Wir nehmen jetzt $A$ und $B$ als feste Gr"o"sen an, und wollen das Maximum des Ausdrucks $Ax+By$ unter dieser Nebenbedingung berechnen. Als Lagrange-Funktion f"ur dieses Problem haben wir
+Wir nehmen jetzt $A$ und $B$ als feste Gr"o"sen an, und wollen das Maximum des Ausdrucks $Ax+By$ unter dieser Nebenbedingung berechnen. 
+Als Lagrange-Funktion f"ur dieses Problem haben wir
 $$ \Lambda(x,y,\lambda) 
 := Ax + By + \left( \left(x-\frac12\right)^2 + y^2 - \frac14 \right) \lambda \,. $$
 Leiten wir die Langrange-Funktion nach $x$ und $y$ ab, so erhalten wir
@@ -98,18 +122,24 @@ an. Also ist die Ungleichung~\eqref{eq:AxByC} erf"ullt, wenn
 \begin{align} \label{eq:intermediateABC}
   \frac12\sqrt{A^2+B^2}+\frac A2 \le C 
 \end{align}
-gilt. Wir bringen $A/2$ auf die andere Seite, quadrieren und ziehen dann $A^2/4$ auf beiden Seite ab. Es entsteht die "aquivalente Ungleichung
+gilt. Wir bringen $A/2$ auf die andere Seite, quadrieren und ziehen dann $A^2/4$ auf beiden Seite ab. 
+Es entsteht die "aquivalente Ungleichung
 $$ \frac14 B^2 \le C^2 - AC. $$
 Wir bringen den Ausdruck $AC$ auf die andere Seite und erhalten nach Einsetzen von $A$, $B$ und $C$ die Ungleichgung
 \begin{align} \label{eq:condpphiiai}
   \frac14\ddot\pphi(t)^2 + \dot\pphi(t)^2\frac{\de^2}{\de t^2}\ln a(t) 
   \le \dot\pphi(t)^4\,.
 \end{align}
-Wenn also diese Ungleichung gilt, dann ist sichergestellt, dass zwischen zwei Nullstellen von $a(t)\cos\pphi(t)$ nicht mehr als eine lokale Extremstelle existiert. Es ist bemerkenswert, dass diese Ungleichung nicht von der momentanen Phase $\pphi(t)$ abh"angt, sondern nur von der Winkelgeschwindigkeit, der Winkelbeschleunigung und der zweiten logarithmischen Ableitung von $a(t)$. Es folgt also, dass $a(t)\cos\pphi(t)$ auch dann noch eine IMF ist, wenn man zur Phase eine konstante Funktion hinzuaddiert. Dasselbe Argument gilt f"ur $a(t)$: Gilt die obige Bedingung, dann bleibt $a(t)\cos\pphi(t)$ auch dann noch eine IMF, wenn man  $a(t)$ mit einer beliebigen Funktion der Form $e^{ct+d}$ multipliziert, denn die zweite logarithmische Ableitung von $a(t)$ bleibt unver"andert. 
+Wenn also diese Ungleichung gilt, dann ist sichergestellt, dass zwischen zwei Nullstellen von $a(t)\cos\pphi(t)$ nicht mehr als eine lokale Extremstelle existiert. 
+Es ist bemerkenswert, dass diese Ungleichung nicht von der momentanen Phase $\pphi(t)$ abh"angt, sondern nur von der Winkelgeschwindigkeit, der Winkelbeschleunigung und der zweiten logarithmischen Ableitung von $a(t)$. 
+Es folgt also, dass $a(t)\cos\pphi(t)$ auch dann noch eine IMF ist, wenn man zur Phase eine konstante Funktion hinzuaddiert. 
+Dasselbe Argument gilt f"ur $a(t)$: Gilt die obige Bedingung, dann bleibt $a(t)\cos\pphi(t)$ auch dann noch eine IMF, wenn man  $a(t)$ mit einer beliebigen Funktion der Form $e^{ct+d}$ multipliziert, denn die zweite logarithmische Ableitung von $a(t)$ bleibt unver"andert. 
 
-Die Bedingung~\eqref{eq:condpphiiai} sieht sehr kompliziert aus. "Au"serlich erscheint sie etwas einfacher, wenn man
+Die Bedingung~\eqref{eq:condpphiiai} sieht sehr kompliziert aus. 
+"Au"serlich erscheint sie etwas einfacher, wenn man
 $$ \alpha(t):=\ln a(t) $$
-einf"uhrt. Dann kann man die zweite logarithmische Ableitung von $a(t)$ schreiben als $\frac{d^2}{dt^2}\ln a(t) = \ddot\alpha(t)$. F"uhrt man dann noch die komplexwertige Funktion
+einf"uhrt. Dann kann man die zweite logarithmische Ableitung von $a(t)$ schreiben als $\frac{d^2}{dt^2}\ln a(t) = \ddot\alpha(t)$. 
+F"uhrt man dann noch die komplexwertige Funktion
 $$ \sigma(t) := \alpha(t) + \ii\pphi(t) $$
 ein, so haben wir die kompaktere Darstellung
 $$ a(t)\cos\pphi(t) = \Re e^{\sigma(t)}\,. $$
@@ -119,9 +149,12 @@ gilt. Dies ist "aquivalent zu der Formulierung
 \begin{align} \label{eq:imSigma}
   \lvert\ddot\sigma(t)\rvert \le \left(\Im\dot\sigma(t)\right)^2\,.
 \end{align}
-Man kann alle Aussagen unserer Problemstellung statt mit $a(t)$ und $\pphi(t)$ ausgehend von $\sigma(t)$ beschreiben. Der Vorteil dieser Sichtweise ist, dass die Nebenbedingungen $a(t)>0$ wegen $a(t)=|e^{\sigma(t)}|$ automatisch erf"ullt ist. Es bleibt nur noch 
+Man kann alle Aussagen unserer Problemstellung statt mit $a(t)$ und $\pphi(t)$ ausgehend von $\sigma(t)$ beschreiben. 
+Der Vorteil dieser Sichtweise ist, dass die Nebenbedingungen $a(t)>0$ wegen $a(t)=|e^{\sigma(t)}|$ automatisch erf"ullt ist. 
+Es bleibt nur noch 
 $$ \Im\dot\sigma(t)\ge0 $$ 
-zu beachten und wir haben damit eine kleine Menge von sehr einfachen Nebenbedingungen. Eine noch st"arkere, aber auch handhabbarere Bedingung ist 
+zu beachten und wir haben damit eine kleine Menge von sehr einfachen Nebenbedingungen. 
+Eine noch st"arkere, aber auch handhabbarere Bedingung ist 
 \begin{align} \label{eq:absSigma}
   \lvert\ddot\sigma(t)\rvert \le\lvert\dot\sigma(t)\rvert^2\,.
 \end{align}
@@ -137,7 +170,8 @@ wobei die Umkehrungen jeweils nicht allgemeing"ultig zutreffen.
 
 \subsection{Na"iver Ansatz}
 
-Um die Funktionen $a_i$ und $\pphi_i$ numerisch ann"ahern zu k"onnen, muss zun"achst eine Diskretiesierung vorgenommen werden. Daf"ur bietet es sich an, die Funktionen als Linearkombinationen darzustellen:
+Um die Funktionen $a_i$ und $\pphi_i$ numerisch ann"ahern zu k"onnen, muss zun"achst eine Diskretiesierung vorgenommen werden. 
+Daf"ur bietet es sich an, die Funktionen als Linearkombinationen darzustellen:
 \begin{align*}
       a_i(t) &= \sum_{m=0}^{M_a    }     a_{im}    b_m(t)\,, \\ 
   \pphi_i(t) &= \sum_{m=0}^{M_\pphi} \pphi_{im} \psi_m(t)\,.
@@ -146,24 +180,38 @@ Geht man von der alternativen Formulierung mit $\sigma_i(t)$ statt $a_i(t)$ und 
 \begin{align*}
   \sigma_i(t) &= \sum_{m=0}^M \sigma_{im}g_m(t)
 \end{align*}
-mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein. Jedoch ist das nicht notwendig und unter Umst"anden auch gar nicht erw"unscht. 
+mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. 
+Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein. 
+Jedoch ist das nicht notwendig und unter Umst"anden auch gar nicht erw"unscht. 
 
-Als Basisfunktionen w"aren beispielsweise Polynome oder trigonometrische Polynome denkbar. Eine konstante Funktion und ein Polynom erster Ordnung erscheinen sehr sinnvoll. Als weitere Basisfunktionen k"onnten auch solche dienen, deren zweite Ableitung Wavelets mit bestimmten Eigenschaften sind. Wavelets haben den Vorteil, dass sie gut lokalisiert sind. Wenn bei den Wavelets au"serdem die nullten und ersten Momente verschwinden, dann ist auch die entsprechende Basisfunktion lokalisiert. Bei der numerischen Optimierung k"onnte auch die Orthogonalit"at von Wavelets eine entscheidende Rolle spielen. 
+Als Basisfunktionen w"aren beispielsweise Polynome oder trigonometrische Polynome denkbar. 
+Eine konstante Funktion und ein Polynom erster Ordnung erscheinen sehr sinnvoll. 
+Als weitere Basisfunktionen k"onnten auch solche dienen, deren zweite Ableitung Wavelets mit bestimmten Eigenschaften sind. 
+Wavelets haben den Vorteil, dass sie gut lokalisiert sind. 
+Wenn bei den Wavelets au"serdem die nullten und ersten Momente verschwinden, dann ist auch die entsprechende Basisfunktion lokalisiert. 
+Bei der numerischen Optimierung k"onnte auch die Orthogonalit"at von Wavelets eine entscheidende Rolle spielen. 
 
 
 \subsection{Erster angepasster Ansatz}
 
-Wir wollen nun einen Ansatz behandeln, der speziell auf unser Problem zugeschnitten ist. Der Ansatz im vorigen Abschnitt hat den Nachteil, dass es aufwendig sein kann, die Nebenbedingungen w"ahrend des Optimierens zu "uberpr"ufen. In diesem Abschnitt werden wir einen Ansatz besprechen, bei dem die Nebenbedingungen trivial "uberpr"ufbar sind. Dazu definieren wir
+Wir wollen nun einen Ansatz behandeln, der speziell auf unser Problem zugeschnitten ist. 
+Der Ansatz im vorigen Abschnitt hat den Nachteil, dass es aufwendig sein kann, die Nebenbedingungen w"ahrend des Optimierens zu "uberpr"ufen. 
+In diesem Abschnitt werden wir einen Ansatz besprechen, bei dem die Nebenbedingungen trivial "uberpr"ufbar sind. 
+Dazu definieren wir
 \begin{align} \label{eq:def_theta} 
 \theta(t) := \frac{\ddot\sigma(t)}{\dot\sigma(t)^2}. 
 \end{align}
 Die Nebenbedingung~\eqref{eq:absSigma} ist also genau dann erf"ullt, wenn 
 $$ |\theta(t)| \le 1. $$
-Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\sigma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. Es gilt dann n"amlich 
+Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\sigma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. 
+Es gilt dann n"amlich 
 $$ -\frac{1}{\dot\sigma(t)} = \int\theta(t)\,\de t 
 \qquad \Longrightarrow \qquad 
 \sigma(t) = -\int \frac{1}{\int\theta(t)\,\de t}\,\de t $$
-Nun ist die Idee, dass man $\theta(t)$ und die Integrationskonstanten optimiert. Der Vorteil ist, dass die Nebenbedingung sehr einfach zu verifizieren ist. Als Ansatz nehmen wir an, dass $\theta(t)$ st"uckweise konstant ist. Auf einem Intervall, wo $\theta(t)=c_0$ konstant ist, gilt dann 
+Nun ist die Idee, dass man $\theta(t)$ und die Integrationskonstanten optimiert. 
+Der Vorteil ist, dass die Nebenbedingung sehr einfach zu verifizieren ist. 
+Als Ansatz nehmen wir an, dass $\theta(t)$ st"uckweise konstant ist. 
+Auf einem Intervall, wo $\theta(t)=c_0$ konstant ist, gilt dann 
 $$ \sigma(t) = -\int \frac{\de t}{c_0t + c_1}
 =-\frac{1}{c_0}\ln(c_0t+c_1) + c_2 $$
 f"ur geeignete Werte von $c_0$, $c_1$ und $c_2$. Mit 
@@ -178,16 +226,27 @@ $$ |\theta(t)| \le 1 \qquad \text{und} \qquad
 k"onnen umformuliert werden zu
 $$ |A|\ge 1 \qquad \text{und}\qquad
 \Im\left[A(t-B)^*\right]\ge 0\,, $$
-wobei $(t-B)^*$ der konjugiert komplexe Wert von $t-B$ sein soll. Die Bedingung links kann trivial "uberpr"uft werden, die Bedingung rechts braucht lediglich an den Endpunkten der Intervalle "uberpr"uft zu werden, auf denen $\theta(t)$ konstant ist. Wenn die Bedingung dort zutrifft, dann auch im Inneren des Intervalls. 
+wobei $(t-B)^*$ der konjugiert komplexe Wert von $t-B$ sein soll. 
+Die Bedingung links kann trivial "uberpr"uft werden, die Bedingung rechts braucht lediglich an den Endpunkten der Intervalle "uberpr"uft zu werden, auf denen $\theta(t)$ konstant ist. 
+Wenn die Bedingung dort zutrifft, dann auch im Inneren des Intervalls. 
 
 
 \subsection{Lokale Ver"anderungen beim ersten Ansatz}
 
-Der Ansatz aus dem vorangegangenen Unterabschnitt erleichtert die "Uberpr"ufung der Nebenbedingungen. Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\sigma(t)$ nach sich ziehen. Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\sigma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
+Der Ansatz aus dem vorangegangenen Unterabschnitt erleichtert die "Uberpr"ufung der Nebenbedingungen. 
+Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\sigma(t)$ nach sich ziehen. 
+Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\sigma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
 
-Man kann dies etwa damit vergleichen, dass man eine st"uckweise konstante Funktion kennt und wissen m"ochte, wie man sie ver"andern kann, so dass nach zweifachem Integrieren eine Funktion herauskommt, die nur lokale "Anderungen aufweist. Bei "aquidistanten Intervallen braucht man in diesem Fall drei benachbarte Intervalle mit den Wichtungen $1$, $-2$ und $1$ in dieser Reihenfolge, damit sich die zweimal integrierte Funktion nur dort und nirgends sonst "andert. 
+Man kann dies etwa damit vergleichen, dass man eine st"uckweise konstante Funktion kennt und wissen m"ochte, wie man sie ver"andern kann, so dass nach zweifachem Integrieren eine Funktion herauskommt, die nur lokale "Anderungen aufweist. 
+Bei "aquidistanten Intervallen braucht man in diesem Fall drei benachbarte Intervalle mit den Wichtungen $1$, $-2$ und $1$ in dieser Reihenfolge, damit sich die zweimal integrierte Funktion nur dort und nirgends sonst "andert. 
 
-In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t_1,t_2]$ und $[t_2,t_3]$. Da $\sigma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. Da sich $\sigma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\sigma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. Die Parameter $A$, $B$ und $C$ aus dem vorangegangen Abschnitt unterscheiden sich auf den drei Intervallen. Wir bezeichnen diese Parameter auf $[t_{i-1},t_i]$ mit $A_i$, $B_i$ und $C_i$ f"ur $i=1,\dotsc,3$. Au"serdem schreiben wir der K"urze halber $\sigma_i:=\sigma(t_i)$ und $\dot\sigma_i:=\dot\sigma(t_i)$ f"ur $i=0,\dotsc,3$. Mit diesen Bezeichnungen bekommen wir folgendes Gleichungssystem:
+In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t_1,t_2]$ und $[t_2,t_3]$. 
+Da $\sigma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. 
+Da sich $\sigma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\sigma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. 
+Die Parameter $A$, $B$ und $C$ aus dem vorangegangen Abschnitt unterscheiden sich auf den drei Intervallen. 
+Wir bezeichnen diese Parameter auf $[t_{i-1},t_i]$ mit $A_i$, $B_i$ und $C_i$ f"ur $i=1,\dotsc,3$. 
+Au"serdem schreiben wir der K"urze halber $\sigma_i:=\sigma(t_i)$ und $\dot\sigma_i:=\dot\sigma(t_i)$ f"ur $i=0,\dotsc,3$. 
+Mit diesen Bezeichnungen bekommen wir folgendes Gleichungssystem:
 \begin{align}
   \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \label{eq:local1} \\
   \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \label{eq:local2} \\
@@ -202,7 +261,12 @@ In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t
   \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \label{eq:local11} \\
   \dot\sigma_3 &= \frac{A_3}{t_3-B_3} \label{eq:local12}
 \end{align}
-Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. Alle anderen Gr"o"sen $\sigma_0$, $\dot\sigma_0$, $\sigma_3$, $\dot\sigma_3$, $t_0$, $t_1$, $t_2$ und $t_3$ setzen wir als bekannt voraus. Somit verbleibt also ein Freiheitsgrad. Man kann sich also zum Beispiel den Wert $A_2$ vorgeben und dann alle restlichen Parameter daraus berechnen. Wir wollen diese Rechnung so weit wie m"oglich analytisch durchf"uhren. Zun"achst stellen wir~\eqref{eq:local2} nach $B_1$ um und erhalten so 
+Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. 
+Alle anderen Gr"o"sen $\sigma_0$, $\dot\sigma_0$, $\sigma_3$, $\dot\sigma_3$, $t_0$, $t_1$, $t_2$ und $t_3$ setzen wir als bekannt voraus. 
+Somit verbleibt also ein Freiheitsgrad. 
+Man kann sich also zum Beispiel den Wert $A_2$ vorgeben und dann alle restlichen Parameter daraus berechnen. 
+Wir wollen diese Rechnung so weit wie m"oglich analytisch durchf"uhren. 
+Zun"achst stellen wir~\eqref{eq:local2} nach $B_1$ um und erhalten so 
 \begin{align} \label{eq:B1}
   B_1=t_0-\frac{A_1}{\dot\sigma_0}\,.
 \end{align}
@@ -226,30 +290,41 @@ Ebenso verfahren wir mit Gleichung~\eqref{eq:local5}. Es entsteht
   &= (A_1-A_2)\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}-A_2\ln\frac{A_2}{A_1}\,.
 \end{split}
 \end{equation}
-Das Gleichungssystem bestehend aus den Gleichungen \eqref{eq:local1} bis~\eqref{eq:local12} ist symmetrisch. Vertauscht man die folgenden Gr"o"sen, so erh"alt man dasselbe Gleichungssystem, allerdings in einer anderen Reihenfolge der Gleichungen: $A_1\leftrightarrow A_3$, $B_1\leftrightarrow B_3$, $C_1\leftrightarrow C_3$, $\sigma_0\leftrightarrow \sigma_3$, $\sigma_1\leftrightarrow \sigma_2$, $\dot\sigma_0\leftrightarrow \dot\sigma_3$, $\dot\sigma_1\leftrightarrow \dot\sigma_2$, $t_0\leftrightarrow t_3$ und $t_1\leftrightarrow t_2$. Also gelten die Gleichungen \eqref{eq:B2} und~\eqref{eq:C2} auch noch nach dieser Vertauschung der Gr"o"sen. Sie lauten dann 
+Das Gleichungssystem bestehend aus den Gleichungen \eqref{eq:local1} bis~\eqref{eq:local12} ist symmetrisch. 
+Vertauscht man die folgenden Gr"o"sen, so erh"alt man dasselbe Gleichungssystem, allerdings in einer anderen Reihenfolge der Gleichungen: $A_1\leftrightarrow A_3$, $B_1\leftrightarrow B_3$, $C_1\leftrightarrow C_3$, $\sigma_0\leftrightarrow \sigma_3$, $\sigma_1\leftrightarrow \sigma_2$, $\dot\sigma_0\leftrightarrow \dot\sigma_3$, $\dot\sigma_1\leftrightarrow \dot\sigma_2$, $t_0\leftrightarrow t_3$ und $t_1\leftrightarrow t_2$. 
+Also gelten die Gleichungen \eqref{eq:B2} und~\eqref{eq:C2} auch noch nach dieser Vertauschung der Gr"o"sen. 
+Sie lauten dann 
 \begin{gather}
   \label{eq:B2symm}
   B_2 = t_2-\frac{A_2}{A_3}(t_2-t_3)-\frac{A_2}{\dot\sigma_3}\,, \\
   \label{eq:C2symm}
   C_2 = (A_3-A_2)\ln\left(t_2-t_3+\frac{A_3}{\dot\sigma_3}\right)+\sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}-A_2\ln\frac{A_2}{A_3}\,.
 \end{gather}
-Wir teilen nun die Gleichungen \eqref{eq:B2} und~\eqref{eq:B2symm} durch~$A_2$ und setzen dann beide Seiten gleich. Es entsteht dadurch
+Wir teilen nun die Gleichungen \eqref{eq:B2} und~\eqref{eq:B2symm} durch~$A_2$ und setzen dann beide Seiten gleich. 
+Es entsteht dadurch
 $$ \frac{t_0-t_1}{A_1}+\frac{t_1-t_2}{A_2}+\frac{t_2-t_3}{A_3} 
   = \frac{1}{\dot\sigma_0}-\frac{1}{\dot\sigma_3}\,. $$
 Setzt man die Gleichungen \eqref{eq:C2} und~\eqref{eq:C2symm} gleich und formt geschickt um, so erh"alt man
 $$ (A_1-A_2)\ln\left(\frac{\dot\sigma_0}{A_1}(t_1-t_0)+1\right)+\sigma_0
   = (A_3-A_2)\ln\left(\frac{\dot\sigma_3}{A_3}(t_2-t_3)+1\right)+\sigma_3\,. $$
-Durch diese beiden Gleichungen sind direkte Beziehungen zwischen den Unbekannten $A_1$ und~$A_3$ hergestellt. Alle anderen Gr"o"sen in den beiden Gleichungen sind bekannt. Diese Gleichungen kann man numerisch nach $A_1$ und~$A_3$ aufl"osen. Sind $A_1$ und~$A_3$ bekannt, so kann man damit die Gr"o"sen $B_1$, $C_1$, $B_2$, $C_2$, $B_3$ und $C_3$ durch die Beziehungen \eqref{eq:B1}, \eqref{eq:C1}, \eqref{eq:B2}, \eqref{eq:C2} und 
+Durch diese beiden Gleichungen sind direkte Beziehungen zwischen den Unbekannten $A_1$ und~$A_3$ hergestellt. 
+Alle anderen Gr"o"sen in den beiden Gleichungen sind bekannt. 
+Diese Gleichungen kann man numerisch nach $A_1$ und~$A_3$ aufl"osen. 
+Sind $A_1$ und~$A_3$ bekannt, so kann man damit die Gr"o"sen $B_1$, $C_1$, $B_2$, $C_2$, $B_3$ und $C_3$ durch die Beziehungen \eqref{eq:B1}, \eqref{eq:C1}, \eqref{eq:B2}, \eqref{eq:C2} und 
 \begin{align*}
   B_3 &= t_3-\frac{A_3}{\dot\sigma_3}\,, \\
   C_3 &= \sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}
 \end{align*}
-berechnen. Die beiden letzten Gleichungen entstehen durch Austauschen der Variablen bei den Gleichungen \eqref{eq:B1} und~\eqref{eq:C1}. Alternativ erh"alt man diese Gleichungen auch, indem man zun"achst Gleichung~\eqref{eq:local12} nach~$B_3$ umstellt und dann in~\eqref{eq:local11} einsetzt diese Gleichung und nach~$C_3$ umstellt. 
+berechnen. Die beiden letzten Gleichungen entstehen durch Austauschen der Variablen bei den Gleichungen \eqref{eq:B1} und~\eqref{eq:C1}. 
+Alternativ erh"alt man diese Gleichungen auch, indem man zun"achst Gleichung~\eqref{eq:local12} nach~$B_3$ umstellt und dann in~\eqref{eq:local11} einsetzt diese Gleichung und nach~$C_3$ umstellt. 
 
 
 \subsection{Bewertung des ersten Ansatzes}
 
-Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass sich der Vorteil aufhebt, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen. 
+Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. 
+Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. 
+Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. 
+Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass sich der Vorteil aufhebt, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen. 
 
 Im n"achsten Abschnitt werden wir einen weiteren Ansatz zu erarbeiten, bei dem die Nebenbedingungen trivial "uberpr"uft werden k"onnen und lokale "Anderungen mit geringem Rechenaufwand realisiert werden k"onnen.
 
@@ -260,7 +335,13 @@ Wir wollen zeigen, dass die Nebenbedingungen
 $$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
 \qquad \text{und} \qquad
 \Im\dot\sigma(t)\ge0 $$
-f"ur st"uckweise quadratische, stetig differenzierbare Funktionen besonders leicht "uberpr"uft werden k"onnen. Auf einem Intervall~$I$, auf dem $\sigma(t)$ quadratisch ist, ist $\Im\dot\sigma(t)$ monoton. Also gilt die zweite Nebenbedigung $\Im\dot\sigma(t)\ge0$ genau dann, wenn sie an beiden Endpunkten dieses Intervalls erf"ullt ist. Wenn $\Im\dot\sigma(t)$ monoton und nicht-negativ ist, dann gilt dasselbe f"ur das Quadrat davon, welches auf der rechten Seite der ersten Nebenbedingung steht. Auf der linken Seite dieser Ungleichgung steht eine Konstante. Daher ist auch die erste Nebenbedingung automatisch erf"ullt, wenn sie an den Endpunkten gilt und die zweite Nebenbedingung zutrifft. Kurz zusammengefasst sind die beiden Nebenbedingungen genau dann erf"ullt, wenn sie an den Endpunkten der Intervalle erf"ullt ist, auf denen $\sigma(t)$ quadratisch ist.
+f"ur st"uckweise quadratische, stetig differenzierbare Funktionen besonders leicht "uberpr"uft werden k"onnen. 
+Auf einem Intervall~$I$, auf dem $\sigma(t)$ quadratisch ist, ist $\Im\dot\sigma(t)$ monoton. 
+Also gilt die zweite Nebenbedigung $\Im\dot\sigma(t)\ge0$ genau dann, wenn sie an beiden Endpunkten dieses Intervalls erf"ullt ist. 
+Wenn $\Im\dot\sigma(t)$ monoton und nicht-negativ ist, dann gilt dasselbe f"ur das Quadrat davon, welches auf der rechten Seite der ersten Nebenbedingung steht. 
+Auf der linken Seite dieser Ungleichgung steht eine Konstante. 
+Daher ist auch die erste Nebenbedingung automatisch erf"ullt, wenn sie an den Endpunkten gilt und die zweite Nebenbedingung zutrifft. 
+Kurz zusammengefasst sind die beiden Nebenbedingungen genau dann erf"ullt, wenn sie an den Endpunkten der Intervalle erf"ullt ist, auf denen $\sigma(t)$ quadratisch ist.
 
 Ganz konkret sei $[t_0,t_1]$ ein Intervall, auf dem $\sigma(t)$ quadratisch ist, und zwar
 $$ \sigma(t) = at^2 + bt + c $$
@@ -273,16 +354,22 @@ f"ur $j=0,1$.
 
 \subsection{Lokale Ver"anderungen beim zweiten Ansatz} \label{sec:2ndansatzLocalChanges}
 
-Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. B-Splines l"osen genau dieses Problem. Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. Sie quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
+Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. 
+B-Splines l"osen genau dieses Problem. 
+Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. 
+Die quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
 
-F"ur "aquidistante St"utzstellen lassen sich die quadratischen B-Splines besonders einfach aufschreiben. F"ur die St"utzstellenmenge $\{0,1,2,3\}$ hat der quadratische B-Spline die Form
+F"ur "aquidistante St"utzstellen lassen sich die quadratischen B-Splines besonders einfach aufschreiben. 
+F"ur die St"utzstellenmenge $\{0,1,2,3\}$ hat der quadratische B-Spline die Form
 $$ b(t)=\begin{cases}
 \frac12t^2 & \text{f"ur $t\in[0,1)$} \\
 \frac12t^2-\frac32(t-1)^2 & \text{f"ur $t\in[1,2)$} \\
 \frac12t^2-\frac32(t-1)^2+\frac32(t-2)^2 & \text{f"ur $t\in[2,3)$} \\
 0 & \text{sonst.}
 \end{cases} $$
-Es gilt $b(1)=b(2)=\frac12$. An allen anderen ganzzahligen Stellen verschwindet  die Funktion $b$. Die erste und zweite Ableitung von $b$ sind
+Es gilt $b(1)=b(2)=\frac12$. 
+An allen anderen ganzzahligen Stellen verschwindet die Funktion $b$. 
+Die erste und zweite Ableitung von $b$ sind
 $$ \dot b(t)=\begin{cases}
 t & \text{f"ur $t\in[0,1)$} \\
 -2(t-\frac32) & \text{f"ur $t\in[1,2)$} \\
@@ -296,20 +383,26 @@ t-3 & \text{f"ur $t\in[2,3)$} \\
 1 & \text{f"ur $t\in(2,3)$} \\
 0 & \text{f"ur $t\in\R\setminus[0,3]$\,.}
 \end{cases} $$
-Alle anderen quadratischen B-Splines mit aufeinanderfolgenden ganzzahligen St"utzstellen ergeben sich durch Translation des gegebenen B-Splines. Alle stetig differenzierbaren Funktionen, die auf den Intervallen $(k,k+1)$ f"ur alle ganzzahligen $k$ quadratische Funktionen sind, lassen sich durch Linearkombinationen dieser beschriebenen B-Splines darstellen. Also kann man die Funktion $\sigma(t)$ schreiben als
+Alle anderen quadratischen B-Splines mit aufeinanderfolgenden ganzzahligen St"utzstellen ergeben sich durch Translation des gegebenen B-Splines. 
+Alle stetig differenzierbaren Funktionen, die auf den Intervallen $(k,k+1)$ f"ur alle ganzzahligen $k$ quadratische Funktionen sind, lassen sich durch Linearkombinationen dieser beschriebenen B-Splines darstellen. 
+Also kann man die Funktion $\sigma(t)$ schreiben als
 $$ \sigma(t) = \sum_{k=-\infty}^{\infty}\sigma_kb(t-k) $$
-wenn die Koeffizienten $\sigma_k$ geeignet gew"ahlt werden. An ganzzahligen Stellen $j$ gilt somit
+wenn die Koeffizienten $\sigma_k$ geeignet gew"ahlt werden. 
+An ganzzahligen Stellen $j$ gilt somit
 \begin{align*}
 \sigma(j) &= \frac{\sigma_{j+1}+\sigma_{j+2}}{2} \\
 \dot\sigma(j) &= \sigma_{j+1}-\sigma_{j+2} \\
 \lim_{t\nearrow j}\ddot\sigma(t) &= \sigma_{j+1}-2\sigma_{j+2}+\sigma_{j+3} \\
 \lim_{t\searrow\,j}\ddot\sigma(t) &= \sigma_{j}-2\sigma_{j+1}+\sigma_{j+2}\,.
 \end{align*}
-Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen rechtsseitigen Limes. Die Nebenbedingungen 
+Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen rechtsseitigen Limes. 
+Die Nebenbedingungen 
 $$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
 \qquad \text{und} \qquad
 \Im\dot\sigma(t)\ge0 $$
-sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. In der Sprache der Koeffizienten $\sigma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
+sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). 
+Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. 
+In der Sprache der Koeffizienten $\sigma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
 \begin{align*}
 \lvert\sigma_j-2\sigma_{j+1}+\sigma_{j+2}\rvert 
 &\le (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\,, \\
@@ -325,60 +418,88 @@ l"asst sich das noch k"urzer schreiben als
 \qquad \text{und} \qquad
 0\le\Im\tau_j\,.
 \end{equation}
-Die Nebenbedingunen lassen sich also auch mit diesem zweiten Ansatz leicht "uberpr"ufen. Im n"achsten Abschnitt soll die eigentliche Zielfunktion, also eine Norm der Restfunktion, genauer beschrieben werden.
+Die Nebenbedingunen lassen sich also auch mit diesem zweiten Ansatz leicht "uberpr"ufen. 
+Im n"achsten Abschnitt soll die eigentliche Zielfunktion, also eine Norm der Restfunktion, genauer beschrieben werden.
 
 
 \section{Norm f"ur die Restfunktion} \label{sec:norms4r}
 
 Die Aufgabenstellung ist es, zu einer gegebenen hinreichend glatten Funktion $f:[a,b]\to\R$, Funktionen $a_i(t)$ und $\pphi_i(t)$, $i=1,\dotsc,N$ zu finden, so dass 
 $$ r(t) := f(t)-\sum_{i=1}^N a_i(t)\cos\pphi_i(t) $$
-m"oglichst klein wird. Bis jetzt haben wir noch nicht genau festgelegt, was wir unter \glqq{}klein\grqq{} verstehen. Das wollen wir nun nachholen, indem wir geeignete Normen f"ur die Restfunktion $r:[a,b]\to\R$ definieren. Folgende Ans"atze liegen nahe:
+m"oglichst klein wird. 
+Bis jetzt haben wir noch nicht genau festgelegt, was wir unter \glqq{}klein\grqq{} verstehen. 
+Das wollen wir nun nachholen, indem wir geeignete Normen f"ur die Restfunktion $r:[a,b]\to\R$ definieren. 
+Folgende Ans"atze liegen nahe:
 \begin{itemize}
 \item $L_p$-Normen mit $1\le p\le\infty$, insbesondere sind die F"alle $p=1,2,\infty$ naheliegend. 
 \item Sobolev-Normen, also Normen der Form
 $$ \norm{r}_{W^{k,p}} := \left(\,\sum_{d=0}^k\int_a^b \lvert r^{(d)}(t)\rvert^p\,\de t\right)^{1/p}. $$
 \end{itemize}
-In der Praxis liegt $f$ oft nicht als Funktion vor, sondern als eine Folge von Messwerten. Um dann mit den $L_p$- oder Sobolev-Normen immernoch arbeiten zu k"onnen, wird $f$ dann typischerweise interpoliert. Die Berechnung der Integrale ist dann wahrscheinlich nicht mehr analytisch m"oglich, sondern nur noch numerisch, was die Berechnung der Norm sehr aufwendig machen kann. Dies umgeht man, indem man f"ur dir Norm nur die gemessenen Funktionswerte benutzt, also etwa
+In der Praxis liegt $f$ oft nicht als Funktion vor, sondern als eine Folge von Messwerten. 
+Um dann mit den $L_p$- oder Sobolev-Normen immernoch arbeiten zu k"onnen, wird $f$ dann typischerweise interpoliert. 
+Die Berechnung der Integrale ist dann wahrscheinlich nicht mehr analytisch m"oglich, sondern nur noch numerisch, was die Berechnung der Norm sehr aufwendig machen kann. 
+Dies umgeht man, indem man f"ur dir Norm nur die gemessenen Funktionswerte benutzt, also etwa
 \begin{align} \label{eq:lpnormr}
 \norm{r}_{\ell_p} := \left(\,\sum_{j=1}^{N}\lvert r(j)\rvert^p\right)^{1/p},
 \end{align}
-f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. Wenn man nur diese diskreten Funktionswerte benutzt, dann muss man allerdings sicherstellen, dass keiner der Summanden $a_i(t)\cos\pphi_i(t)$ zu schnell zwischen den Stellen hin und her schwingt. Es muss allenfalls vermieden werden, dass ein Summand mehrere Nullstellen zwischen zwei benachbarten ganzen Zahlen hat. Dies erreicht man, indem man 
+f"ur $1\le p<\infty$ und die entsprechende Supremumsnorm im Fall $p=\infty$. 
+Wenn man nur diese diskreten Funktionswerte benutzt, dann muss man allerdings sicherstellen, dass keiner der Summanden $a_i(t)\cos\pphi_i(t)$ zu schnell zwischen den Stellen hin und her schwingt. 
+Es muss allenfalls vermieden werden, dass ein Summand mehrere Nullstellen zwischen zwei benachbarten ganzen Zahlen hat. Dies erreicht man, indem man 
 \begin{equation} \label{eq:dotPhiLePi}
 \dot\pphi_i(t)\le\pi
 \end{equation}
-fordert. In Form der Werte $\tau_j$ ausgedr"uckt, ist das "aquivalent zu $\Im\tau_j\le\pi$. Es gibt noch einen weiteren zwingenden Grund f"ur diese Forderung: Man k"onnte $\norm{r}_{\ell_p}=0$ f"ur beliebigen Funktionen $f$ mit einem einzigen Summanden $a(t)\cos\pphi(t)$ erreichen, indem man $a(t)$ gen"ugend gro"s und konstant w"ahlt und man $\pphi(t)$ so einrichtet, dass $\cos\pphi(j)$ f"ur ganzzahligen $j$ um null schwankt und $\dot\pphi(t)\approx\pi$ ist und $\ddot\pphi(t)$ betraglich klein bleibt. Dann w"are die Bedingung~\eqref{eq:absSigma}, also $\lvert\ddot\sigma(t)\rvert\le\lvert\dot\sigma(t)\rvert^2$,  erf"ullt, denn es w"are $ \lvert\dot\sigma(t)\rvert = \lvert\dot\pphi(t)\rvert \approx \pi $ und $\lvert\ddot\sigma(t)\rvert=\lvert\ddot\pphi(t)\rvert \ll 1$. 
+fordert. In Form der Werte $\tau_j$ ausgedr"uckt, ist das "aquivalent zu $\Im\tau_j\le\pi$. 
+Es gibt noch einen weiteren zwingenden Grund f"ur diese Forderung: Man k"onnte $\norm{r}_{\ell_p}=0$ f"ur beliebigen Funktionen $f$ mit einem einzigen Summanden $a(t)\cos\pphi(t)$ erreichen, indem man $a(t)$ gen"ugend gro"s und konstant w"ahlt und man $\pphi(t)$ so einrichtet, dass $\cos\pphi(j)$ f"ur ganzzahligen $j$ um null schwankt und $\dot\pphi(t)\approx\pi$ ist und $\ddot\pphi(t)$ betraglich klein bleibt. 
+Dann w"are die Bedingung~\eqref{eq:absSigma}, also $\lvert\ddot\sigma(t)\rvert\le\lvert\dot\sigma(t)\rvert^2$,  erf"ullt, denn es w"are $ \lvert\dot\sigma(t)\rvert = \lvert\dot\pphi(t)\rvert \approx \pi $ und $\lvert\ddot\sigma(t)\rvert=\lvert\ddot\pphi(t)\rvert \ll 1$. 
 
 Der zweite angepasste Ansatz (siehe Abschnitte \ref{sec:2ndansatz} und~\ref{sec:2ndansatzLocalChanges}) und die Norm $\norm{r}_{\ell_2}$ haben zusammen folgende Eigenschaften:
-
 \begin{itemize}
-\item Die Norm~$\norm{r}_{\ell_2}$ h"angt beliebig oft (reell) differenzierbar von den Gr"o"sen~$\sigma_j$ ab und ist mit sehr geringem Aufwand berechenbar. Die Ableitungen lassen sich als analytische Ausdr"ucke schreiben.
-\item Die Nebenbedingungen \eqref{eq:condTau} und~\eqref{eq:dotPhiLePi} sind anhand der Gr"o"sen $\sigma_j$ mit geringem Rechenaufwand "uberpr"ufbar. 
-\item Wird nur ein einziges~$\sigma_j$ ver"andert, so lassen sich die Nebenbedigungen, wenn sie vorher galten, leicht durch eine lokale Betrachtung "uberpr"ufen. Ebenso l"asst sich die Kostenfunktion~$\norm{r}_{\ell_2}$ durch lokale Berechnungen aus dem vorherigen Wert berechnen. 
+  \item Die Norm~$\norm{r}_{\ell_2}$ h"angt beliebig oft (reell) differenzierbar von den Gr"o"sen~$\sigma_j$ ab und ist mit sehr geringem Aufwand berechenbar. 
+  Die Ableitungen lassen sich als analytische Ausdr"ucke schreiben.
+  \item Die Nebenbedingungen \eqref{eq:condTau} und~\eqref{eq:dotPhiLePi} sind anhand der Gr"o"sen $\sigma_j$ mit geringem Rechenaufwand "uberpr"ufbar. 
+  \item Wird nur ein einziges~$\sigma_j$ ver"andert, so lassen sich die Nebenbedigungen, wenn sie vorher galten, leicht durch eine lokale Betrachtung "uberpr"ufen. 
+  Ebenso l"asst sich die Kostenfunktion~$\norm{r}_{\ell_2}$ durch lokale Berechnungen aus dem vorherigen Wert berechnen. 
 \end{itemize}
-Damit haben wir also beste Voraussetzungen f"ur eine lokale Optimumsuche. Dieser Schritt wird im folgenden Abschnitt besprochen. 
+Damit haben wir also beste Voraussetzungen f"ur eine lokale Optimumsuche. 
+Dieser Schritt wird im folgenden Abschnitt besprochen. 
 
 
 \section{Lokale Optimumsuche} \label{sec:gradients}
 
-F"ur die lokale Suche eines Optimums k"onnen verschiedenste Algorithmen verwendet werden, die Ungleichungen als Nebenbedingungen zulassen. Man kann zum Beispiel ein einfaches Gradientenverfahren ansetzen. 
+F"ur die lokale Suche eines Optimums k"onnen verschiedenste Algorithmen verwendet werden, die Ungleichungen als Nebenbedingungen zulassen. 
+Man kann zum Beispiel ein einfaches Gradientenverfahren ansetzen. 
 
-Damit n"ahert man sich sehr schnell einem lokalen Optimum. Es ist absehbar, dass bei unserem Problem sehr viele lokale Optima existieren. Die eigentliche Schwierigkeit besteht darin, ein m"oglichst gutes lokales Optimum zu finden. Daf"ur braucht man einen m"oglichst guten Startpunkt f"ur die Optimierung oder eine M"oglichkeit, einem lokalen Maximum wieder zu entkommen, oder beides. Beide Ans"atze werden in den Abschnitten \ref{sec:initialval} und~\ref{sec:jumps} er"ortert. 
+Damit n"ahert man sich sehr schnell einem lokalen Optimum. 
+Es ist absehbar, dass bei unserem Problem sehr viele lokale Optima existieren. 
+Die eigentliche Schwierigkeit besteht darin, ein m"oglichst gutes lokales Optimum zu finden. 
+Daf"ur braucht man einen m"oglichst guten Startpunkt f"ur die Optimierung oder eine M"oglichkeit, einem lokalen Maximum wieder zu entkommen, oder beides. 
+Beide Ans"atze werden in den Abschnitten \ref{sec:initialval} und~\ref{sec:jumps} er"ortert. 
 
 
 \section{Suche nach einer guten Anfangsn"aherung} \label{sec:initialval}
 
 \subsection{Erste Ans"atze}
 
-Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu zerlegen. Dazu geh"ort die Hilbert-Huang-Transformation. Eine andere M"oglichkeit ist die Benutzung des Spektrograms der Short-Time-Fourier-Transformation oder das Wavelet-Energie-Spektrum bez"uglich des komplexwertigen Morlet-Wavelets. Aus diesen Diagrammen kann man recht gut die haupts"achlich vorkommenden Frequenzen zu verschiedenen Zeitpunkten ablesen. Dies k"onnte man als Grundlage f"ur eine Anfangsn"aherung nehmen. Eine Schwierigkeit dabei ist, dass die Nebenbedingungen verifiziert werden m"ussen und im Allgemeinen nicht von selbst eintreten. Dieses Problem kann man auf zweierlei Weisen angehen:
+Es gibt bereits verschiedene Verfahren, ein Signal in verschiedene Frequenzen zu zerlegen. 
+Dazu geh"ort die Hilbert-Huang-Transformation. 
+Eine andere M"oglichkeit ist die Benutzung des Spektrograms der Short-Time-Fourier-Transformation oder das Wavelet-Energie-Spektrum bez"uglich des komplexwertigen Morlet-Wavelets. 
+Aus diesen Diagrammen kann man recht gut die haupts"achlich vorkommenden Frequenzen zu verschiedenen Zeitpunkten ablesen. 
+Dies k"onnte man als Grundlage f"ur eine Anfangsn"aherung nehmen. 
+Eine Schwierigkeit dabei ist, dass die Nebenbedingungen verifiziert werden m"ussen und im Allgemeinen nicht von selbst eintreten. 
+Dieses Problem kann man auf zweierlei Weisen angehen:
 \begin{itemize}
-\item Man "andert die Anfangsn"aherungen iterativ so ab, dass sie Nebenbedingungen erf"ullen. Wir k"onnen davon sprechen, dass die Nebenbedingungen repariert werden. 
-\item Man konstruiert Anfangsn"aherungen, welche die Nebenbedingungen automatisch erf"ullen. 
+  \item Man "andert die Anfangsn"aherungen iterativ so ab, dass sie Nebenbedingungen erf"ullen. 
+  Wir k"onnen davon sprechen, dass die Nebenbedingungen repariert werden. 
+  \item Man konstruiert Anfangsn"aherungen, welche die Nebenbedingungen automatisch erf"ullen. 
 \end{itemize}
 
 
 \subsection{Reparieren der Nebenbedingungen}
 
-Alle bisher angedeuteten Ans"atze aus dem vorigen Unterabschnitt f"uhren zu Anfangsn"aherungen, welche die Nebenbedingungen nicht notwendigerweise erf"ullen. Diese An\-fangs\-n"a\-he\-rungen m"ussen daher repariert werden. Da die Nebenbedingungen alle in Form von Ungleichungen vorliegen, kann man leicht eine Kostenfunktion angeben, die aussagt, wie weit man davon entfernt ist, die Nebenbedingungen zu erf"ullen. In Form der Werte von $\tau_j$ kann man als Kostenfunktion folgendes ansetzen:
+Alle bisher angedeuteten Ans"atze aus dem vorigen Unterabschnitt f"uhren zu Anfangsn"aherungen, welche die Nebenbedingungen nicht notwendigerweise erf"ullen. 
+Diese An\-fangs\-n"a\-he\-rungen m"ussen daher repariert werden. 
+Da die Nebenbedingungen alle in Form von Ungleichungen vorliegen, kann man leicht eine Kostenfunktion angeben, die aussagt, wie weit man davon entfernt ist, die Nebenbedingungen zu erf"ullen. 
+In Form der Werte von $\tau_j$ kann man als Kostenfunktion folgendes ansetzen:
 $$ L_j = \left(\lvert\tau_j-\tau_{j+1}\rvert - \max\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}\right)_+ + (-\Im\tau_j)_+ + (\Im\tau_j-\pi)_+\,, $$
 wobei wir $(x)_+$ definieren durch
 $$ (x)_+ := \begin{cases} x & \text{f"ur $x\ge0$} \\ 0 & \text{sonst.}\end{cases} $$
@@ -389,55 +510,87 @@ Nun kann man diese Funktion anhand eines lokalen Optimierungsverfahrens minimier
 
 \subsection{Anfangsn"aherungen bei denen die Nebenbedingungen automatisch erf"ullt werden}
 
-Es gibt gewisse M"oglichkeiten, die Anfangsn"aherungen so zu bestimmen, dass sie automatisch die Nebenbedingungen erf"ullen und in einem gewissen Ma"se optimal sind. Eine solche M"oglichkeit ist, dass man $f$ durch eine diskrete Fourier-Transformation (DFT) in Komponenten zerlegt. Die Komponenten mit den betraglich gr"o"sten Koeffizienten bilden die beste $\ell_2$-Approximation von $f$. Obwohl es die beste Approximation in diesem Sinne ist, ist die Approximation vermutlich nicht sonderlich gut, da sich die Winkelfrequenz nicht "andert und keine lokale Anpassung erfolgt. 
+Es gibt gewisse M"oglichkeiten, die Anfangsn"aherungen so zu bestimmen, dass sie automatisch die Nebenbedingungen erf"ullen und in einem gewissen Ma"se optimal sind. 
+Eine solche M"oglichkeit ist, dass man $f$ durch eine diskrete Fourier-Transformation (DFT) in Komponenten zerlegt. 
+Die Komponenten mit den betraglich gr"o"sten Koeffizienten bilden die beste $\ell_2$-Approximation von $f$. 
+Obwohl es die beste Approximation in diesem Sinne ist, ist die Approximation vermutlich nicht sonderlich gut, da sich die Winkelfrequenz nicht "andert und keine lokale Anpassung erfolgt. 
 
-Eine andere M"oglichkeit ist, $\pphi_1$ so einzurichten, dass die Nullstellen (oder Vorzeichenwechsel bez"uglich der ganzzahligen Stellen) mit denen von $f$ "ubereinstimmen. Von Nullstelle zu Nullstelle muss die Phase um $\pi$ vergr"o"sert werden, was man durch eine geeignete Spline-Interpolation erreichen kann. Die Nebenbedingungen k"onnen dabei nat"urlich leicht verletzt werden, wenn sich die Frequenz zu schnell "andert. Das passiert vor allem in Regionen, wo die Nullstellen zu dicht liegen, etwa weil die Funktion um eine Nullstelle herum verrauscht ist und dadurch neue Nullstellen entstehen. Dies kann man vermeiden, indem man Paare von zu dicht liegenden Nullstellen verwirft und bei der Interpolation ignoriert. 
+Eine andere M"oglichkeit ist, $\pphi_1$ so einzurichten, dass die Nullstellen (oder Vorzeichenwechsel bez"uglich der ganzzahligen Stellen) mit denen von $f$ "ubereinstimmen. 
+Von Nullstelle zu Nullstelle muss die Phase um $\pi$ vergr"o"sert werden, was man durch eine geeignete Spline-Interpolation erreichen kann. 
+Die Nebenbedingungen k"onnen dabei nat"urlich leicht verletzt werden, wenn sich die Frequenz zu schnell "andert. 
+Das passiert vor allem in Regionen, wo die Nullstellen zu dicht liegen, etwa weil die Funktion um eine Nullstelle herum verrauscht ist und dadurch neue Nullstellen entstehen. 
+Dies kann man vermeiden, indem man Paare von zu dicht liegenden Nullstellen verwirft und bei der Interpolation ignoriert. 
 
 Nun braucht man also ein Kriterium mit dem man entscheidet, welche Nullstellen weggelassen werden sollen. 
 
-Bei all dem kann die Amplitude zun"achst konstant gelassen werden, da diese ohnehin sp"ater durch Optimierung angepasst wird. Lediglich das Vorzeichen sollte f"ur die meisten Samples "ubereinstimmen. 
+Bei all dem kann die Amplitude zun"achst konstant gelassen werden, da diese ohnehin sp"ater durch Optimierung angepasst wird. 
+Lediglich das Vorzeichen sollte f"ur die meisten Samples "ubereinstimmen. 
 
 
 \section{Phasenboost und genetische Algorithmen} \label{sec:jumps}
 
-Viele lokale Maxima werden vermutlich durch lokale "Anderungen der Funktionen $a_i(t)$ und $\pphi_i(t)$ voneinander getrennt. Addiert man zu einer Phasenfunktion $\pphi_i(t)$ eine Funktion, die f"ur gen"ugend kleines $t$ konstant $0$ ist und ab einem gewissen $t$ konstant $2\pi$ ist und zwischen diesen konstanten Teilen verbunden wird, dann findet man bei $a_i(t)\cos\pphi_i(t)$ nur eine lokale "Anderung vor, n"amlich zwischen den beiden konstanten Abschnitten der addierten Funktion. Solch eine Addition bezeichnen wir als Phasenboost. Es ist vorstellbar, dass durch Phasenboosts viele Gr"aben zwischen lokalen Maxima "uberwunden werden k"onnen. 
+Viele lokale Maxima werden vermutlich durch lokale "Anderungen der Funktionen $a_i(t)$ und $\pphi_i(t)$ voneinander getrennt. 
+Addiert man zu einer Phasenfunktion $\pphi_i(t)$ eine Funktion, die f"ur gen"ugend kleines $t$ konstant $0$ ist und ab einem gewissen $t$ konstant $2\pi$ ist und zwischen diesen konstanten Teilen verbunden wird, dann findet man bei $a_i(t)\cos\pphi_i(t)$ nur eine lokale "Anderung vor, n"amlich zwischen den beiden konstanten Abschnitten der addierten Funktion. 
+Solch eine Addition bezeichnen wir als Phasenboost. 
+Es ist vorstellbar, dass durch Phasenboosts viele Gr"aben zwischen lokalen Maxima "uberwunden werden k"onnen. 
 
-Weiterhin ist es vermutlich sinnvoll, nicht nur lokal zu suchen, sondern mehrere lokale Optima gleichzeitig zu suchen. Gute L"osungen k"onnten dann wiederum kombiniert werden, um noch bessere L"osungen zu erhalten. Solche Algorithmen werden auch als genetische Algorithmen bezeichnet. Genetische Algorithmen umfassen folgende Elemente
+Weiterhin ist es vermutlich sinnvoll, nicht nur lokal zu suchen, sondern mehrere lokale Optima gleichzeitig zu suchen. 
+Gute L"osungen k"onnten dann wiederum kombiniert werden, um noch bessere L"osungen zu erhalten. 
+Solche Algorithmen werden auch als genetische Algorithmen bezeichnet. 
+Genetische Algorithmen umfassen folgende Elemente
 \begin{itemize}
-  \item {\em Selektion} zweier Individuen gem"a"s der Fitness in der Population. Als Fitness kann beispielsweise die Norm der Fehlerfunktion $r(t)$ angenommen werden.  
-  \item {\em Kombination} (Kreuzung) der beiden selektierten Individuen zu einem neuen Individuum. Die Funktionen k"onnen etwa zerst"uckelt aneinander gesetzt werden.
-  \item {\em Mutation} des Individuums. Dies kann zum einen bedeuten, dass die Funktion so mit einem Gradientenverfahren optimiert wird, dass man sich nahe einem lokalen Optimum befindet. Andererseits k"onnten auch Phasenboosts mit einflie"sen. 
+  \item {\em Selektion} zweier Individuen gem"a"s der Fitness in der Population. 
+  Als Fitness kann beispielsweise die Norm der Fehlerfunktion $r(t)$ angenommen werden.  
+  \item {\em Kombination} (Kreuzung) der beiden selektierten Individuen zu einem neuen Individuum. 
+  Die Funktionen k"onnen etwa zerst"uckelt aneinander gesetzt werden.
+  \item {\em Mutation} des Individuums. 
+  Dies kann zum einen bedeuten, dass die Funktion so mit einem Gradientenverfahren optimiert wird, dass man sich nahe einem lokalen Optimum befindet. 
+  Andererseits k"onnten auch Phasenboosts mit einflie"sen. 
 \end{itemize}
 Genetische Algorithmen bringen zudem noch eine Vielzahl an anderen Ideen und Methoden mit sich, die verwendet werden k"onnten. 
 
 
 \section{Die derzeitige Implementierung des Algorithmus}
 
-Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. Wir beschreiben die folgenden Bestandteile des Algorithmus in dieser Reihenfolge:
+Gegeben ist endliche Folge von Samples $(a_1,\ldots,a_n)$ zu der eine IMF gefunden werden soll. 
+Wir beschreiben die folgenden Bestandteile des Algorithmus in dieser Reihenfolge:
 \begin{enumerate}[1.]
-\item Die IMF wird aus anfänglichen Parametern berechnet. 
-\item Die Kostenfunktion inklusive der Strafterme bei Verletzung der Nebenbedigung wird berechnet. 
-\item Ein globaler Optimierungsalgorithmus wird verwendet, um anf"angliche Parameter zu finden, die die Kostenfunktion minimieren. 
+  \item Die IMF wird aus anfänglichen Parametern berechnet. 
+  \item Die Kostenfunktion inklusive der Strafterme bei Verletzung der Nebenbedigung wird berechnet. 
+  \item Ein globaler Optimierungsalgorithmus wird verwendet, um anf"angliche Parameter zu finden, die die Kostenfunktion minimieren. 
 \end{enumerate}
 
 Wir beschreiben hier, wie man die Berechnung der IMF schrittweise auf die anf"anglichen Parameter zur"uckf"uhrt. 
-Die IMF ist der Realteil der Funktion $e^{\sigma(t)}$. Die IMF braucht nur sampleweise berechnet zu werden. Daher wird dies nur an Stellen $t_1,\ldots,t_n$ ausgef"uhrt. Die Funktion $\sigma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\sigma_0,\ldots,\sigma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\sigma(t_i)=\dfrac{\sigma_{i-1}+\sigma_{i}}{2}$ f"ur $i=1,\ldots,n$. Da die Division durch $2$ in $\C/2\pi\ii\Z$ nicht eindeutig ist, sondern $2x=y$ bei gegebenem $y\in\C/2\pi\ii\Z$ genau zwei L"osungen $x\in\C/2\pi\ii\Z$ besitzt, m"ussen wir genauer festlegen, welche L"osung wir meinen. Wir w"ahlen aus den Restklassen solche Repr"asentanten aus, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist, und dividieren deren Summe durch $2$. Auf diese Weise ist die Restklasse, in der $\sigma(t_i)$ liegt, eindeutig festgelegt. 
+Die IMF ist der Realteil der Funktion $e^{\sigma(t)}$. 
+Die IMF braucht nur sampleweise berechnet zu werden. 
+Daher wird dies nur an Stellen $t_1,\ldots,t_n$ ausgef"uhrt. 
+Die Funktion $\sigma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\sigma_0,\ldots,\sigma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\sigma(t_i)=\dfrac{\sigma_{i-1}+\sigma_{i}}{2}$ f"ur $i=1,\ldots,n$. 
+Da die Division durch $2$ in $\C/2\pi\ii\Z$ nicht eindeutig ist, sondern $2x=y$ bei gegebenem $y\in\C/2\pi\ii\Z$ genau zwei L"osungen $x\in\C/2\pi\ii\Z$ besitzt, m"ussen wir genauer festlegen, welche L"osung wir meinen. 
+Wir w"ahlen aus den Restklassen solche Repr"asentanten aus, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist, und dividieren deren Summe durch $2$. 
+Auf diese Weise ist die Restklasse, in der $\sigma(t_i)$ liegt, eindeutig festgelegt. 
 
 Der Realteil der Folge $\sigma_0,\ldots,\sigma_n$ wird durch eine Summe von Radialbasisfunktionen und der Imagin"arteil als Summe von logistischen Funktionen beschrieben, d.\,h. 
 $$ \sigma_i = \sum_{k=1}^{d_1}b_ke^{-\frac{(i-\mu_k)}{2\alpha^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+e^\frac{\nu_l-i}{\beta}} $$
-bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$ und $\alpha$ und~$\beta$. Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
+bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$ und $\alpha$ und~$\beta$. 
+Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
 
-Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. Mit der Definition
+Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. 
+Mit der Definition
 $ \tau_j := \sigma_j-\sigma_{j+1} $ 
 k"onnen diese Nebenbedingungen auch in der Form 
 $$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2
 \qquad \text{und} \qquad
 0\le\Im\tau_j $$
-geschrieben werden. Wieder m"ussen wir sagen, welche Repr"asentanten von $\sigma_j$ und $\sigma_{j+1}$ wir verwenden, da es sich streng genommen um Restklassen modulo $2\pi\ii$ handelt und beispielsweise der Ausdruck $\lvert\tau_j-\tau_{j+1}\rvert$ davon abh"angt. Wir w"ahlen zwei solche Repr"asentanten von $\sigma_j$ und~$\sigma_{j+1}$, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist. F"ur jede solche Auswahl ist die angegebene Bedingung "aquivalent. Wird die linke Nebenbedingung f"ur ein $j$ verletzt, so wird der Strafterm
+geschrieben werden. 
+Wieder m"ussen wir sagen, welche Repr"asentanten von $\sigma_j$ und $\sigma_{j+1}$ wir verwenden, da es sich streng genommen um Restklassen modulo $2\pi\ii$ handelt und beispielsweise der Ausdruck $\lvert\tau_j-\tau_{j+1}\rvert$ davon abh"angt. 
+Wir w"ahlen zwei solche Repr"asentanten von $\sigma_j$ und~$\sigma_{j+1}$, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist. 
+F"ur jede solche Auswahl ist die angegebene Bedingung "aquivalent. 
+Wird die linke Nebenbedingung f"ur ein $j$ verletzt, so wird der Strafterm
 $$ 1 + \lvert\tau_j-\tau_{j+1}\rvert - \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2 $$
 addiert. Wird die rechte Nebenbedingung verletzt, so wird zus"atzlich 
 $ 1 - \Im\tau_j $
-auf die Kostenfunktion aufaddiert. Dies wird f"ur alle m"oglichen Werte von $j$ durchgef"uhrt. 
+auf die Kostenfunktion aufaddiert. 
+Dies wird f"ur alle m"oglichen Werte von $j$ durchgef"uhrt. 
 
 %- totalCost( func[], params[] )
 %	- getSamplesFromParams( params[] ) -> pairsOfReals[]
@@ -464,18 +617,29 @@ auf die Kostenfunktion aufaddiert. Dies wird f"ur alle m"oglichen Werte von $j$ 
 
 \subsection{Nachtr"agliches Sortieren der IMFs}
 
-Da f"ur die Optimierung der Differential Evolution Algorithmus benutzt wird, h"angt das Ergebnis vom Zufall ab. Wenn die erste IMF gefunden wird, so handelt es sich (zumindest ann"ahernd) um ein lokales Minimum der Kostenfunktion. Es k"onnen manchmal verschiedene lokale Minima gefunden werden, je nachdem wie der Zufall entscheidet. Somit kann es passieren, dass die gefundene IMF der Restfunktion sogar bessere Werte der Kostenfunktion (bez"uglich der urspr"unglichen Zielfunktion) liefert, als die erste gefundene IMF. Ein typisches Beispiel, wo soetwas auftreten kann, ist die Funktion
+Da f"ur die Optimierung der Differential Evolution Algorithmus benutzt wird, h"angt das Ergebnis vom Zufall ab. 
+Wenn die erste IMF gefunden wird, so handelt es sich (zumindest ann"ahernd) um ein lokales Minimum der Kostenfunktion. 
+Es k"onnen manchmal verschiedene lokale Minima gefunden werden, je nachdem wie der Zufall entscheidet. 
+Somit kann es passieren, dass die gefundene IMF der Restfunktion sogar bessere Werte der Kostenfunktion (bez"uglich der urspr"unglichen Zielfunktion) liefert, als die erste gefundene IMF. 
+Ein typisches Beispiel, wo soetwas auftreten kann, ist die Funktion
 $$ f(t) := \sin 30t + (1+\varepsilon)\cos t\,. $$
-Sowohl $\sin 30t$ als auch $(1+\varepsilon)\cos t$ sind IMFs, die als ann"ahernde lokale Minima der Kostenfunktion gefunden werden k"onnen. Als zweite IMF wird dann der jeweils andere Summand gefunden. 
+Sowohl $\sin 30t$ als auch $(1+\varepsilon)\cos t$ sind IMFs, die als ann"ahernde lokale Minima der Kostenfunktion gefunden werden k"onnen. 
+Als zweite IMF wird dann der jeweils andere Summand gefunden. 
 
-Dieses Korrespondenzproblem kann leicht gel"ost werden, indem man als erste IMF diejenige w"ahlt, welche die Kostenfunktion bez"uglich der urspr"unglichen Funktion minimiert. Falls die erste gefundene IMF nicht mit dieser "ubereinstimmt, dann kann auch noch einmal komplett von vorn optimiert werden, indem man die neue erste IMF als Anfangsapproximation vorgibt. Die erste IMF wird durch dieses Vorgehen auf jeden Fall verbessert. Es kann jedoch passieren, dass weitere IMFs im Gesamtergebnis schlechtere Ergebnisse liefern, weil die Norm der Restfunktion gr"o"ser wird.
+Dieses Korrespondenzproblem kann leicht gel"ost werden, indem man als erste IMF diejenige w"ahlt, welche die Kostenfunktion bez"uglich der urspr"unglichen Funktion minimiert. 
+Falls die erste gefundene IMF nicht mit dieser "ubereinstimmt, dann kann auch noch einmal komplett von vorn optimiert werden, indem man die neue erste IMF als Anfangsapproximation vorgibt. 
+Die erste IMF wird durch dieses Vorgehen auf jeden Fall verbessert. 
+Es kann jedoch passieren, dass weitere IMFs im Gesamtergebnis schlechtere Ergebnisse liefern, weil die Norm der Restfunktion gr"o"ser wird.
 
 
 \subsection{Mehrere Suchl"aufe, Anpassungen der globalen Optimumsuche} \label{sec:aormchsogz}
 
-Ein weiterer Ansatz, um das Korrespondenzproblem in den Griff zu bekommen, ist, dass man mehrere Suchl"aufe mit verschiedenen Anfangswerten mit dem Differential Evolution Algorithmus durchf"uhrt und das beste gefundene Optimum heraussucht. Je mehr Suchl"aufe man startet, um so gr"o"ser wird die Wahrscheinlichkeit, dass man das beste lokale Optimum findet. 
+Ein weiterer Ansatz, um das Korrespondenzproblem in den Griff zu bekommen, ist, dass man mehrere Suchl"aufe mit verschiedenen Anfangswerten mit dem Differential Evolution Algorithmus durchf"uhrt und das beste gefundene Optimum heraussucht. 
+Je mehr Suchl"aufe man startet, um so gr"o"ser wird die Wahrscheinlichkeit, dass man das beste lokale Optimum findet. 
 
-Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differential Evolution Algorithmus. Es gibt sicherlich noch viele weitere allgemeine Ans"atze, um Differential Evolution zu verbessern. Oder man k"onnte gar einen v"ollig anderen Algorithmus zur globalen Optimumsuche verwenden. 
+Hierbei handelt es sich jedoch um eine allgemeing"ultige Ver"anderung des Differential Evolution Algorithmus. 
+Es gibt sicherlich noch viele weitere allgemeine Ans"atze, um Differential Evolution zu verbessern. 
+Oder man k"onnte gar einen v"ollig anderen Algorithmus zur globalen Optimumsuche verwenden. 
 
 
 \section{Benchmarks mit verschiedenen Funktionen}
@@ -491,25 +655,40 @@ f_2(t) &:= \sin\big(16\pi(\sin 2\pi t+t)\big) \\
 f_3(t) &:= e^{-30(t-1/2)^2}\sin 160\pi t + \sin(3\pi te^{3t})
 %exp(-30*(x-0.5)^2)*sin(160*pi*x)+sin(3*pi*x*exp(3*x))
 \end{align*}
-Alle drei Funktionen leben auf dem Intervall $[0,1]$. Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und schneidet die Phasengeschwindigkeit des zweiten Summanden. 
+Alle drei Funktionen leben auf dem Intervall $[0,1]$. 
+Die Schwierigkeit bei der ersten Funktion $f_1(t)$ besteht im Korrespondenzproblem. 
+Beide Summanden sind IMFs, welche denselben Wert f"ur die Kostenfunktion liefern. 
+Die zweite Funktion $f_2(t)$ ist problematisch, da die Phasengeschwindigkeit zuerst positiv, dann negativ und am rechten Ende des Intervalls wieder positiv ist, was bei unserer Suche nicht zugelassen ist. 
+Die Herausforderung der dritten Funktion $f_3(t)$ besteht im Mode Mixing: Die Phasengeschwindigkeit des ersten Summanden nimmt exponentiell zu und schneidet die Phasengeschwindigkeit des zweiten Summanden. 
 
 
 \subsection{Ergebnisse}
 
-Die Funktion $f_1(t)$ stellt f"ur unseren Algorithmus kein Problem dar. Die IMFs werden immer richtig gefunden. Allerdings wird manchmal der eine, manchmal der andere Summand zuerst gefunden. Die exakte Gleichheit der Kostenfunktionen von IMFs sollte allerdings bei realen Daten kaum auftreten. 
+Die Funktion $f_1(t)$ stellt f"ur unseren Algorithmus kein Problem dar. 
+Die IMFs werden immer richtig gefunden. 
+Allerdings wird manchmal der eine, manchmal der andere Summand zuerst gefunden. 
+Die exakte Gleichheit der Kostenfunktionen von IMFs sollte allerdings bei realen Daten kaum auftreten. 
 
-Die Funktion $f_2(t)$ ist f"ur unsere Suche allerdings in der Tat ein Problem. Die Phasengeschwindigkeit wechselt das Vorzeichen, was f"ur unsere L"osungen nicht zugelassen ist. Die erste gefundene IMF liefert oft wenig zufriedenstellende Ergebnisse. Die Stellen, wo die Phasengeschwindigkeit das Vorzeichen wechselt werden meist schlecht erfasst. Die restlichen Schwingungen werden allerdings gut approximiert. 
+Die Funktion $f_2(t)$ ist f"ur unsere Suche allerdings in der Tat ein Problem. 
+Die Phasengeschwindigkeit wechselt das Vorzeichen, was f"ur unsere L"osungen nicht zugelassen ist. 
+Die erste gefundene IMF liefert oft wenig zufriedenstellende Ergebnisse. 
+Die Stellen, wo die Phasengeschwindigkeit das Vorzeichen wechselt werden meist schlecht erfasst. 
+Die restlichen Schwingungen werden allerdings gut approximiert. 
 
-Bei $f_3(t)$ werden die IMFs oft mit hervorragender "Ubereinstimmung gefunden. Manchmal werden aber auch abh"angig vom Zufall andere L"osungen gefunden. Mode Mixing war hier jedenfalls kein schwerwiegendes Problem. Bei der Funktion $f_3(t)$ w"urde der Ansatz aus Abschnitt~\ref{sec:aormchsogz} wahrscheinlich sehr viel helfen, da hierdurch die L"osungssuche robuster wird. 
+Bei $f_3(t)$ werden die IMFs oft mit hervorragender "Ubereinstimmung gefunden. 
+Manchmal werden aber auch abh"angig vom Zufall andere L"osungen gefunden. 
+Mode Mixing war hier jedenfalls kein schwerwiegendes Problem. 
+Bei der Funktion $f_3(t)$ w"urde der Ansatz aus Abschnitt~\ref{sec:aormchsogz} wahrscheinlich sehr viel helfen, da hierdurch die L"osungssuche robuster wird. 
 
 
 \section{Ideen f"ur zuk"unftige Forschung und Entwicklung}
 
 Drei Dinge sollten im Jahr 2014 passieren:
 \begin{enumerate}
-\item Der Algorithmus und die Mathematik sollten in einem Artikel zur Ver"offentlichung eingereicht werden. 
-\item Weitere Benchmarks mit k"unstlichen und realen Daten sollten durchgef"uhrt werden. Dazu geh"oren Vergleiche mit den derzeit besten Methoden f"ur die Zerlegung in IMFs. 
-\item Ideen f"ur einen Folgeantrag sollten gesammelt werden. 
+  \item Der Algorithmus und die Mathematik sollten in einem Artikel zur Ver"offentlichung eingereicht werden. 
+  \item Weitere Benchmarks mit k"unstlichen und realen Daten sollten durchgef"uhrt werden. 
+  Dazu geh"oren Vergleiche mit den derzeit besten Methoden f"ur die Zerlegung in IMFs. 
+  \item Ideen f"ur einen Folgeantrag sollten gesammelt werden. 
 \end{enumerate}
 
 
