@@ -558,7 +558,11 @@ Wir beschreiben die folgenden Bestandteile des Algorithmus in dieser Reihenfolge
   \item Die IMF wird aus anfänglichen Parametern berechnet. 
   \item Die Kostenfunktion inklusive der Strafterme bei Verletzung der Nebenbedigung wird berechnet. 
   \item Ein globaler Optimierungsalgorithmus wird verwendet, um anf"angliche Parameter zu finden, die die Kostenfunktion minimieren. 
+  \item Eine Anfangsapproximation wird gefunden. 
 \end{enumerate}
+
+
+\subsection{Berechnung von IMF-Samples aus einem Parametersatz}
 
 Wir beschreiben hier, wie man die Berechnung der IMF schrittweise auf die anf"anglichen Parameter zur"uckf"uhrt. 
 Die IMF ist der Realteil der Funktion $e^{\sigma(t)}$. 
@@ -573,6 +577,9 @@ Der Realteil der Folge $\sigma_0,\ldots,\sigma_n$ wird durch eine Summe von Radi
 $$ \sigma_i = \sum_{k=1}^{d_1}b_ke^{-\frac{(i-\mu_k)}{2\alpha^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+e^\frac{\nu_l-i}{\beta}} $$
 bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$ und $\alpha$ und~$\beta$. 
 Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
+
+
+\subsection{Berechnung der Kostenfunktion}
 
 Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. 
 Mit der Definition
@@ -591,6 +598,13 @@ addiert. Wird die rechte Nebenbedingung verletzt, so wird zus"atzlich
 $ 1 - \Im\tau_j $
 auf die Kostenfunktion aufaddiert. 
 Dies wird f"ur alle m"oglichen Werte von $j$ durchgef"uhrt. 
+Zusammenfassend k"onnen wir also die Kostenfunktion vollst"andig aus dem Parametersatz und den Zielsamples $(a_1,\ldots,a_n)$ berechnen. 
+
+
+\subsection{Globales Optimierungsverfahren zur Minimierung der Kostenfunktion}
+
+
+\subsection{Finden einer Anfangsapproximation}
 
 %- totalCost( func[], params[] )
 %	- getSamplesFromParams( params[] ) -> pairsOfReals[]
