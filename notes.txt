@@ -32,6 +32,19 @@ Ideas for improving the total result
     negative of the original phase plus an integer multiple of $2\pi$.
 	
 
+
+Eine Schleife ueber alle Tests probieren
+
+iterieren ueber:
+- Diffential Evolution
+- IMFs
+
+Denoising
+Butterworth-Filter
+Andere Filter
+Frequenz richtig eingeben
+
+
 Things to do on the gui
 =======================
 * Let the user choose the noise level to be added to the initial
