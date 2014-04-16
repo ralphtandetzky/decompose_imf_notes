@@ -1,0 +1,65 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[utf8]{inputenc} % necessary for the BiBTeX file to work with umlauts
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage[ngerman]{babel}
+\usepackage{enumerate}
+\usepackage{natbib} % provides a few nice styles for the bibliography
+\usepackage[nottoc]{tocbibind} % makes sure the bibliography is added to the table of contents
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{german} % selects german as language for the bibliography
+
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\de}{{\mathrm{d}}}
+\newcommand{\ii}{{\mathrm{i}}}
+\newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
+\newcommand{\pphi}{{\varphi}}
+\newcommand{\defeq}{\overset{!}{=}}
+
+
+\begin{document}
+
+%\tableofcontents
+
+\section{Zusammenfassung}
+
+Es ist ein Signal $f:[a,b]\to\R$ gegeben, von dem wir annehmen, dass es durch reellwertige Funktion auf einem Intervall $[a,b]$ beschrieben wird. 
+Gesucht ist eine Zerlegung
+$$ f(t) = \sum_{i=1}^N a_i(t)\cos\pphi_i(t) + r(t)\,, $$
+wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. 
+Die Summe ist also eine "Uberlagerung von amplituden- und phasenmodulierten Signalen. 
+Entsprechend sollen f"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ mindestens folgende Bedingungen f"ur alle $t$ gelten:
+\begin{align*}
+  a_i(t) &> 0 \\
+  \dot{\pphi_i}(t) &\ge 0
+\end{align*}
+Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (intrinsic mode function) erf"ullt ist. 
+Die Aufgabe ist es nun, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. 
+
+%- bisherige Nebenbedingungen zu schwach => viele L"osungen, etc.
+%- zus"atzliche Forderungen, um plausible L"osungen zu finden. 
+%- Hinreichende Bedingungen in Form einer Differentialungleichung f"ur die IMF-Eigenschaft.
+%- Diskretisierung mit B-Splines.
+%- Zerlegung von Phase in logistische Basisfunktionen, und von Amplitute in radiale Basisfunktionen. 
+%- F"ur die Optimierung brauch man eine Kostenfunktion, die sich zusammensetzt aus:
+%  - einer Norm f"ur die Restfunktion und
+%  - Strafterme f"ur die Verletzung der Nebenbedingungen.
+%- F"ur die globale Optimierung braucht man
+%  - eine geeignete Anfangsapproximation und
+%  - einen globalen Optimierungsalgorithmus.
+%- Vorverarbeitungsschritte: 
+%  - Gl"attung der Funktion $f$, 
+%  - alle Momente bis zur Ordnung $2$ auf null bringen.
+%- Iterative Berechnung von IMF-Komponenten
+%- Konkrete Ergebnisse in Testl"aufen
+%- kurze Beschreibung der entstandenen Software
+
+
+
+%\bibliographystyle{plainnat}
+%\bibliography{decompose_imf}
+
+
+\end{document}
