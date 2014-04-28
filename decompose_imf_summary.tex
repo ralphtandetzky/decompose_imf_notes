@@ -13,6 +13,7 @@
 \newcommand{\R}{{\mathbb{R}}}
 \newcommand{\Z}{{\mathbb{Z}}}
 \newcommand{\de}{{\mathrm{d}}}
+\newcommand{\ee}{{\mathrm{e}}}
 \newcommand{\ii}{{\mathrm{i}}}
 \newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
 \newcommand{\pphi}{{\varphi}}
@@ -23,14 +24,14 @@
 
 %\tableofcontents
 
-\section{Zusammenfassung}
+\section{Die Problemstellung}
 
 Es ist ein Signal $f:[a,b]\to\R$ gegeben, von dem wir annehmen, dass es durch reellwertige Funktion auf einem Intervall $[a,b]$ beschrieben wird. 
 Gesucht ist eine Zerlegung
 $$ f(t) = \sum_{i=1}^N a_i(t)\cos\pphi_i(t) + r(t)\,, $$
-wobei $a_i,\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. 
+wobei die Amplituden~$a_i$, die Phasen~$\pphi_i$ f"ur $i=1,\dotsc,N$ und $r$ reellwertige Funktionen auf dem Intervall $[a,b]$ sind und die Restfunktion $r(t)$ minimiert werden soll. 
 Die Summe ist also eine "Uberlagerung von amplituden- und phasenmodulierten Signalen. 
-Entsprechend sollen f"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ mindestens folgende Bedingungen f"ur alle $t$ gelten:
+Entsprechend sollen f"ur die Amplituden und Phasen mindestens folgende Bedingungen f"ur alle $i=1,\dotsc,N$ und $t\in[a,b]$ gelten:
 \begin{align*}
   a_i(t) &> 0 \\
   \dot{\pphi_i}(t) &\ge 0
@@ -38,24 +39,127 @@ Entsprechend sollen f"ur die Funktionen $a_i$ und $\pphi_i$ f"ur $i=1,\dotsc,N$ 
 Au"serdem sollten die Summanden $a_i(t)\cos\pphi_i(t)$ zwischen je zwei benachbarten Nullstellen genau ein Extremum besitzen, so dass die Eigenschaft einer IMF (intrinsic mode function) erf"ullt ist. 
 Die Aufgabe ist es nun, die $a_i(t)$ und $\pphi_i(t)$ numerisch so zu bestimmen, dass die Restfunktion $r(t)$ m"oglichst klein wird. 
 
-%- bisherige Nebenbedingungen zu schwach => viele L"osungen, etc.
-%- zus"atzliche Forderungen, um plausible L"osungen zu finden. 
-%- Hinreichende Bedingungen in Form einer Differentialungleichung f"ur die IMF-Eigenschaft.
-%- Diskretisierung mit B-Splines.
-%- Zerlegung von Phase in logistische Basisfunktionen, und von Amplitute in radiale Basisfunktionen. 
-%- F"ur die Optimierung brauch man eine Kostenfunktion, die sich zusammensetzt aus:
-%  - einer Norm f"ur die Restfunktion und
-%  - Strafterme f"ur die Verletzung der Nebenbedingungen.
-%- F"ur die globale Optimierung braucht man
-%  - eine geeignete Anfangsapproximation und
-%  - einen globalen Optimierungsalgorithmus.
-%- Vorverarbeitungsschritte: 
-%  - Gl"attung der Funktion $f$, 
-%  - alle Momente bis zur Ordnung $2$ auf null bringen.
-%- Iterative Berechnung von IMF-Komponenten
+
+\section{Weitere Nebenbedingungen}
+
+Man stellt schnell fest, dass die bisherigen Nebenbedingungen an die Amplituden und Phasen zu schwach sind, um sinnvolle Ergebnisse zu erlangen. 
+Schon wenn man davon ausgeht, dass nur zwei Summanden $(N=2)$ zugelassen sind und $f$ hinreichend glatt ist, dann erlangt man eine verschwindende Restfunktion $r=0$ auf unendlich viele Weisen.
+Man braucht also zus"atzliche Forderungen an die Amplituden und Phasen, um plausible L"osungen zu erhalten. 
+Eine hinreichende Bedingung daf"ur, dass $a_i(t)\cos\pphi_i(t)$ eine IMF ist, lautet
+\begin{align} \label{eq:condpphiiai}
+  \frac14\ddot\pphi_i(t)^2 + \dot\pphi_i(t)^2\frac{\de^2}{\de t^2}\ln a_i(t) 
+  \le \dot\pphi_i(t)^4\,.
+\end{align}
+Diese Ungleichung ist schwer handhabbar und es ist schwierig zu erkennen, was sie anschaulich bedeutet. 
+Daher wurden weitere hinreichende Bedingungen untersucht. 
+Setzt man
+$$ \sigma_i(t) := \ln a_i(t) + \ii\pphi_i(t)\,, $$
+so lassen sich die Summanden vereinfacht darstellen als
+$$ a_i(t)\cos\pphi_i(t) = \Re \ee^{\sigma_i(t)}. $$
+Eine Amplitude und eine Phase lassen sich also in eine komplexwertige Funktion $\sigma_i(t)$ "ubersetzen und umgekehrt. 
+In dieser Spache l"asst sich die bisherige hinreichende Bedingung f"ur eine IMF weiter vereinfachen zu
+\begin{align} \label{eq:imSigma}
+  \lvert\ddot\sigma_i(t)\rvert \le \left(\Im\dot\sigma_i(t)\right)^2\,.
+\end{align}
+Wenn diese Bedingung~\ref{eq:imSigma} erf"ullt ist, dann gilt auch~\eqref{eq:condpphiiai}, aber nicht notwendigerweise umgekehrt. 
+Diese Bedingung~\ref{eq:imSigma} ist offensichtlich erst recht erf"ullt, wenn 
+\begin{align} \label{eq:absSigma}
+  \lvert\ddot\sigma_i(t)\rvert \le\lvert\dot\sigma_i(t)\rvert^2\,.
+\end{align}
+gilt. Die Nebenbedingung $\dot{\pphi_i}(t) \ge 0$ "ubersetzt sich in $\Im\dot{\sigma_i}(t) \ge 0$. 
+Unter dieser Monotonievoraussetzung gilt also zusammenfassend die Implikationskette 
+$$ \text{\eqref{eq:absSigma}} \quad \Longrightarrow \quad
+  \text{\eqref{eq:imSigma}} \quad \Longrightarrow \quad
+  \text{\eqref{eq:condpphiiai}} \quad \Longrightarrow \quad
+  \text{$a_i(t)\cos\pphi_i(t)$ ist eine IMF,} $$
+wobei die Umkehrungen jeweils nicht allgemeing"ultig zutreffen. 
+
+In der Bedingung~\eqref{eq:absSigma} wird ersichtlich, dass die zweite Ableitung von $\sigma_i(t)$ betraglich durch das Quadrat der ersten Ableitung beschr"ankt ist. 
+Ginge man von einer konstanten Amplitude aus, so w"urde sich diese Forderung "aquivalent auf die Phase "ubertragen. 
+Damit ist also eine Nebenbedingung gefunden, die zu {\em plausiblen} L"osungen unserer Ausgangsfrage f"uhren kann. 
+
+
+\section{Diskretisierung}
+
+Der n"achste Schritt auf dem Weg zu einer numerischen Optimierung besteht darin, dass wir den Raum der L"osungen soweit einschr"anken, dass er endlichdimensional ist. 
+Bei verschiedenen Untersuchungen hat sich folgender Ansatz als besonders erfolgreich herausgestellt: 
+Es werden als L"osungen nur st"uckweise quadratische Funktionen $\sigma_i$ zugelassen, die zudem stetig differenzierbar sind. 
+Die St"utzstellen, an denen die Funktionen $\sigma_i$ nicht lokal quadratisch zu sein brauchen, sollen "aquidistant und f"ur alle Funktionen $\sigma_i$, $i=1,\ldots,N$ gleich und fest vorgegeben sein. 
+Als Basis eines solchen linearen Funktionenraumes dienen dann die sogenannten B-Splines. 
+Das sind gerade diejenigen st"uckweise quadratischen und stetig differenzierbaren Funktionen mit den vorgegebenen St"utzstellen und minimalem nichtleeren Tr"ager. 
+Die B-Splines gehen bei "aquidistanten St"utzstellen auseinander durch Translation hervor. 
+Bei diesem Ansatz stellt sich heraus, dass die Nebenbedingungen~\eqref{eq:imSigma} oder~\eqref{eq:absSigma} extrem leicht f"ur alle~$t$ "uberpr"ufbar sind, wenn man die komplexwertigen Koeffizienten der B-Splines kennt. 
+
+
+\section{Reduktion des Parameterraumes}
+
+Wenn die Anzahl der St"utzstellen im Zielintervall $[a,b]$ sehr gro"s ist, dann kann die numerische Optimierung unpraktikabel werden. 
+Um das zu vermeiden, wird die Anzahl der Parameter des Optimierungsproblems weiter reduziert. 
+Es seien $\sigma_{ij}$ die B-Spline-Koeffizienten von $\sigma_i(t)$ in geordneter Reihenfolge\footnote{Die B-Splines gehen durch Translation des Arguments auseinander hervor. Die Reihenfolge soll so gew"ahlt werden, dass der am weitesten links liegende B-Spline, dessen Tr"ager das Intervall $(a,b)$ noch schneidet den kleinsten Index $j$ bekommt und der am weitesten rechts liegende B-Spline mit dieser Eigenschaft den gr"o"sten Index.} bez"uglich $j$. Nun reduzieren wir die Zahl der Parameter, indem wir annehmen, dass 
+$$ \sigma_{ij} = \sum_{k=1}^{d_1}b_{ik}\ee^{-\frac{(j-\mu_{ik})}{2\alpha_i^2}} + \ii\sum_{l=1}^{d_2}c_{il}\frac{1}{1+\ee^\frac{\nu_{il}-j}{\beta_i}} $$
+gilt, wobei die Parameter $b_{ik}$, $c_{il}$, $\mu_{ik}$, $\nu_{il}$, $\alpha_i$ und $\beta_i$ zu bestimmen sind und $d_1$ sowie $d_2$ vorgegeben sind. 
+Der Realteil setzt sich also aus einer Radialbasis und der Imagin"arteil aus einer logistischen Basis zusammen. 
+Wenn $d_1$ und $d_2$ klein sind, so kann dadurch die Anzahl der Parameter drastisch reduziert werden. 
+
+
+\section{Die Kostenfunktion}
+
+F"ur eine numerische Optimierung wird eine Kostenfunktion ben"otigt, die sich zusammensetzt aus
+\begin{itemize}
+ \item einer Norm f"ur die Restfunktion $r(t) = f(t) - \sum_{i=1}^N a_i(t)\cos\pphi_i(t)$ und
+ \item Straftermen f"ur die Verletzung von Nebenbedingungen. 
+\end{itemize}
+F"ur die Norm der Restfunktion $r(t)$ k"onnte man $L_p$-Normen oder Sobolev-Normen verwenden. 
+Da wir jedoch davon ausgehen k"onnen, dass uns von $f(t)$ nur einige Samples bekannt sind und nicht die Werte auf dem gesamten Intervall $[a,b]$, bietet es sich an, die $\ell_p$-Norm der Werte an den Samplestellen als Norm zugrunde zu legen. 
+Die Norm besitzt dann also die Form
+\begin{align} \label{eq:lpnormr}
+\norm{r}_{\ell_p} := \left(\,\sum_{t}\lvert r(t)\rvert^p\right)^{1/p},
+\end{align}
+wobei $t$ "uber alle Samples l"auft. 
+
+Die Strafterme, die bei der Verletzung von Nebenbedingungen verwendet werden, richten sich prim"ar nach der Gesamtbreite aller Intervalle, auf dem die Nebenbedingungen verletzt sind und au"serdem danach, wie schwerwiegend die entsprechenden Ungleichungen der Nebenbedingung verletzt werden. 
+Es ist anzumerken, dass der Strafterm unstetig in den Parametern ist, da schon die Verletzung der Nebenbedingungen auf einem kleinen Intervall einen gen"ugend gro"sen Strafterm liefern soll, der sicherstellt dass die Nebenbedingungen nach einer Optimierung auch wirklich erf"ullt sind. 
+
+
+\section{Die globale Optimierung}
+
+Als Optimierungsverfahren wurde eine Implementierung des Differential Evolution Algorithmus verwendet. 
+Dieser Algorithmus erh"alt als Eingabe die Kostenfunktion und eine Menge (ein Schwarm) von L"osungskandidaten. 
+Dieser Schwarm wird im Laufe des Algorithmus schrittweise verbessert, indem L"osungskandidaten mit hohen Kosten durch neue L"osungskandidaten mit niedrigeren Kosten ersetzt werden. 
+Wenn ein vorgegebenes Abbruchkriterium erf"ullt ist, wird der beste L"osungskandidat als Ergebnis zur"uckgeliefert. 
+
+F"ur den Erfolg des Verfahrens sind gute L"osungskandidaten entscheidend. 
+Bei umfangreichen Tests hat sich ergeben, dass es besonders wichtig ist, mit einer guten Approximation der Phasenfunktion zu beginnen. 
+Der Differential Evolution Algorithmus hat dann keine Probleme die Amplitude entsprechend anzupassen. 
+Eine geeignete Anfangsapproximation der Phase ergibt sich, indem man nur die Nullstellen und die Vorzeichen der Funktion betrachtet und die Phase so einrichtet, dass die Nullstellen "ubereinstimmen. 
+F"ur die Anfangsapproximation der Amplitude reicht es aus eine Konstante anzunehmen. 
+Der Schwarm wird dann erzeugt, indem man L"osungskandidaten w"ahlt, die normalverteilt sind so dass der Erwartungswert die gerade besprochene Anfangsapproximation ist. 
+
+
+\section{Vorverarbeitungsschritte}
+
+Bei der Berechnung der Anfangsapproximation spielen die Nullstellen eine erhebliche Rolle. 
+Ist auf den Samples ein gro"ses Rauschen, so kann es schnell dazu kommen, dass zu viele Nullstellen gez"ahlt werden und somit die Anfangsapproximation ungeeignet wird. 
+Um dem Vorzubeugen kann man das Signal-Rausch-Verh"altnis verbessern, indem man einen Tiefpassfilter auf die Samples anwendet. 
+Au"serdem sollte man daf"ur sorgen dass der Mittelwert der Samples Null ist. 
+Es hat sich herausgestellt, dass das Verfahren besonders gut funktioniert, wenn man das erste und zweite Moment der Samples entfernt, indem die entsprechende quadratische Funktion von den Samples abzieht.
+Damit wird gleichzeitig sichergestellt, dass die Zielfunktion mindestens drei Nullstellen besitzt. 
+
+
+\section{Iterative Berechnung der IMF-Komponenten}
+
+Der Parameterraum ist im Falle von mehreren IMF-Komponenten immernoch sehr gro"s. 
+Die Rechenzeit w"achst sehr stark mit der Anzahl der zu optimierenden Parameter. 
+Daher wird in der derzeitigen Implementierung immer nur eine IMF-Komponente zu einer Zeit optimiert und nicht alle gleichzeitig. 
+Wenn eine IMF-Komponente optimiert wurde, wird anschlie"send mit der n"achsten Komponente fortgefahren. 
+Dies setzt sich fort, bis der Restfehler sich auf Rauschniveau befindet und abgebrochen wird. 
+
+Noch weitaus bessere Ergebnisse erlangt man, wenn nach der Optimierung der zweiten IMF die erste IMF-Komponente auf Grundlage der zweiten nachgebessert wird. 
+Ebenso kann man nach der Berechnung der dritten IMF-Komponente die beiden vorherigen nochmals nachbessern.
+Es hat sich gezeigt, dass dieses Verfahren zu einer erheblichen Verringerung des Restfehlers f"uhrt. 
+
 %- Konkrete Ergebnisse in Testl"aufen
 %- kurze Beschreibung der entstandenen Software
-
 
 
 %\bibliographystyle{plainnat}
