@@ -141,23 +141,23 @@ Die Bedingung~\eqref{eq:condpphiiai} sieht sehr kompliziert aus.
 $$ \alpha(t):=\ln a(t) $$
 einf"uhrt. Dann kann man die zweite logarithmische Ableitung von $a(t)$ schreiben als $\frac{d^2}{dt^2}\ln a(t) = \ddot\alpha(t)$. 
 F"uhrt man dann noch die komplexwertige Funktion
-$$ \sigma(t) := \alpha(t) + \ii\pphi(t) $$
+$$ \gamma(t) := \alpha(t) + \ii\pphi(t) $$
 ein, so haben wir die kompaktere Darstellung
-$$ a(t)\cos\pphi(t) = \Re \ee^{\sigma(t)}\,. $$
+$$ a(t)\cos\pphi(t) = \Re \ee^{\gamma(t)}\,. $$
 Die Ungleichung~\eqref{eq:intermediateABC} ist erf"ullt, wenn 
 $$ \sqrt{A^2 + B^2} \le C $$
 gilt. Dies ist "aquivalent zu der Formulierung
 \begin{align} \label{eq:imSigma}
-  \lvert\ddot\sigma(t)\rvert \le \left(\Im\dot\sigma(t)\right)^2\,.
+  \lvert\ddot\gamma(t)\rvert \le \left(\Im\dot\gamma(t)\right)^2\,.
 \end{align}
-Man kann alle Aussagen unserer Problemstellung statt mit $a(t)$ und $\pphi(t)$ ausgehend von $\sigma(t)$ beschreiben. 
-Der Vorteil dieser Sichtweise ist, dass die Nebenbedingungen $a(t)>0$ wegen $a(t)=|\ee^{\sigma(t)}|$ automatisch erf"ullt ist. 
+Man kann alle Aussagen unserer Problemstellung statt mit $a(t)$ und $\pphi(t)$ ausgehend von $\gamma(t)$ beschreiben. 
+Der Vorteil dieser Sichtweise ist, dass die Nebenbedingungen $a(t)>0$ wegen $a(t)=|\ee^{\gamma(t)}|$ automatisch erf"ullt ist. 
 Es bleibt nur noch 
-$$ \Im\dot\sigma(t)\ge0 $$ 
+$$ \Im\dot\gamma(t)\ge0 $$ 
 zu beachten und wir haben damit eine kleine Menge von sehr einfachen Nebenbedingungen. 
 Eine noch st"arkere, aber auch handhabbarere Bedingung ist 
   \begin{align} \label{eq:absSigma}
-    \lvert\ddot\sigma(t)\rvert \le\lvert\dot\sigma(t)\rvert^2\,.
+    \lvert\ddot\gamma(t)\rvert \le\lvert\dot\gamma(t)\rvert^2\,.
   \end{align}
 Zusammenfassend haben wir also die Implikationskette 
 $$ \text{\eqref{eq:absSigma}} \quad \Longrightarrow \quad
@@ -177,11 +177,11 @@ Daf"ur bietet es sich an, die Funktionen als Linearkombinationen darzustellen:
       a_i(t) &= \sum_{m=0}^{M_a    }     a_{im}    b_m(t)\,, \\ 
   \pphi_i(t) &= \sum_{m=0}^{M_\pphi} \pphi_{im} \psi_m(t)\,.
 \end{align*}
-Geht man von der alternativen Formulierung mit $\sigma_i(t)$ statt $a_i(t)$ und $\pphi_i(t)$ aus, so k"onnte man auch den Ansatz
+Geht man von der alternativen Formulierung mit $\gamma_i(t)$ statt $a_i(t)$ und $\pphi_i(t)$ aus, so k"onnte man auch den Ansatz
 \begin{align*}
-  \sigma_i(t) &= \sum_{m=0}^M \sigma_{im}g_m(t)
+  \gamma_i(t) &= \sum_{m=0}^M \gamma_{im}g_m(t)
 \end{align*}
-mit komplexwertigen Koeffizienten $\sigma_{im}$ w"ahlen. 
+mit komplexwertigen Koeffizienten $\gamma_{im}$ w"ahlen. 
 Die Basisfunktionen $g_m(t)$ k"onnten auch komplexwertig sein. 
 Jedoch ist das nicht notwendig und unter Umst"anden auch gar nicht erw"unscht. 
 
@@ -200,30 +200,30 @@ Der Ansatz im vorigen Abschnitt hat den Nachteil, dass es aufwendig sein kann, d
 In diesem Abschnitt werden wir einen Ansatz besprechen, bei dem die Nebenbedingungen trivial "uberpr"ufbar sind. 
 Dazu definieren wir
 \begin{align} \label{eq:def_theta} 
-\theta(t) := \frac{\ddot\sigma(t)}{\dot\sigma(t)^2}. 
+\theta(t) := \frac{\ddot\gamma(t)}{\dot\gamma(t)^2}. 
 \end{align}
 Die Nebenbedingung~\eqref{eq:absSigma} ist also genau dann erf"ullt, wenn 
 $$ |\theta(t)| \le 1. $$
-Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\sigma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. 
+Jetzt drehen wir den Spie"s um: Wenn $\theta(t)$ bekannt ist, dann ist $\gamma(t)$ durch Gleichung~\eqref{eq:def_theta} bis auf zwei Integrationskonstanten eindeutig festgelegt. 
 Es gilt dann n"amlich 
-$$ -\frac{1}{\dot\sigma(t)} = \int\theta(t)\,\de t 
+$$ -\frac{1}{\dot\gamma(t)} = \int\theta(t)\,\de t 
 \qquad \Longrightarrow \qquad 
-\sigma(t) = -\int \frac{1}{\int\theta(t)\,\de t}\,\de t $$
+\gamma(t) = -\int \frac{1}{\int\theta(t)\,\de t}\,\de t $$
 Nun ist die Idee, dass man $\theta(t)$ und die Integrationskonstanten optimiert. 
 Der Vorteil ist, dass die Nebenbedingung sehr einfach zu verifizieren ist. 
 Als Ansatz nehmen wir an, dass $\theta(t)$ st"uckweise konstant ist. 
 Auf einem Intervall, wo $\theta(t)=c_0$ konstant ist, gilt dann 
-$$ \sigma(t) = -\int \frac{\de t}{c_0t + c_1}
+$$ \gamma(t) = -\int \frac{\de t}{c_0t + c_1}
 =-\frac{1}{c_0}\ln(c_0t+c_1) + c_2 $$
 f"ur geeignete Werte von $c_0$, $c_1$ und $c_2$. Mit 
 $$ A := -\frac{1}{c_0}\,, \quad
 B:= -\frac{c_1}{c_0}\,, \quad
 C:= c_2 + A\ln c_0 $$
 gilt 
-$$ \sigma(t) = A\ln(t-B) + C\,. $$
+$$ \gamma(t) = A\ln(t-B) + C\,. $$
 Die Nebenbedingungen 
 $$ |\theta(t)| \le 1 \qquad \text{und} \qquad
-\Im\dot\sigma(t)\ge 0 $$
+\Im\dot\gamma(t)\ge 0 $$
 k"onnen umformuliert werden zu
 $$ |A|\ge 1 \qquad \text{und}\qquad
 \Im\left[A(t-B)^*\right]\ge 0\,, $$
@@ -235,86 +235,86 @@ Wenn die Bedingung dort zutrifft, dann auch im Inneren des Intervalls.
 \subsection{Lokale Ver"anderungen beim ersten Ansatz}
 
 Der Ansatz aus dem vorangegangenen Unterabschnitt erleichtert die "Uberpr"ufung der Nebenbedingungen. 
-Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\sigma(t)$ nach sich ziehen. 
-Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\sigma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
+Allerdings muss die Funktion $\theta(t)$ optimiert werden und lokale "Anderungen bei dieser Funktion k"onnen globale Auswirkungen auf die Funktion $\gamma(t)$ nach sich ziehen. 
+Wir wollen nun untersuchen, wie man die Funktion $\theta(t)$ lokal ver"andern kann, damit man bei $\gamma(t)$ ebenfalls nur lokale Ver"anderungen vorfindet. 
 
 Man kann dies etwa damit vergleichen, dass man eine st"uckweise konstante Funktion kennt und wissen m"ochte, wie man sie ver"andern kann, so dass nach zweifachem Integrieren eine Funktion herauskommt, die nur lokale "Anderungen aufweist. 
 Bei "aquidistanten Intervallen braucht man in diesem Fall drei benachbarte Intervalle mit den Wichtungen $1$, $-2$ und $1$ in dieser Reihenfolge, damit sich die zweimal integrierte Funktion nur dort und nirgends sonst "andert. 
 
 In unserem Fall versuchen wir es ebenfalls mit drei Intervallen $[t_0,t_1]$, $[t_1,t_2]$ und $[t_2,t_3]$. 
-Da $\sigma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. 
-Da sich $\sigma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\sigma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. 
+Da $\gamma(t)$ einmal stetig differenzierbar ist, stimmen die Werte der Funktion und deren Ableitungen an den Intervallgrenzen "uberein. 
+Da sich $\gamma(t)$ au"serhalb der Intervalle nicht ver"andern darf, k"onnen wir davon ausgehen, dass die Werte von $\gamma(t)$ und deren Ableitung an den Stellen $t_0$ und $t_3$ fest und bekannt sind. 
 Die Parameter $A$, $B$ und $C$ aus dem vorangegangen Abschnitt unterscheiden sich auf den drei Intervallen. 
 Wir bezeichnen diese Parameter auf $[t_{i-1},t_i]$ mit $A_i$, $B_i$ und $C_i$ f"ur $i=1,\dotsc,3$. 
-Au"serdem schreiben wir der K"urze halber $\sigma_i:=\sigma(t_i)$ und $\dot\sigma_i:=\dot\sigma(t_i)$ f"ur $i=0,\dotsc,3$. 
+Au"serdem schreiben wir der K"urze halber $\gamma_i:=\gamma(t_i)$ und $\dot\gamma_i:=\dot\gamma(t_i)$ f"ur $i=0,\dotsc,3$. 
 Mit diesen Bezeichnungen bekommen wir folgendes Gleichungssystem:
 \begin{align}
-  \sigma_0       &= A_1\ln(t_0-B_1)+C_1 \label{eq:local1} \\
-  \dot\sigma_0 &= \frac{A_1}{t_0-B_1} \label{eq:local2} \\
-  \sigma_1       &= A_1\ln(t_1-B_1)+C_1 \label{eq:local3} \\
-  \dot\sigma_1 &= \frac{A_1}{t_1-B_1} \label{eq:local4} \displaybreak[0] \\
-  \sigma_1       &= A_2\ln(t_1-B_2)+C_2 \label{eq:local5} \\
-  \dot\sigma_1 &= \frac{A_2}{t_1-B_2} \label{eq:local6} \\
-  \sigma_2       &= A_2\ln(t_2-B_2)+C_2 \label{eq:local7} \\
-  \dot\sigma_2 &= \frac{A_2}{t_2-B_2} \label{eq:local8} \displaybreak[0] \\
-  \sigma_2       &= A_3\ln(t_2-B_3)+C_3 \label{eq:local9} \\
-  \dot\sigma_2 &= \frac{A_3}{t_2-B_3} \label{eq:local10} \\
-  \sigma_3       &= A_3\ln(t_3-B_3)+C_3 \label{eq:local11} \\
-  \dot\sigma_3 &= \frac{A_3}{t_3-B_3} \label{eq:local12}
+  \gamma_0       &= A_1\ln(t_0-B_1)+C_1 \label{eq:local1} \\
+  \dot\gamma_0 &= \frac{A_1}{t_0-B_1} \label{eq:local2} \\
+  \gamma_1       &= A_1\ln(t_1-B_1)+C_1 \label{eq:local3} \\
+  \dot\gamma_1 &= \frac{A_1}{t_1-B_1} \label{eq:local4} \displaybreak[0] \\
+  \gamma_1       &= A_2\ln(t_1-B_2)+C_2 \label{eq:local5} \\
+  \dot\gamma_1 &= \frac{A_2}{t_1-B_2} \label{eq:local6} \\
+  \gamma_2       &= A_2\ln(t_2-B_2)+C_2 \label{eq:local7} \\
+  \dot\gamma_2 &= \frac{A_2}{t_2-B_2} \label{eq:local8} \displaybreak[0] \\
+  \gamma_2       &= A_3\ln(t_2-B_3)+C_3 \label{eq:local9} \\
+  \dot\gamma_2 &= \frac{A_3}{t_2-B_3} \label{eq:local10} \\
+  \gamma_3       &= A_3\ln(t_3-B_3)+C_3 \label{eq:local11} \\
+  \dot\gamma_3 &= \frac{A_3}{t_3-B_3} \label{eq:local12}
 \end{align}
-Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\sigma_1$, $\dot\sigma_1$, $\sigma_2$ und $\dot\sigma_2$. 
-Alle anderen Gr"o"sen $\sigma_0$, $\dot\sigma_0$, $\sigma_3$, $\dot\sigma_3$, $t_0$, $t_1$, $t_2$ und $t_3$ setzen wir als bekannt voraus. 
+Damit haben wir 12 Gleichungen und 13 Unbekannte, n"amlich $A_1$, $B_1$, $C_1$, $A_2$, $B_2$, $C_2$, $A_3$, $B_3$, $C_3$, $\gamma_1$, $\dot\gamma_1$, $\gamma_2$ und $\dot\gamma_2$. 
+Alle anderen Gr"o"sen $\gamma_0$, $\dot\gamma_0$, $\gamma_3$, $\dot\gamma_3$, $t_0$, $t_1$, $t_2$ und $t_3$ setzen wir als bekannt voraus. 
 Somit verbleibt also ein Freiheitsgrad. 
 Man kann sich also zum Beispiel den Wert $A_2$ vorgeben und dann alle restlichen Parameter daraus berechnen. 
 Wir wollen diese Rechnung so weit wie m"oglich analytisch durchf"uhren. 
 Zun"achst stellen wir~\eqref{eq:local2} nach $B_1$ um und erhalten so 
 \begin{align} \label{eq:B1}
-  B_1=t_0-\frac{A_1}{\dot\sigma_0}\,.
+  B_1=t_0-\frac{A_1}{\dot\gamma_0}\,.
 \end{align}
 Setzen wir dies in~\eqref{eq:local1} ein und stellen nach $C_1$ um, so erhalten wir
 \begin{align} \label{eq:C1}
-  C_1=\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}\,.
+  C_1=\gamma_0-A_1\ln\frac{A_1}{\dot\gamma_0}\,.
 \end{align}
 Setzen wir den Ausdruck f"ur $B_1$ in~\eqref{eq:local4} ein, so erhalten wir 
-$$ \dot\sigma_1 = \frac{A_1}{t_1-t_0+\frac{A_1}{\dot\sigma_0}}\,. $$
+$$ \dot\gamma_1 = \frac{A_1}{t_1-t_0+\frac{A_1}{\dot\gamma_0}}\,. $$
 Setzen wir die Ausdr"ucke f"ur $B_1$ und $C_1$ in~\eqref{eq:local3} ein, so entsteht
-$$ \sigma_1 = A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}\,. $$
+$$ \gamma_1 = A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\gamma_0}\right)+\gamma_0-A_1\ln\frac{A_1}{\dot\gamma_0}\,. $$
 Wir setzen die erhaltenen Ausdr"ucke in~\eqref{eq:local6} ein, und bekommen
 \begin{align} \label{eq:B2}
-  B_2 = t_1-\frac{A_2}{A_1}(t_1-t_0)-\frac{A_2}{\dot\sigma_0}\,.
+  B_2 = t_1-\frac{A_2}{A_1}(t_1-t_0)-\frac{A_2}{\dot\gamma_0}\,.
 \end{align}
 Ebenso verfahren wir mit Gleichung~\eqref{eq:local5}. Es entsteht
 \begin{equation} \label{eq:C2}
 \begin{split}
   C_2 
-  &= A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}-A_2\ln\left(\frac{A_2}{A_1}(t_1-t_0)+\frac{A_2}{\dot\sigma_0}\right) \\
-  &= (A_1-A_2)\ln\left(t_1-t_0+\frac{A_1}{\dot\sigma_0}\right)+\sigma_0-A_1\ln\frac{A_1}{\dot\sigma_0}-A_2\ln\frac{A_2}{A_1}\,.
+  &= A_1\ln\left(t_1-t_0+\frac{A_1}{\dot\gamma_0}\right)+\gamma_0-A_1\ln\frac{A_1}{\dot\gamma_0}-A_2\ln\left(\frac{A_2}{A_1}(t_1-t_0)+\frac{A_2}{\dot\gamma_0}\right) \\
+  &= (A_1-A_2)\ln\left(t_1-t_0+\frac{A_1}{\dot\gamma_0}\right)+\gamma_0-A_1\ln\frac{A_1}{\dot\gamma_0}-A_2\ln\frac{A_2}{A_1}\,.
 \end{split}
 \end{equation}
 Das Gleichungssystem bestehend aus den Gleichungen \eqref{eq:local1} bis~\eqref{eq:local12} ist symmetrisch. 
-Vertauscht man die folgenden Gr"o"sen, so erh"alt man dasselbe Gleichungssystem, allerdings in einer anderen Reihenfolge der Gleichungen: $A_1\leftrightarrow A_3$, $B_1\leftrightarrow B_3$, $C_1\leftrightarrow C_3$, $\sigma_0\leftrightarrow \sigma_3$, $\sigma_1\leftrightarrow \sigma_2$, $\dot\sigma_0\leftrightarrow \dot\sigma_3$, $\dot\sigma_1\leftrightarrow \dot\sigma_2$, $t_0\leftrightarrow t_3$ und $t_1\leftrightarrow t_2$. 
+Vertauscht man die folgenden Gr"o"sen, so erh"alt man dasselbe Gleichungssystem, allerdings in einer anderen Reihenfolge der Gleichungen: $A_1\leftrightarrow A_3$, $B_1\leftrightarrow B_3$, $C_1\leftrightarrow C_3$, $\gamma_0\leftrightarrow \gamma_3$, $\gamma_1\leftrightarrow \gamma_2$, $\dot\gamma_0\leftrightarrow \dot\gamma_3$, $\dot\gamma_1\leftrightarrow \dot\gamma_2$, $t_0\leftrightarrow t_3$ und $t_1\leftrightarrow t_2$. 
 Also gelten die Gleichungen \eqref{eq:B2} und~\eqref{eq:C2} auch noch nach dieser Vertauschung der Gr"o"sen. 
 Sie lauten dann 
 \begin{gather}
   \label{eq:B2symm}
-  B_2 = t_2-\frac{A_2}{A_3}(t_2-t_3)-\frac{A_2}{\dot\sigma_3}\,, \\
+  B_2 = t_2-\frac{A_2}{A_3}(t_2-t_3)-\frac{A_2}{\dot\gamma_3}\,, \\
   \label{eq:C2symm}
-  C_2 = (A_3-A_2)\ln\left(t_2-t_3+\frac{A_3}{\dot\sigma_3}\right)+\sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}-A_2\ln\frac{A_2}{A_3}\,.
+  C_2 = (A_3-A_2)\ln\left(t_2-t_3+\frac{A_3}{\dot\gamma_3}\right)+\gamma_3-A_3\ln\frac{A_3}{\dot\gamma_3}-A_2\ln\frac{A_2}{A_3}\,.
 \end{gather}
 Wir teilen nun die Gleichungen \eqref{eq:B2} und~\eqref{eq:B2symm} durch~$A_2$ und setzen dann beide Seiten gleich. 
 Es entsteht dadurch
 $$ \frac{t_0-t_1}{A_1}+\frac{t_1-t_2}{A_2}+\frac{t_2-t_3}{A_3} 
-  = \frac{1}{\dot\sigma_0}-\frac{1}{\dot\sigma_3}\,. $$
+  = \frac{1}{\dot\gamma_0}-\frac{1}{\dot\gamma_3}\,. $$
 Setzt man die Gleichungen \eqref{eq:C2} und~\eqref{eq:C2symm} gleich und formt geschickt um, so erh"alt man
-$$ (A_1-A_2)\ln\left(\frac{\dot\sigma_0}{A_1}(t_1-t_0)+1\right)+\sigma_0
-  = (A_3-A_2)\ln\left(\frac{\dot\sigma_3}{A_3}(t_2-t_3)+1\right)+\sigma_3\,. $$
+$$ (A_1-A_2)\ln\left(\frac{\dot\gamma_0}{A_1}(t_1-t_0)+1\right)+\gamma_0
+  = (A_3-A_2)\ln\left(\frac{\dot\gamma_3}{A_3}(t_2-t_3)+1\right)+\gamma_3\,. $$
 Durch diese beiden Gleichungen sind direkte Beziehungen zwischen den Unbekannten $A_1$ und~$A_3$ hergestellt. 
 Alle anderen Gr"o"sen in den beiden Gleichungen sind bekannt. 
 Diese Gleichungen kann man numerisch nach $A_1$ und~$A_3$ aufl"osen. 
 Sind $A_1$ und~$A_3$ bekannt, so kann man damit die Gr"o"sen $B_1$, $C_1$, $B_2$, $C_2$, $B_3$ und $C_3$ durch die Beziehungen \eqref{eq:B1}, \eqref{eq:C1}, \eqref{eq:B2}, \eqref{eq:C2} und 
 \begin{align*}
-  B_3 &= t_3-\frac{A_3}{\dot\sigma_3}\,, \\
-  C_3 &= \sigma_3-A_3\ln\frac{A_3}{\dot\sigma_3}
+  B_3 &= t_3-\frac{A_3}{\dot\gamma_3}\,, \\
+  C_3 &= \gamma_3-A_3\ln\frac{A_3}{\dot\gamma_3}
 \end{align*}
 berechnen. Die beiden letzten Gleichungen entstehen durch Austauschen der Variablen bei den Gleichungen \eqref{eq:B1} und~\eqref{eq:C1}. 
 Alternativ erh"alt man diese Gleichungen auch, indem man zun"achst Gleichung~\eqref{eq:local12} nach~$B_3$ umstellt und dann in~\eqref{eq:local11} einsetzt diese Gleichung und nach~$C_3$ umstellt. 
@@ -323,7 +323,7 @@ Alternativ erh"alt man diese Gleichungen auch, indem man zun"achst Gleichung~\eq
 \subsection{Bewertung des ersten Ansatzes}
 
 Der gro"se Vorteil des ersten Ansatzes ist, dass die Nebenbedingunen trivial "uberpr"ufbar sind. 
-Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\sigma(t)$ ebenfalls nur lokal "andert. 
+Es ist m"oglich, $\theta(t)$ so lokal abzu"andern, dass sich $\gamma(t)$ ebenfalls nur lokal "andert. 
 Allerdings muss man, daf"ur ein Gleichungssystem l"osen, welches vermutlich nur numerisch l"osbar ist. 
 Dieser Schritt des numerischen L"osens ist bei einer einfachen Implementierung wahrscheinlich so aufwendig, dass sich der Vorteil aufhebt, dass die Nebenbedingungen trivial "uberpr"uft werden k"onnen. 
 
@@ -333,20 +333,20 @@ Im n"achsten Abschnitt werden wir einen weiteren Ansatz zu erarbeiten, bei dem d
 \subsection{Zweiter angepasster Ansatz} \label{sec:2ndansatz}
 
 Wir wollen zeigen, dass die Nebenbedingungen 
-$$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
+$$ \lvert\ddot\gamma(t)\rvert \le (\Im\dot\gamma(t))^2 
 \qquad \text{und} \qquad
-\Im\dot\sigma(t)\ge0 $$
+\Im\dot\gamma(t)\ge0 $$
 f"ur st"uckweise quadratische, stetig differenzierbare Funktionen besonders leicht "uberpr"uft werden k"onnen. 
-Auf einem Intervall~$I$, auf dem $\sigma(t)$ quadratisch ist, ist $\Im\dot\sigma(t)$ monoton. 
-Also gilt die zweite Nebenbedigung $\Im\dot\sigma(t)\ge0$ genau dann, wenn sie an beiden Endpunkten dieses Intervalls erf"ullt ist. 
-Wenn $\Im\dot\sigma(t)$ monoton und nicht-negativ ist, dann gilt dasselbe f"ur das Quadrat davon, welches auf der rechten Seite der ersten Nebenbedingung steht. 
+Auf einem Intervall~$I$, auf dem $\gamma(t)$ quadratisch ist, ist $\Im\dot\gamma(t)$ monoton. 
+Also gilt die zweite Nebenbedigung $\Im\dot\gamma(t)\ge0$ genau dann, wenn sie an beiden Endpunkten dieses Intervalls erf"ullt ist. 
+Wenn $\Im\dot\gamma(t)$ monoton und nicht-negativ ist, dann gilt dasselbe f"ur das Quadrat davon, welches auf der rechten Seite der ersten Nebenbedingung steht. 
 Auf der linken Seite dieser Ungleichgung steht eine Konstante. 
 Daher ist auch die erste Nebenbedingung automatisch erf"ullt, wenn sie an den Endpunkten gilt und die zweite Nebenbedingung zutrifft. 
-Kurz zusammengefasst sind die beiden Nebenbedingungen genau dann erf"ullt, wenn sie an den Endpunkten der Intervalle erf"ullt ist, auf denen $\sigma(t)$ quadratisch ist.
+Kurz zusammengefasst sind die beiden Nebenbedingungen genau dann erf"ullt, wenn sie an den Endpunkten der Intervalle erf"ullt ist, auf denen $\gamma(t)$ quadratisch ist.
 
-Ganz konkret sei $[t_0,t_1]$ ein Intervall, auf dem $\sigma(t)$ quadratisch ist, und zwar
-$$ \sigma(t) = at^2 + bt + c $$
-Dann erf"ullt $\sigma(t)$ die beiden Nebenbedingungen auf dem Intervall genau dann, wenn 
+Ganz konkret sei $[t_0,t_1]$ ein Intervall, auf dem $\gamma(t)$ quadratisch ist, und zwar
+$$ \gamma(t) = at^2 + bt + c $$
+Dann erf"ullt $\gamma(t)$ die beiden Nebenbedingungen auf dem Intervall genau dann, wenn 
 $$ 2\,\lvert a\rvert \le (2\,\Im a\,t_j + \Im b)^2
 \qquad \text{und} \qquad
 2\,\Im a\,t_j + \Im b\ge 0 $$
@@ -355,10 +355,10 @@ f"ur $j=0,1$.
 
 \subsection{Lokale Ver"anderungen beim zweiten Ansatz} \label{sec:2ndansatzLocalChanges}
 
-Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\sigma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. 
+Ebenso wie beim ersten Ansatz stellt sich die Frage, wie man st"uckweise quadratische $\gamma(t)$ lokal ab"andern kann ohne dabei die stetige Differenzierbarkeit zu verlieren. 
 B-Splines l"osen genau dieses Problem. 
 Quadratische B-Splines sind st"uckweise quadratisch und haben einen minimalen Tr"ager. 
-Die quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\sigma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\sigma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
+Die quadratischen B-Splines formen eine Basis aller m"oglichen Funktionen $\gamma(t)$, wenn die St"utzpunkte $t_0,\dotsc, t_N$ an denen $\gamma(t)$ nicht quadratisch zu sein braucht, vorgegeben sind. 
 
 F"ur "aquidistante St"utzstellen lassen sich die quadratischen B-Splines besonders einfach aufschreiben. 
 F"ur die St"utzstellenmenge $\{0,1,2,3\}$ hat der quadratische B-Spline die Form
@@ -386,33 +386,33 @@ t-3 & \text{f"ur $t\in[2,3)$} \\
 \end{cases} $$
 Alle anderen quadratischen B-Splines mit aufeinanderfolgenden ganzzahligen St"utzstellen ergeben sich durch Translation des gegebenen B-Splines. 
 Alle stetig differenzierbaren Funktionen, die auf den Intervallen $(k,k+1)$ f"ur alle ganzzahligen $k$ quadratische Funktionen sind, lassen sich durch Linearkombinationen dieser beschriebenen B-Splines darstellen. 
-Also kann man die Funktion $\sigma(t)$ schreiben als
-$$ \sigma(t) = \sum_{k=-\infty}^{\infty}\sigma_kb(t-k) $$
-wenn die Koeffizienten $\sigma_k$ geeignet gew"ahlt werden. 
+Also kann man die Funktion $\gamma(t)$ schreiben als
+$$ \gamma(t) = \sum_{k=-\infty}^{\infty}\gamma_kb(t-k) $$
+wenn die Koeffizienten $\gamma_k$ geeignet gew"ahlt werden. 
 An ganzzahligen Stellen $j$ gilt somit
 \begin{align*}
-\sigma(j) &= \frac{\sigma_{j+1}+\sigma_{j+2}}{2} \\
-\dot\sigma(j) &= \sigma_{j+1}-\sigma_{j+2} \\
-\lim_{t\nearrow j}\ddot\sigma(t) &= \sigma_{j+1}-2\sigma_{j+2}+\sigma_{j+3} \\
-\lim_{t\searrow\,j}\ddot\sigma(t) &= \sigma_{j}-2\sigma_{j+1}+\sigma_{j+2}\,.
+\gamma(j) &= \frac{\gamma_{j+1}+\gamma_{j+2}}{2} \\
+\dot\gamma(j) &= \gamma_{j+1}-\gamma_{j+2} \\
+\lim_{t\nearrow j}\ddot\gamma(t) &= \gamma_{j+1}-2\gamma_{j+2}+\gamma_{j+3} \\
+\lim_{t\searrow\,j}\ddot\gamma(t) &= \gamma_{j}-2\gamma_{j+1}+\gamma_{j+2}\,.
 \end{align*}
 Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen rechtsseitigen Limes. 
 Die Nebenbedingungen 
-$$ \lvert\ddot\sigma(t)\rvert \le (\Im\dot\sigma(t))^2 
+$$ \lvert\ddot\gamma(t)\rvert \le (\Im\dot\gamma(t))^2 
 \qquad \text{und} \qquad
-\Im\dot\sigma(t)\ge0 $$
+\Im\dot\gamma(t)\ge0 $$
 sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Abschnitt~\ref{sec:2ndansatz} f"ur die Begr"undung). 
 Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. 
-In der Sprache der Koeffizienten $\sigma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
+In der Sprache der Koeffizienten $\gamma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
 \begin{align*}
-\lvert\sigma_j-2\sigma_{j+1}+\sigma_{j+2}\rvert 
-&\le (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\,, \\
-\lvert\sigma_{j+1}-2\sigma_{j+2}+\sigma_{j+3}\rvert 
-&\le (\Im\sigma_{j+1}-\Im\sigma_{j+2})^2\,, \\
-0&\le \Im\sigma_j-\Im\sigma_{j+1}
+\lvert\gamma_j-2\gamma_{j+1}+\gamma_{j+2}\rvert 
+&\le (\Im\gamma_{j+1}-\Im\gamma_{j+2})^2\,, \\
+\lvert\gamma_{j+1}-2\gamma_{j+2}+\gamma_{j+3}\rvert 
+&\le (\Im\gamma_{j+1}-\Im\gamma_{j+2})^2\,, \\
+0&\le \Im\gamma_j-\Im\gamma_{j+1}
 \end{align*}
 f"ur alle ganzzahligen $j$. Mit 
-$ \tau_j := \sigma_j-\sigma_{j+1} $
+$ \tau_j := \gamma_j-\gamma_{j+1} $
 l"asst sich das noch k"urzer schreiben als
 \begin{equation} \label{eq:condTau}
 \lvert\tau_j-\tau_{j+1}\rvert \le \min\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
@@ -451,14 +451,14 @@ Es muss allenfalls vermieden werden, dass ein Summand mehrere Nullstellen zwisch
 \end{equation}
 fordert. In Form der Werte $\tau_j$ ausgedr"uckt, ist das "aquivalent zu $\Im\tau_j\le\pi$. 
 Es gibt noch einen weiteren zwingenden Grund f"ur diese Forderung: Man k"onnte $\norm{r}_{\ell_p}=0$ f"ur beliebigen Funktionen $f$ mit einem einzigen Summanden $a(t)\cos\pphi(t)$ erreichen, indem man $a(t)$ gen"ugend gro"s und konstant w"ahlt und man $\pphi(t)$ so einrichtet, dass $\cos\pphi(j)$ f"ur ganzzahligen $j$ um null schwankt und $\dot\pphi(t)\approx\pi$ ist und $\ddot\pphi(t)$ betraglich klein bleibt. 
-Dann w"are die Bedingung~\eqref{eq:absSigma}, also $\lvert\ddot\sigma(t)\rvert\le\lvert\dot\sigma(t)\rvert^2$,  erf"ullt, denn es w"are $ \lvert\dot\sigma(t)\rvert = \lvert\dot\pphi(t)\rvert \approx \pi $ und $\lvert\ddot\sigma(t)\rvert=\lvert\ddot\pphi(t)\rvert \ll 1$. 
+Dann w"are die Bedingung~\eqref{eq:absSigma}, also $\lvert\ddot\gamma(t)\rvert\le\lvert\dot\gamma(t)\rvert^2$,  erf"ullt, denn es w"are $ \lvert\dot\gamma(t)\rvert = \lvert\dot\pphi(t)\rvert \approx \pi $ und $\lvert\ddot\gamma(t)\rvert=\lvert\ddot\pphi(t)\rvert \ll 1$. 
 
 Der zweite angepasste Ansatz (siehe Abschnitte \ref{sec:2ndansatz} und~\ref{sec:2ndansatzLocalChanges}) und die Norm $\norm{r}_{\ell_2}$ haben zusammen folgende Eigenschaften:
 \begin{itemize}
-  \item Die Norm~$\norm{r}_{\ell_2}$ h"angt beliebig oft (reell) differenzierbar von den Gr"o"sen~$\sigma_j$ ab und ist mit sehr geringem Aufwand berechenbar. 
+  \item Die Norm~$\norm{r}_{\ell_2}$ h"angt beliebig oft (reell) differenzierbar von den Gr"o"sen~$\gamma_j$ ab und ist mit sehr geringem Aufwand berechenbar. 
   Die Ableitungen lassen sich als analytische Ausdr"ucke schreiben.
-  \item Die Nebenbedingungen \eqref{eq:condTau} und~\eqref{eq:dotPhiLePi} sind anhand der Gr"o"sen $\sigma_j$ mit geringem Rechenaufwand "uberpr"ufbar. 
-  \item Wird nur ein einziges~$\sigma_j$ ver"andert, so lassen sich die Nebenbedigungen, wenn sie vorher galten, leicht durch eine lokale Betrachtung "uberpr"ufen. 
+  \item Die Nebenbedingungen \eqref{eq:condTau} und~\eqref{eq:dotPhiLePi} sind anhand der Gr"o"sen $\gamma_j$ mit geringem Rechenaufwand "uberpr"ufbar. 
+  \item Wird nur ein einziges~$\gamma_j$ ver"andert, so lassen sich die Nebenbedigungen, wenn sie vorher galten, leicht durch eine lokale Betrachtung "uberpr"ufen. 
   Ebenso l"asst sich die Kostenfunktion~$\norm{r}_{\ell_2}$ durch lokale Berechnungen aus dem vorherigen Wert berechnen. 
 \end{itemize}
 Damit haben wir also beste Voraussetzungen f"ur eine lokale Optimumsuche. 
@@ -566,32 +566,32 @@ Wir beschreiben die folgenden Bestandteile des Algorithmus in dieser Reihenfolge
 \subsection{Berechnung von IMF-Samples aus einem Parametersatz}
 
 Wir beschreiben hier, wie man die Berechnung der IMF schrittweise auf die anf"anglichen Parameter zur"uckf"uhrt. 
-Die IMF ist der Realteil der Funktion $\ee^{\sigma(t)}$. 
+Die IMF ist der Realteil der Funktion $\ee^{\gamma(t)}$. 
 Die IMF braucht nur sampleweise berechnet zu werden. 
 Daher wird dies nur an Stellen $t_1,\ldots,t_n$ ausgef"uhrt. 
-Die Funktion $\sigma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\sigma_0,\ldots,\sigma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\sigma(t_i)=\dfrac{\sigma_{i-1}+\sigma_{i}}{2}$ f"ur $i=1,\ldots,n$. 
+Die Funktion $\gamma(t)$ wird an diesen Stellen aus einer Folge komplexer Zahlen $\gamma_0,\ldots,\gamma_n$ modulo $2\pi\ii$ ermittelt durch (grob gesagt) $\gamma(t_i)=\dfrac{\gamma_{i-1}+\gamma_{i}}{2}$ f"ur $i=1,\ldots,n$. 
 Da die Division durch $2$ in $\C/2\pi\ii\Z$ nicht eindeutig ist, sondern $2x=y$ bei gegebenem $y\in\C/2\pi\ii\Z$ genau zwei L"osungen $x\in\C/2\pi\ii\Z$ besitzt, m"ussen wir genauer festlegen, welche L"osung wir meinen. 
 Wir w"ahlen aus den Restklassen solche Repr"asentanten aus, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist, und dividieren deren Summe durch $2$. 
-Auf diese Weise ist die Restklasse, in der $\sigma(t_i)$ liegt, eindeutig festgelegt. 
+Auf diese Weise ist die Restklasse, in der $\gamma(t_i)$ liegt, eindeutig festgelegt. 
 
-Der Realteil der Folge $\sigma_0,\ldots,\sigma_n$ wird durch eine Summe von Radialbasisfunktionen und der Imagin"arteil als Summe von logistischen Funktionen beschrieben, d.\,h. 
-$$ \sigma_i = \sum_{k=1}^{d_1}b_k\ee^{-\frac{(i-\mu_k)}{2\alpha^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+\ee^\frac{\nu_l-i}{\beta}} $$
+Der Realteil der Folge $\gamma_0,\ldots,\gamma_n$ wird durch eine Summe von Radialbasisfunktionen und der Imagin"arteil als Summe von logistischen Funktionen beschrieben, d.\,h. 
+$$ \gamma_i = \sum_{k=1}^{d_1}b_k\ee^{-\frac{(i-\mu_k)}{2\alpha^2}} + \ii\sum_{l=1}^{d_2}c_l\frac{1}{1+\ee^\frac{\nu_l-i}{\beta}} $$
 bei reelen Werten der Parameter $b_k, \mu_k$ mit $k=1,\ldots,d_1$ und $c_l, \nu_l$ mit $l=1,\ldots,d_2$ und $\alpha$ und~$\beta$. 
 Diese Parameter sind die anf"anglichen Parameter, aus denen die IMF letztendlich berechnet wird und von denen eingangs die Rede war. 
 
 
 \subsection{Berechnung der Kostenfunktion}
 
-Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\sigma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. 
+Die Kostenfunktion setzt sich nun aus der $\ell_2$-Norm~\eqref{eq:lpnormr} der Abweichung der Samples $(a_1,\ldots,a_n)$ und der IMF und einem Strafterm zusammen, der addiert wird, wenn die Funktion $\gamma(t)$ den Nebenbedingungen~\eqref{eq:condTau} nicht gen"ugt. 
 Mit der Definition
-$ \tau_j := \sigma_j-\sigma_{j+1} $ 
+$ \tau_j := \gamma_j-\gamma_{j+1} $ 
 k"onnen diese Nebenbedingungen auch in der Form 
 $$ \lvert\tau_j-\tau_{j+1}\rvert \le \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2
 \qquad \text{und} \qquad
 0\le\Im\tau_j $$
 geschrieben werden. 
-Wieder m"ussen wir sagen, welche Repr"asentanten von $\sigma_j$ und $\sigma_{j+1}$ wir verwenden, da es sich streng genommen um Restklassen modulo $2\pi\ii$ handelt und beispielsweise der Ausdruck $\lvert\tau_j-\tau_{j+1}\rvert$ davon abh"angt. 
-Wir w"ahlen zwei solche Repr"asentanten von $\sigma_j$ und~$\sigma_{j+1}$, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist. 
+Wieder m"ussen wir sagen, welche Repr"asentanten von $\gamma_j$ und $\gamma_{j+1}$ wir verwenden, da es sich streng genommen um Restklassen modulo $2\pi\ii$ handelt und beispielsweise der Ausdruck $\lvert\tau_j-\tau_{j+1}\rvert$ davon abh"angt. 
+Wir w"ahlen zwei solche Repr"asentanten von $\gamma_j$ und~$\gamma_{j+1}$, deren Differenzbetrag der Imagin"arteile h"ochstens $\pi$ ist. 
 F"ur jede solche Auswahl ist die angegebene Bedingung "aquivalent. 
 Wird die linke Nebenbedingung f"ur ein $j$ verletzt, so wird der Strafterm
 $$ 1 + \lvert\tau_j-\tau_{j+1}\rvert - \max\{0,\min\{\Im\tau_j,\Im\tau_{j+1}\}\}^2 $$
