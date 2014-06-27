@@ -1,0 +1,64 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[utf8]{inputenc} % necessary for the BiBTeX file to work with umlauts
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage[ngerman]{babel}
+\usepackage{enumerate}
+\usepackage{natbib} % provides a few nice styles for the bibliography
+\usepackage[nottoc]{tocbibind} % makes sure the bibliography is added to the table of contents
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{german} % selects German as language for the bibliography
+
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\de}{{\mathrm{d}}}
+\newcommand{\ee}{{\mathrm{e}}}
+\newcommand{\ii}{{\mathrm{i}}}
+\newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
+\newcommand{\pphi}{{\varphi}}
+\newcommand{\defeq}{\overset{!}{=}}
+
+
+\begin{document}
+
+%\tableofcontents
+
+\title{Zerlegung von univariaten Signalen in amplituden- und frequenzmodulierte IMF-Komponenten}
+\author{Ralph Tandetzky}
+\date{20. Juni 2014}
+\maketitle
+
+\section{Die Problemstellung}
+
+H"aufig versucht man EEG- und MEG-Signale oder andere Zeitreihen zu untersuchen, indem man sie in eine "Uberlagerung von IMFs (intrinsic mode functions) aufteilt. 
+Die IMFs variieren in Amplitude und Frequenz und k"onnen in der Form~$a(t)\cos\pphi(t)$ dargestellt werden. 
+Ist ein Signal~$f:[a,b]\to\R$ gegeben, so ist die Aufgabe, eine Zerlegung der Form 
+$$ f(t) = \sum_{i=1}^N a_i(t)\pphi_i(t) + r(t) $$
+zu finden, wobei die Amplituden~$a_i$, die Phasen~$\pphi_i$ und die Restfunktion~$r$ reellwertige Funktionen auf dem Intervall~$[a,b]$ sein sollen und~$r$ minimiert werden soll unter der Nebenbedingung, dass die Summanden~$a_i(t)\pphi_i(t)$ gutartige IMFs sind. 
+Zu kl"aren, was \glqq{}gutartig\grqq{} hei"st, ist Teil der Problemstellung. 
+
+
+\section{Der Stand der Entwicklung}
+
+Um gutartige L"osungen zu erlangen, wurden plausible Nebenbedingungen erarbeitet, die sich durch Ungleichungen der Ableitungen von Amplituden- und Phasenfunktion schreiben lassen. 
+Der Amplitudenlogarithmus und die Phasenfunktion wurden durch eine Radialbasis bzw.~logistische Funktionen dargestellt und die Koeffizienten optimiert, um eine m"oglichst kleine Restfunktion~$r$ zu erhalten. 
+
+
+
+% Ideen
+% =====
+%
+% * Radialbasen und logistische Basen durch Basen quadratischer B-Splines ersetzen. 
+% * Multigrid-Verfahren: Der Zahl der Knotenpunkte der B-Splines kann schrittweise verdoppelt werden. 
+% * Reduktion der zu fittenden Parameter durch analytische Ermittelung von Phasenoffset, Amplitudenoffset und Momenten der gefitteten Funktion. 
+% * Phasenboost implementieren. 
+% * Bei den B-Splines k"onnte ein Intervall ausgew"ahlt werden, auf dem Elemente des Schwarms kombiniert werden. 
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{decompose_imf}
+
+
+\end{document}
