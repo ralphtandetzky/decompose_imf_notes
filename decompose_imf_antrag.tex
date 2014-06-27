@@ -8,6 +8,7 @@
 \usepackage[nottoc]{tocbibind} % makes sure the bibliography is added to the table of contents
 \usepackage[fixlanguage]{babelbib}
 \selectbiblanguage{german} % selects German as language for the bibliography
+\usepackage{graphics}
 
 \newcommand{\C}{{\mathbb{C}}}
 \newcommand{\R}{{\mathbb{R}}}
@@ -18,6 +19,7 @@
 \newcommand{\norm}[1]{{\left\lVert#1\right\rVert}}
 \newcommand{\pphi}{{\varphi}}
 \newcommand{\defeq}{\overset{!}{=}}
+\newcommand{\todo}[1]{{TODO: {#1}}}
 
 
 \begin{document}
@@ -26,7 +28,7 @@
 
 \title{Zerlegung von univariaten Signalen in amplituden- und frequenzmodulierte IMF-Komponenten}
 \author{Ralph Tandetzky}
-\date{20. Juni 2014}
+\date{27. Juni 2014}
 \maketitle
 
 \section{Die Problemstellung}
@@ -34,16 +36,89 @@
 H"aufig versucht man EEG- und MEG-Signale oder andere Zeitreihen zu untersuchen, indem man sie in eine "Uberlagerung von IMFs (intrinsic mode functions) aufteilt. 
 Die IMFs variieren in Amplitude und Frequenz und k"onnen in der Form~$a(t)\cos\pphi(t)$ dargestellt werden. 
 Ist ein Signal~$f:[a,b]\to\R$ gegeben, so ist die Aufgabe, eine Zerlegung der Form 
-$$ f(t) = \sum_{i=1}^N a_i(t)\pphi_i(t) + r(t) $$
-zu finden, wobei die Amplituden~$a_i$, die Phasen~$\pphi_i$ und die Restfunktion~$r$ reellwertige Funktionen auf dem Intervall~$[a,b]$ sein sollen und~$r$ minimiert werden soll unter der Nebenbedingung, dass die Summanden~$a_i(t)\pphi_i(t)$ gutartige IMFs sind. 
+$$ f(t) = \sum_{i=1}^N a_i(t)\cos\pphi_i(t) + r(t) $$
+zu finden, wobei die Amplituden~$a_i$, die Phasen~$\pphi_i$ und die Restfunktion~$r$ reellwertige Funktionen auf dem Intervall~$[a,b]$ sein sollen und~$r$ minimiert werden soll unter der Nebenbedingung, dass die Summanden~$a_i(t)\cos\pphi_i(t)$ gutartige IMFs sind. 
 Zu kl"aren, was \glqq{}gutartig\grqq{} hei"st, ist Teil der Problemstellung. 
 
 
-\section{Der Stand der Entwicklung}
+\section{Die Grundidee}
 
-Um gutartige L"osungen zu erlangen, wurden plausible Nebenbedingungen erarbeitet, die sich durch Ungleichungen der Ableitungen von Amplituden- und Phasenfunktion schreiben lassen. 
-Der Amplitudenlogarithmus und die Phasenfunktion wurden durch eine Radialbasis bzw.~logistische Funktionen dargestellt und die Koeffizienten optimiert, um eine m"oglichst kleine Restfunktion~$r$ zu erhalten. 
+Es wird stets davon ausgegangen, dass $a_i(t)>0$ und $\pphi_i(t)>0$ ist. 
+Diese Bedingungen reichen jedoch nicht, um zu garantieren, dass die Summanden IMFs sind, also nicht nicht mehrere Extrema zwischen zwei Nullstellen haben k"onnen. 
+Wenn der Logarithmus des Betrags eines Summanden zwischen je zwei Nullstellen konkav (nach unten gebogen) ist, dann ist jedoch die IMF-Eigenschaft sichergestellt. 
+Dazu betrachten wir die zweite Ableitung des Betrags des Summanden~$a(t)\cos\pphi(t)$. 
+(Wir lassen den Index $i$ f"ur diese Rechnung weg.)
+Diese hat die Form
+$$ \frac{\de^2}{\de t^2}\ln a(t)
+-\ddot\pphi(t)\tan\pphi(t)
+-\frac{\dot\pphi(t)^2}{\cos^2\pphi(t)} $$
+und muss nicht-positiv sein, um zu erreichen, dass der Betrag des Summanden zwischen den Nullstellen logarithmisch konkav ist. 
+Wir definieren $\alpha(t):=\ln a(t)$. 
+Der obige Ausdruck multipliziert mit $\cos^2\pphi(t)$ ergibt
+$$ \ddot\alpha(t)\cos^2\pphi(t)
+-\frac12\ddot\pphi(t)\sin2\pphi(t)
+-\dot\pphi(t)^2
+\le 0\,. $$
+Dies ist "aquivalent zu
+$$ \frac12\ddot\alpha(t)\cos2\pphi(t)
+-\frac12\ddot\pphi(t)\sin2\pphi(t)
+\le \dot\pphi(t)^2-\frac12\ddot\alpha(t)\,. $$
+Die linke Seite ist gleich dem Skalarprodukt der beiden $\R^2$-Vektoren $(\cos2\pphi(t);\sin2\pphi(t))$ und $\frac12(\ddot\alpha(t);\ddot\pphi(t))$ und somit gem"a"s der Cauchy-Schwarzschen Ungleichung jedenfalls nicht gr"o"ser als das Produkt der euklidischen Normen beider Vektoren. Also ist diese Bedingung erf"ullt, falls 
+$$ \frac12\sqrt{\ddot\alpha(t)+\ddot\pphi(t)}
+\le \dot\pphi(t)^2-\frac12\ddot\alpha(t) $$
+gilt. Und diese Bedingung ist wiederum erf"ullt, wenn
+$$ \sqrt{\ddot\alpha(t)+\ddot\pphi(t)}
+\le \dot\pphi(t)^2 $$
+gilt. Wir haben also gezeigt, dass diese letzte Ungleichung zusammen mit $a(t)>0$ und $\pphi(t)>0$ eine hinreichende Bedingung daf"ur ist, dass $a(t)\cos\pphi(t)$ eine IMF ist. 
 
+Gleichzeitig ist es aber auch eine Bedingung an die Glattheit der IMF, also dass sich der Summand \glqq{}gutartig\grqq{} verh"alt.
+Das ist die Grundidee der gefundenen Methode. 
+Es wird im folgenden kurz beschrieben, wie passende Funktionen gefunden werden k"onnen, welche diese Nebenbedingung erf"ullen. 
+
+\section{Umsetzung der Optimierung}
+
+F"ur die Optimierung wurden der Amplitudenlogarithmus $\alpha(t)$ und die Phasenfunktion $\pphi(t)$ wurden durch eine Radialbasis bzw. eine Basis aus logistischen Funktionen dargestellt. 
+Die Koeffizienten wurden anhand des {\em Differential Evolution} Algorithmus~\citep*{StPr1997} so optimiert, dass eine m"oglichst kleine Restfunktion~$r(t)$ entsteht. 
+Die Nebenbedingungen werden durch entsprechende Strafterme in der Kostenfunktion erzwungen. 
+
+Au"serdem werden die IMFs iterativ optimiert. 
+Dies geschieht, indem zuerst $\alpha_1(t)$ und $\pphi_1(t)$ optimiert werden, wobei die anderen Summanden vernachl"assigt werden. 
+Dann werden diese beiden Funktionen fixiert und derselbe Algorithmus auf den Rest $f(t) - a_1(t)\cos\pphi_1(t)$ angewendet, um $a_2(t)$ und $\pphi_2(t)$ zu bestimmen. 
+So wird fortgefahren, bis alle IMFs berechnet worden sind. 
+
+\section{Vergleich mit anderen Methoden}
+
+Ein der besten bekannten Methoden, um ein Signal in IMFs zu zerlegen ist die sogenannte {\em Complementary Ensemble Empirical Mode Decomposition (cEEMD)}~\citep*{YeShHu2010}.
+Ein Problem bei allen dem Autor bekannten Methoden ist das Mode Mixing. 
+
+\todo{Konkrete Ergebnisse von EEG-Testdaten vergleichen}
+
+
+\section{Weitere Arbeit} 
+
+Es gibt noch folgende Herausforderungen f"ur die Zukunft:
+\begin{itemize}
+\item Die Methode funktioniert sehr gut auf kurzen Intervallen. 
+Bei langen Zeitintervallen werden allerdings oft schlechte Ergebnisse gefunden, da die notwendige Zahl der zu fittenden Parameter zu gro"s wird. 
+\item Die Optimierung braucht vergleichsweise viel Zeit.
+\item Die Methode zeigt, dass nur sehr wenige IMFs gebraucht werden, um die Daten so zu beschreiben, dass als Restfunktion nur noch Rauschen "ubrig bleibt. 
+F"ur die Zukunft sollte es m"oglich sein, dass der Algorithmus selbst entscheidet, wann abgebrochen wird. 
+\end{itemize}
+Um auf l"angeren Intervallen erfolgreich zu optimieren, gibt es folgende Ans"atze:
+\begin{itemize}
+\item Den Differential Evolution Algorithmus so modifizieren, dass immer nur Teilintervalle optimiert werden und der Rest der IMFs gleich bleibt. 
+  Dann wird das Teilintervall zuf"allig gewechselt und das neue Teilintervall weiter optimiert. 
+\item Statt Radialbasen und logistischen Funktionen k"onnten quadratische B-Splines als Basis verwendet werden. 
+  Diese haben einen kompakten Tr"ager und die Koeffizienten wirken sich daher nur lokal aus. 
+Deswegen kann diese Idee kann Grundlage f"ur die angesprochene Modifikation des Differential Evolution Algorithmus benutzt werden. 
+\item Die B-Splines haben au"serdem den Vorteil, dass sie leicht mit dem Faktor 2 skalierbar sind. 
+  Das hei"st, man k"onnte anfangen sehr grob mit wenigen Parametern zu optimieren. 
+  Sp"ater wird die Feinheit der B-Splines (und somit die Anzahl der Parameter) schrittweise verdoppelt, um genauere Ergebnisse zu erlangen. 
+  Dies d"urfte auch die notwendige Optimierungszeit massiv verringern. 
+\end{itemize}
+
+
+%\includegraphics{decompose_imf-1.mps}
 
 
 % Ideen
