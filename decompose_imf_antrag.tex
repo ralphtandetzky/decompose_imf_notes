@@ -43,8 +43,8 @@ Zu kl"aren, was \glqq{}gutartig\grqq{} hei"st, ist Teil der Problemstellung.
 
 \section{Die Grundidee}
 
-Es wird stets davon ausgegangen, dass $a_i(t)>0$ und $\pphi_i(t)>0$ ist. 
-Diese Bedingungen reichen jedoch nicht, um zu garantieren, dass die Summanden IMFs sind, also nicht nicht mehrere Extrema zwischen zwei Nullstellen haben k"onnen. 
+Es wird stets davon ausgegangen, dass $a_i(t)>0$ und $\dot\pphi_i(t)>0$ ist. 
+Diese Bedingungen reichen jedoch nicht, um zu garantieren, dass die Summanden IMFs sind, also nicht mehrere Extrema zwischen zwei Nullstellen haben k"onnen. 
 Wenn der Logarithmus des Betrags eines Summanden zwischen je zwei Nullstellen konkav (nach unten gebogen) ist, dann ist jedoch die IMF-Eigenschaft sichergestellt. 
 Dazu betrachten wir die zweite Ableitung des Betrags des Summanden~$a(t)\cos\pphi(t)$. 
 (Wir lassen den Index $i$ f"ur diese Rechnung weg.)
@@ -52,7 +52,7 @@ Diese hat die Form
 $$ \frac{\de^2}{\de t^2}\ln a(t)
 -\ddot\pphi(t)\tan\pphi(t)
 -\frac{\dot\pphi(t)^2}{\cos^2\pphi(t)} $$
-und muss nicht-positiv sein, um zu erreichen, dass der Betrag des Summanden zwischen den Nullstellen logarithmisch konkav ist. 
+und muss nicht-positiv sein, um zu erreichen, dass der Betrag des Summanden zwischen den Nullstellen logarithmisch konkav\footnote{Die Eigenschaft, logarithmisch konkav zu sein, ist echt schw"acher als die Eigenschaft, konkav zu sein.} ist. 
 Wir definieren $\alpha(t):=\ln a(t)$. 
 Der obige Ausdruck multipliziert mit $\cos^2\pphi(t)$ ergibt
 $$ \ddot\alpha(t)\cos^2\pphi(t)
@@ -64,16 +64,21 @@ $$ \frac12\ddot\alpha(t)\cos2\pphi(t)
 -\frac12\ddot\pphi(t)\sin2\pphi(t)
 \le \dot\pphi(t)^2-\frac12\ddot\alpha(t)\,. $$
 Die linke Seite ist gleich dem Skalarprodukt der beiden $\R^2$-Vektoren $(\cos2\pphi(t);\sin2\pphi(t))$ und $\frac12(\ddot\alpha(t);\ddot\pphi(t))$ und somit gem"a"s der Cauchy-Schwarzschen Ungleichung jedenfalls nicht gr"o"ser als das Produkt der euklidischen Normen beider Vektoren. Also ist diese Bedingung erf"ullt, falls 
-$$ \frac12\sqrt{\ddot\alpha(t)+\ddot\pphi(t)}
+$$ \frac12\sqrt{\ddot\alpha(t)^2+\ddot\pphi(t)^2}
 \le \dot\pphi(t)^2-\frac12\ddot\alpha(t) $$
-gilt. Und diese Bedingung ist wiederum erf"ullt, wenn
-$$ \sqrt{\ddot\alpha(t)+\ddot\pphi(t)}
+gilt.\footnote{Dieser Schritt bei der Absch"atzung bewirkt, dass die Nebenbedingung unabh"angig von einer additiven Konstante wird, die man zu $\pphi(t)$ hinzuf"ugen k"onnte. 
+Man k"onnte also im Nachhinein die Phase um $90^\circ$ drehen, ohne dadurch etwas an der G"ultigkeit dieser Nebenbedingungen zu "andern.
+Damit kann also aus einem reellen Signal ein komplexes Signal erzeugt werden, indem man ein um $90^\circ$ gedrehtes Signal als Imagin"arteil hinzuf"ugt. 
+Dies stellt eine Alternative zur Hilbert-Transformation dar mit dem Vorteil, dass die Phasengeschwindigkeit stets positiv ist.
+}
+Und diese Bedingung ist wiederum erf"ullt, wenn
+$$ \sqrt{\ddot\alpha(t)^2+\ddot\pphi(t)^2}
 \le \dot\pphi(t)^2 $$
-gilt. Wir haben also gezeigt, dass diese letzte Ungleichung zusammen mit $a(t)>0$ und $\pphi(t)>0$ eine hinreichende Bedingung daf"ur ist, dass $a(t)\cos\pphi(t)$ eine IMF ist. 
+gilt. Wir haben also gezeigt, dass diese letzte Ungleichung zusammen mit $a(t)>0$ und $\dot\pphi(t)>0$ eine hinreichende Bedingung daf"ur ist, dass $a(t)\cos\pphi(t)$ eine IMF ist. 
 
 Gleichzeitig ist es aber auch eine Bedingung an die Glattheit der IMF, also dass sich der Summand \glqq{}gutartig\grqq{} verh"alt.
 Das ist die Grundidee der gefundenen Methode. 
-Es wird im folgenden kurz beschrieben, wie passende Funktionen gefunden werden k"onnen, welche diese Nebenbedingung erf"ullen. 
+Es wird im Folgenden kurz beschrieben, wie passende Funktionen gefunden werden k"onnen, die diese Nebenbedingung erf"ullen. 
 
 \section{Umsetzung der Optimierung}
 
@@ -82,13 +87,13 @@ Die Koeffizienten wurden anhand des {\em Differential Evolution} Algorithmus~\ci
 Die Nebenbedingungen werden durch entsprechende Strafterme in der Kostenfunktion erzwungen. 
 
 Au"serdem werden die IMFs iterativ optimiert. 
-Dies geschieht, indem zuerst $\alpha_1(t)$ und $\pphi_1(t)$ optimiert werden, wobei die anderen Summanden vernachl"assigt werden. 
+Dies geschieht, indem zuerst $a_1(t)$ und $\pphi_1(t)$ optimiert werden, wobei die anderen Summanden vernachl"assigt werden. 
 Dann werden diese beiden Funktionen fixiert und derselbe Algorithmus auf den Rest $f(t) - a_1(t)\cos\pphi_1(t)$ angewendet, um $a_2(t)$ und $\pphi_2(t)$ zu bestimmen. 
 So wird fortgefahren, bis alle IMFs berechnet worden sind. 
 
 \section{Vergleich mit anderen Methoden}
 
-Ein der besten bekannten Methoden, um ein Signal in IMFs zu zerlegen ist die sogenannte {\em Complementary Ensemble Empirical Mode Decomposition (cEEMD)}~\citep*{YeShHu2010}.
+Eine der besten bekannten Methoden, um ein Signal in IMFs zu zerlegen ist die sogenannte {\em Complete Ensemble Empirical Mode Decomposition (cEEMD)}~\citep*{TCSF2011}.
 Ein Problem bei allen dem Autor bekannten Methoden ist das Mode Mixing. 
 
 \todo{Konkrete Ergebnisse von EEG-Testdaten vergleichen}
@@ -110,7 +115,7 @@ Um auf l"angeren Intervallen erfolgreich zu optimieren, gibt es folgende Ans"atz
   Dann wird das Teilintervall zuf"allig gewechselt und das neue Teilintervall weiter optimiert. 
 \item Statt Radialbasen und logistischen Funktionen k"onnten quadratische B-Splines als Basis verwendet werden. 
   Diese haben einen kompakten Tr"ager und die Koeffizienten wirken sich daher nur lokal aus. 
-Deswegen kann diese Idee kann Grundlage f"ur die angesprochene Modifikation des Differential Evolution Algorithmus benutzt werden. 
+  Deswegen kann diese Idee kann Grundlage f"ur die angesprochene Modifikation des Differential Evolution Algorithmus benutzt werden. 
 \item Die B-Splines haben au"serdem den Vorteil, dass sie leicht mit dem Faktor 2 skalierbar sind. 
   Das hei"st, man k"onnte anfangen sehr grob mit wenigen Parametern zu optimieren. 
   Sp"ater wird die Feinheit der B-Splines (und somit die Anzahl der Parameter) schrittweise verdoppelt, um genauere Ergebnisse zu erlangen. 
