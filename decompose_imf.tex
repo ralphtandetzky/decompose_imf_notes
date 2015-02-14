@@ -398,10 +398,10 @@ $$ \gamma(t) = \sum_{k=-\infty}^{\infty}\gamma_kb(t-k) $$
 wenn die Koeffizienten $\gamma_k$ geeignet gew"ahlt werden. 
 An ganzzahligen Stellen $j$ gilt somit
 \begin{align*}
-\gamma(j) &= \frac{\gamma_{j+1}+\gamma_{j+2}}{2} \\
-\dot\gamma(j) &= \gamma_{j+1}-\gamma_{j+2} \\
-\lim_{t\nearrow j}\ddot\gamma(t) &= \gamma_{j+1}-2\gamma_{j+2}+\gamma_{j+3} \\
-\lim_{t\searrow\,j}\ddot\gamma(t) &= \gamma_{j}-2\gamma_{j+1}+\gamma_{j+2}\,.
+\gamma(j) &= \frac{\gamma_{j-1}+\gamma_{j-2}}{2} \\
+\dot\gamma(j) &= \gamma_{j-1}-\gamma_{j-2} \\
+\lim_{t\nearrow j}\ddot\gamma(t) &= \gamma_{j-1}-2\gamma_{j-2}+\gamma_{j-3} \\
+\lim_{t\searrow\,j}\ddot\gamma(t) &= \gamma_{j}-2\gamma_{j-1}+\gamma_{j-2}\,.
 \end{align*}
 Die Grenzwerte bezeichnen durch die Pfeilrichtung einen linksseitigen bzw. einen rechtsseitigen Limes. 
 Die Nebenbedingungen 
@@ -412,17 +412,17 @@ sind "uberall erf"ullt, falls sie an den ganzzahligen Stellen gelten (siehe Absc
 Die Bedingung mit der zweiten Ableitung muss im links- und rechtsseitigen Grenzwert gelten. 
 In der Sprache der Koeffizienten $\gamma_k$ die Nebenbedingungen nach kleineren Umformungen "aquivalent zu 
 \begin{align*}
-\lvert\gamma_j-2\gamma_{j+1}+\gamma_{j+2}\rvert 
-&\le (\Im\gamma_{j+1}-\Im\gamma_{j+2})^2\,, \\
-\lvert\gamma_{j+1}-2\gamma_{j+2}+\gamma_{j+3}\rvert 
-&\le (\Im\gamma_{j+1}-\Im\gamma_{j+2})^2\,, \\
-0&\le \Im\gamma_j-\Im\gamma_{j+1}
+\lvert\gamma_j-2\gamma_{j-1}+\gamma_{j-2}\rvert 
+&\le (\Im\gamma_{j-1}-\Im\gamma_{j-2})^2\,, \\
+\lvert\gamma_{j-1}-2\gamma_{j-2}+\gamma_{j-3}\rvert 
+&\le (\Im\gamma_{j-1}-\Im\gamma_{j-2})^2\,, \\
+0&\le \Im\gamma_j-\Im\gamma_{j-1}
 \end{align*}
 f"ur alle ganzzahligen $j$. Mit 
-$ \tau_j := \gamma_j-\gamma_{j+1} $
+$ \tau_j := \gamma_j-\gamma_{j-1} $
 l"asst sich das noch k"urzer schreiben als
 \begin{equation} \label{eq:condTau}
-\lvert\tau_j-\tau_{j+1}\rvert \le \min\{(\Im\tau_j)^2, (\Im\tau_{j+1})^2\}
+\lvert\tau_j-\tau_{j-1}\rvert \le \min\{(\Im\tau_j)^2, (\Im\tau_{j-1})^2\}
 \qquad \text{und} \qquad
 0\le\Im\tau_j\,.
 \end{equation}
